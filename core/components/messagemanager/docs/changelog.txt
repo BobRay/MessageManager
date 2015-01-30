@@ -1,0 +1,5 @@
+Changelog for MessageManager
+
+MessageManager 1.0.0
+---------------------------------
+Initial Version
