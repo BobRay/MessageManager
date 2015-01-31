@@ -54,6 +54,11 @@ if($object->xpdo) {
                   'parent' => '0',
                   'template' => 'default',
                 ),
+                1 =>  array (
+                  'pagetitle' => 'mmAjax',
+                  'parent' => 'Message Manager',
+                  'template' => 0,
+                ),
             );
 
             if (is_array($intersects)) {

@@ -156,6 +156,11 @@ $components = array(
                 'description' => 'MessageManager snippet',
                 'static' => false,
             ),
+            'mmAjax' => array(
+                'category'    => 'MessageManager',
+                'description' => 'MessageManager ajax connector snippet',
+                'static'      => false,
+            ),
 
         ),
         'chunks' => array(
@@ -189,6 +194,13 @@ $components = array(
             'pagetitle' => 'Message Manager',
             'alias' => 'message-manager',
         ),
+        'mmAjax' => array(
+            'pagetitle' => 'mmAjax',
+            'alias' => 'mm-ajax',
+            'published' => '1',
+            'hidemenu' => '1',
+            'parent' => 'Message Manager',
+        )
     ),
 
 
@@ -216,7 +228,7 @@ $components = array(
         'css' => true,
 
         /* If true, a default (empty) JS file will be created */
-        'js' => false,
+        'js' => true,
     ),
     /* minify any JS files */
     'minifyJS' => false,
@@ -232,10 +244,11 @@ $components = array(
        if 'createCmpFiles is true, these will be ignored.
     */
     'jsFiles' => array(
+        'messagemanager.js'
     ),
 
     /* Desired CSS files */
-    'cssfiles' => array(
+    'cssFiles' => array(
         'messagemanager.css',
     ),
 
@@ -313,7 +326,7 @@ $components = array(
      *
      * Set to array() if there are no classes. */
     'classes' => array(
-        'MessageManager' => 'messagemanager:messagemanager',
+        // 'MessageManager' => 'messagemanager:messagemanager',
     ),
 
     /* ************************************
@@ -421,6 +434,7 @@ $components = array(
 
     'exportResources' => array(
         'Message Manager',
+        'mmAjax',
     ),
     /* Array of resource parent IDs to get children of. */
     'parents' => array(),

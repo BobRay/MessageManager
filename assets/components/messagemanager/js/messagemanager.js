@@ -2274,81 +2274,109 @@ function strstr(haystack, needle, bool) {
 }
 
 
+function mmAjax(id, action) {
+    /* Ajax call to action; calls MODX resource pseudo-connector */
+    var ajaxRequest = $.ajax({
+         type: "POST",
+         url: "http://localhost/addons/mm-ajax.html",
+         data: {'action': action, 'id': id}
+     });
+
+    ajaxRequest.done(function (msg) {
+        // alert(action + ' succeeded on message ' + id);
+    });
+
+    ajaxRequest.fail(function (jqXHR, textStatus) {
+        alert(action + ' failed on message ' + id + ' ' + textStatus);
+    });
+}
+
+
+/* Pulls ID out of selector ID like 'mm_message12' */
 function getId(s) {
     var number = s.match(/\d+$/);
     number = parseInt(number, 10);
     return number
 }
 
-/* **************** */
-$(function () {
-    $('#the-node').contextMenu({
-           /* selector: 'li', */
-           selector: 'tr',
-           callback: function (key, options) {
-               // var m = "clicked: " + key + " on " + $(this).text();
-               //( var m = "clicked: " + key + " on " + $(this).attr('id');
-               var id = getId($(this).attr('id'))
-               var m = "clicked: " + key + " on " + getId($(this).attr('id'));
-               window.console && console.log(m) || alert(m);
-               switch (key) {
-                   case 'markunread':
-                       e = document.getElementById('mm_read' + id);
-                       if (e.innerHTML == 'Yes') {
-                           /* Ajax call here */
-                           e.innerHTML = 'No';
-                       }
-                       /* Ajax call to security/message/remove here */
-                       break;
-                   case 'delete':
-                       alert('Deleting');
-                       break;
-               }
+/* Mark message read in DB and on screen */
 
-
-
-           },
-           items: {
-               "markunread": {name: "Mark Unread", icon: "markunread"},
-               "delete": {name: "Delete", icon: "delete"},
-               "reply": {name: "Reply", icon: "reply", disabled:true},
-               "sep1": "---------",
-               "quit": {name: "Cancel", icon: "cancel"}
-           }
-       });
-});
-
-
-
-function mm_toggle(id) {
-    var e = document.getElementById('mm_message' + id);
-
-    /* toggle selected */
-    e.setAttribute('colspan', '5');
-    if (e.style.display == 'table-row') {
-        e.style.display = 'none';
-    } else {
-        e.style.display = 'table-row';
-    }
-    var subject = document.getElementById('mm_subject' + id);
-    e = document.getElementById('mm_expand' + id);
-    /* toggle selected */
-    if (e.innerHTML == '\u25BE') {
-        $(subject).toggleClass("zoomin zoomout");
-        // subject.setAttribute('cursor', 'zoom-in');
-        e.innerHTML = '\u25B4';
-    } else {
-        $(subject).toggleClass("zoomin zoomout");
-        // subject.setAttribute('cursor', 'zoom-out');
-        e.innerHTML = '\u25BE';
-    }
-
-    e = document.getElementById('mm_read' + id);
-    /* toggle selected */
-    if (e.innerHTML == 'No') {
-        /* Ajax call here */
-
-        e.innerHTML = 'Yes';
+function mmMarkRead(id, message) {
+    var e = $('#mm_read' + id);
+    if (e.html() == 'No') {
+        e.html('Yes');
+        mmAjax(id, 'security/message/read')
     }
 }
 
+/* Mark message unread in DB and on screen;
+   hide message if visible; change cursor to +
+ */
+function mmMarkUnread(id, message) {
+    var e = $('#mm_read' + id);
+    if (e.html() == 'Yes') {
+        e.html('No');
+        mmAjax(id, 'security/message/unread');
+    }
+    e = $('#mm_message' + id);
+    mmCloseSubject(e, id);
+}
+
+/* Show message if hidden; mark read in DB and on screen;
+   change down arrow to up arrow; change cursor to -
+ */
+
+function mmOpenSubject(e, id) {
+    e.attr('colspan', 5);
+    e.show();
+    mmMarkRead(id, 'Yes');
+    $('#mm_expand' + id).html('\u25B4');
+    $('#mm_subject' + id).toggleClass("zoomin zoomout");
+}
+
+/* Hide message if visible; change up arrow to down arrow */
+function mmCloseSubject(e, id) {
+    e.attr('colspan', 5);
+    e.hide();
+    $('#mm_expand' + id).html('\u25BE');
+    $('#mm_subject' + id).toggleClass("zoomin zoomout");
+}
+
+/* *** Context Menu *** */
+$(function () {
+    $('#the-node').contextMenu({
+        /* selector: 'li', */
+        selector: 'tr',
+        callback: function (key, options) {
+            var id = getId($(this).attr('id'));
+            // var m = "clicked: " + key + " on " + getId($(this).attr('id'));
+            // window.console && console.log(m) || alert(m);
+            switch (key) {
+            case 'markunread':
+                mmMarkUnread(id, 'No');
+               break;
+            case 'delete':
+               alert('Deleting');
+               break;
+            }
+        },
+       items: {
+           "markunread": {name: "Mark Unread", icon: "markunread"},
+           "delete": {name: "Delete", icon: "delete"},
+           "reply": {name: "Reply", icon: "reply", disabled:true},
+           "sep1": "---------",
+           "quit": {name: "Cancel", icon: "cancel"}
+       }
+   });
+});
+
+
+/* onClick function for subject field */
+function mm_toggle(id) {
+    var e = $('#mm_message' + id);
+    if (e.is(":visible")) {
+        mmCloseSubject(e, id);
+    } else {
+        mmOpenSubject(e, id);
+    }
+}

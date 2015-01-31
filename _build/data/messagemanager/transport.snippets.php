@@ -37,4 +37,14 @@ $snippets[1]->fromArray(array (
 ), '', true, true);
 $snippets[1]->setContent(file_get_contents($sources['source_core'] . '/elements/snippets/messagemanager.snippet.php'));
 
+$snippets[2] = $modx->newObject('modSnippet');
+$snippets[2]->fromArray(array (
+  'id' => 2,
+  'property_preprocess' => false,
+  'name' => 'mmAjax',
+  'description' => 'MessageManager ajax connector snippet',
+  'properties' => NULL,
+), '', true, true);
+$snippets[2]->setContent(file_get_contents($sources['source_core'] . '/elements/snippets/mmajax.snippet.php'));
+
 return $snippets;
