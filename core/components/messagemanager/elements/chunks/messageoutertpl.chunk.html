@@ -3,7 +3,12 @@
     <h3>Your Messages</h3>
     <form class="mm_form" method='post' id='userform' action=''>
         <table id="the-node">
-            <tr id="mm_header"><th></th><th>Sender</th><th>Subject</th><th>Sent</th><th>Read</th></tr>
+            <tr id="mm_header">
+                <th id="mm_checkbox"><input type="checkbox" id="mm_check_all"></th>
+                <th id="mm_sender">Sender</th>
+                <th id="mm_subject">Subject</th>
+                <th id="mm_sent">Sent</th>
+                <th id="mm_read">Read</th></tr>
             [[+messages]]
         </table>
         <br/>

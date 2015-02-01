@@ -2303,8 +2303,10 @@ function getId(s) {
 
 function mmMarkRead(id, message) {
     var e = $('#mm_read' + id);
+
     if (e.html() == 'No') {
         e.html('Yes');
+        e.toggleClass("Yes No")
         mmAjax(id, 'security/message/read')
     }
 }
@@ -2315,6 +2317,7 @@ function mmMarkRead(id, message) {
 function mmMarkUnread(id, message) {
     var e = $('#mm_read' + id);
     if (e.html() == 'Yes') {
+            e.toggleClass("Yes No");
         e.html('No');
         mmAjax(id, 'security/message/unread');
     }
@@ -2342,6 +2345,17 @@ function mmCloseSubject(e, id) {
     $('#mm_subject' + id).toggleClass("zoomin zoomout");
 }
 
+$(function () {
+    $("#mm_check_all").change(function () {
+        if (this.checked) {
+            $('.mm_box').prop("checked", true);
+        } else {
+            $('.mm_box').prop("checked", false);
+        }
+    });
+});
+
+
 /* *** Context Menu *** */
 $(function () {
     $('#the-node').contextMenu({
@@ -2361,13 +2375,16 @@ $(function () {
             }
         },
        items: {
+
            "markunread": {name: "Mark Unread", icon: "markunread"},
            "delete": {name: "Delete", icon: "delete"},
            "reply": {name: "Reply", icon: "reply", disabled:true},
+           "newmessage": {name: "New Message", icon: "newmessage", disabled: true},
            "sep1": "---------",
            "quit": {name: "Cancel", icon: "cancel"}
        }
    });
+
 });
 
 

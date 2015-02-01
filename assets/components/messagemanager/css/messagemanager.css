@@ -5,6 +5,28 @@
  * Created on 1/05/2015
  *
  * @package messagemanager
+ * Icon image credits:
+      Licensed under CC BY 2.5 via Wikimedia Commons -
+          http://commons.wikimedia.org/wiki/File:Email.png#mediaviewer/File:Email.png
+      "Silk arrow turn left" by Mark James - http://famfamfam.com/lab/icons/silk/. Licensed under CC BY 2.5
+          via Wikimedia Commons -
+          http://commons.wikimedia.org/wiki/File:Silk_arrow_turn_left.png#mediaviewer/File:silk_arrow_turn_left.png
+      "Cancel". Licensed under CC BY 2.5 via Wikimedia Commons -
+          http://commons.wikimedia.org/wiki/File:Cancel.png#mediaviewer/File:Cancel.png
+      "Email open image". Licensed under CC BY 2.5 via Wikimedia Commons -
+           http://commons.wikimedia.org/wiki/File:Email_open_image.png#mediaviewer/File:Email_open_image.png
+      "Email add". Licensed under CC BY 2.5 via Wikimedia Commons -
+           http://commons.wikimedia.org/wiki/File:Email_add.png#mediaviewer/File:Email_add.png
+      "Silk arrow down" by Mark James - http://famfamfam.com/lab/icons/silk/.
+          Licensed under CC BY 2.5 via Wikimedia Commons -
+          http://commons.wikimedia.org/wiki/File:Silk_arrow_down.png#mediaviewer/File:Silk_arrow_down.png
+      "Silk cross" by Mark James - http://famfamfam.com/lab/icons/silk/.
+          Licensed under CC BY 2.5 via Wikimedia Commons -
+          http://commons.wikimedia.org/wiki/File:Silk_cross.png#mediaviewer/File:Silk_cross.png
+      "Email". Licensed under CC BY 2.5 via Wikimedia Commons -
+          http://commons.wikimedia.org/wiki/File:Email.png#mediaviewer/File:Email.png
+      "Add". Licensed under CC BY 2.5 via Wikimedia Commons -
+          http://commons.wikimedia.org/wiki/File:Add.png#mediaviewer/File:Add.png
  */
 
 div#messagemanager {
@@ -35,11 +57,27 @@ tr#mm_header th {
 div#messagemanager td {
     border: 1px black solid;
     margin:0;
-    padding:5px 15px;
-
+    padding:5px 10px;
 }
+
+td.Yes {
+    background-color: rgba(0, 255, 0, 0.25);
+}
+
 tr.mm_messagemanager_tr {
    background-color: teal;
+}
+
+th#mm_checkbox {
+    -webkit-border-top-left-radius: 7px;
+    -moz-border-radius-topleft: 7px;
+    border-top-left-radius: 7px;
+}
+
+th#mm_read {
+    -webkit-border-top-right-radius: 7px;
+    -moz-border-radius-topright: 7px;
+    border-top-right-radius: 7px;
 }
 
 div#messagemanager td.mm_message {
@@ -53,20 +91,40 @@ div#messagemanager td.mm_message {
     border-radius: 10px; /* future proofing */
 }
 
-.mm_checkbox {
+td {
+    margin:0;
+    padding:0;
+}
+
+th#mm_checkbox {
     width:10px;
 }
 
-.mm_chackbox.hover {
-    cursor:hand;
+td.mm_checkbox {
+    margin:0;
+    padding:0;
 }
+
 /* sender, subject, sent, read */
-.mm_sender {
+th#mm_sender {
     width: 120px;
 }
 
-.mm_subject {
+th#mm_subject {
     width: 200px;
+}
+
+
+
+th#mm_sent {
+    width: 170px;
+}
+
+td.mm_date_sent {
+    margin:5px 10px;
+}
+th#mm_read {
+    width: 60px;
 }
 
 .zoomin:hover {
@@ -75,14 +133,6 @@ div#messagemanager td.mm_message {
 
 .zoomout:hover {
     cursor: zoom-out;
-}
-
-.mm_sent {
-    width: 40px;
-}
-
-.mm_read {
-    width: 30px;
 }
 
 .mm_message_tr {
@@ -112,7 +162,8 @@ span.mm_expand {
 
 .context-menu-list {
     margin: 0;
-    padding: 0;
+    // padding: 0;
+    padding:5px;
 
     min-width: 120px;
     max-width: 250px;
@@ -122,77 +173,92 @@ span.mm_expand {
 
     border: 1px solid #DDD;
     background: #EEE;
-
-    -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    /*-webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
     -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
     -ms-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
     -o-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);*/
+
+    -webkit-box-shadow: 5pc 5px 5px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+    -ms-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+    -o-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
 
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 11px;
+
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px; /* future proofing */
 }
 
 .context-menu-item {
-    padding: 2px 2px 2px 24px;
+    padding: 4px 2px 2px 24px;
     background-color: #EEE;
     position: relative;
     -webkit-user-select: none;
     -moz-user-select: -moz-none;
     -ms-user-select: none;
     user-select: none;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
 }
 
 .context-menu-separator {
-    padding-bottom: 0;
-    border-bottom: 1px solid #DDD;
+   // padding-bottom: 0;
+   // border-bottom: 1px solid #DDD;
+   border-bottom: 3px solid #DDD;
+   padding: 1px 0 5px 0;
+   margin-bottom:5px;
 }
 
 .context-menu-item > label > input,
 .context-menu-item > label > textarea {
-    -webkit-user-select: text;
-    -moz-user-select: text;
-    -ms-user-select: text;
-    user-select: text;
+   -webkit-user-select: text;
+   -moz-user-select: text;
+   -ms-user-select: text;
+   user-select: text;
 }
 
 .context-menu-item.hover {
-    cursor: pointer;
-    background-color: #39F;
+   cursor: pointer;
+   background-color: rgba(41, 230, 16, 0.13);
 }
 
 .context-menu-item.disabled {
-    color: #666;
+   color: #666;
 }
 
 .context-menu-input.hover,
 .context-menu-item.disabled.hover {
-    cursor: default;
-    background-color: #EEE;
+   cursor: default;
+   background-color: #EEE;
 }
 
 .context-menu-submenu:after {
-    content: ">";
-    color: #666;
-    position: absolute;
-    top: 0;
-    right: 3px;
-    z-index: 1;
+   content: ">";
+   color: #666;
+   position: absolute;
+   top: 0;
+   right: 3px;
+   z-index: 1;
 }
 
 /* icons
-    #protip:
-    In case you want to use sprites for icons (which I would suggest you do) have a look at
-    http://css-tricks.com/13224-pseudo-spriting/ to get an idea of how to implement
-    .context-menu-item.icon:before {}
- */
+   #protip:
+   In case you want to use sprites for icons (which I would suggest you do) have a look at
+   http://css-tricks.com/13224-pseudo-spriting/ to get an idea of how to implement
+   .context-menu-item.icon:before {}
+*/
 .context-menu-item.icon {
     min-height: 18px;
     background-repeat: no-repeat;
     background-position: 4px 2px;
 }
 
-.context-menu-item.icon-edit {
+/*.context-menu-item.icon-edit {
     background-image: url(images/page_white_edit.png);
 }
 
@@ -206,18 +272,29 @@ span.mm_expand {
 
 .context-menu-item.icon-paste {
     background-image: url(images/page_white_paste.png);
-}
+}*/
 
 .context-menu-item.icon-delete {
-    background-image: url(images/page_white_delete.png);
+    background-image: url(silk_cross.png);
 }
 
-.context-menu-item.icon-add {
+.context-menu-item.icon-newmessage {
+    background-image: url(add.png);
+}
+
+.context-menu-item.icon-markunread {
+    background-image: url(email.png);
+}
+.context-menu-item.icon-reply {
+    background-image: url(silk_arrow_turn_left.png);
+}
+
+/*.context-menu-item.icon-add {
     background-image: url(images/page_white_add.png);
-}
+}*/
 
-.context-menu-item.icon-quit {
-    background-image: url(images/door.png);
+.context-menu-item.icon-cancel {
+    background-image: url(cancel.png);
 }
 
 /* vertically align inside labels */
