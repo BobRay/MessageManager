@@ -33,6 +33,7 @@ div#messagemanager {
     background-color: darkgray;
     padding: 50px;
     margin: 50px;
+    width:80%;
 }
 
 form#mm_form {
@@ -47,15 +48,21 @@ form#mm_form {
 table#mm_table {
     border: 1px darkgray solid;
     background-color: #d3d3d3;
+    width:60%;
 
 }
 
 tr#mm_header th {
     background-color: ivory;
+    font-family:Verdana, Arial, Helvetica, sans-serif;
+    font-size:medium;
+    font-weight:normal;
 }
 
 div#messagemanager td {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
     border: 1px black solid;
+    font-size: small;
     margin:0;
     padding:5px 10px;
 }
@@ -86,18 +93,19 @@ div#messagemanager td.mm_message {
     padding: 5px 15px;
     /* background-color: lavender; */
     background-color: whitesmoke;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
-    border-radius: 10px; /* future proofing */
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
 }
 
-td {
-    margin:0;
-    padding:0;
+td.mm_spacer {
+    border:none !important;
 }
 
 th#mm_checkbox {
     width:10px;
+    margin: 0;
+    padding: 0;
 }
 
 td.mm_checkbox {
@@ -107,24 +115,26 @@ td.mm_checkbox {
 
 /* sender, subject, sent, read */
 th#mm_sender {
-    width: 120px;
+    width: 20%;
 }
 
 th#mm_subject {
-    width: 200px;
+    width: 50%;
 }
 
 
 
 th#mm_sent {
-    width: 170px;
+    width: 20%;
 }
 
 td.mm_date_sent {
     margin:5px 10px;
 }
 th#mm_read {
-    width: 60px;
+    width: 10%;
+    margin:0;
+    padding:0;
 }
 
 .zoomin:hover {
