@@ -2330,8 +2330,13 @@ function mmMarkUnread(id, message) {
  */
 
 function mmOpenSubject(e, id) {
-    e.attr('colspan', 5);
+
+
     e.show();
+    e.attr("style", "display:table-row");
+    var td = $('.mm_message');
+    td.attr('style', 'display:table-cell');
+    td.attr('colspan', "5");
     mmMarkRead(id, 'Yes');
     $('#mm_expand' + id).html('\u25B4');
     $('#mm_subject' + id).toggleClass("zoomin zoomout");
@@ -2355,6 +2360,10 @@ $(function () {
     });
 });
 
+function mmReply(id) {
+    var senderId = $('#mm_sender' + id).html();
+    alert('Sender: ' + senderId);
+}
 
 /* *** Context Menu *** */
 $(function () {
@@ -2368,17 +2377,20 @@ $(function () {
             switch (key) {
             case 'markunread':
                 mmMarkUnread(id, 'No');
-               break;
+                break;
             case 'delete':
-               alert('Deleting');
-               break;
+                alert('Deleting');
+                break;
+            case 'reply':
+                mmReply(id);
+                break;
             }
         },
        items: {
 
            "markunread": {name: "Mark Unread", icon: "markunread"},
            "delete": {name: "Delete", icon: "delete"},
-           "reply": {name: "Reply", icon: "reply", disabled:true},
+           "reply": {name: "Reply", icon: "reply"},
            "newmessage": {name: "New Message", icon: "newmessage", disabled: true},
            "sep1": "---------",
            "quit": {name: "Cancel", icon: "cancel"}

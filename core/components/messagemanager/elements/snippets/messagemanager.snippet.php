@@ -109,6 +109,7 @@ foreach ($messages as $message) {
     $query->select('username');
     $username = $modx->getValue($query->prepare());
     // $fields['mm.date_sent'] = strftime("%b %d, %Y at %I:%M %p", strtotime($fields['mm.date_sent']));
+    $fields['mm.sender_id'] = $fields['mm.sender'];
     $fields['mm.sender'] = $username;
     $fields['mm.class'] = $fields['mm.read']? 'read' : 'unread';
     $fields['mm.read_indicator'] = $fields['mm.read'] ? 'Yes' : 'No';

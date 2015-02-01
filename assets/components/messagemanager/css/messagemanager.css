@@ -96,10 +96,11 @@ div#messagemanager td.mm_message {
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px;
-}
 
-td.mm_spacer {
-    border:none !important;
+    -webkit-column-span: all; /* Safari & Chrome */
+    -moz-column-span: all; /* Firefox */
+    -ms-column-span: all; /* Internet Explorer */
+    -o-column-span: all; /* Opera */
 }
 
 th#mm_checkbox {
