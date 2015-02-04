@@ -36,6 +36,7 @@ div#messagemanager {
     width:80%;
 }
 
+
 form#mm_form {
     border: none;
     text-align: left;
@@ -57,6 +58,21 @@ tr#mm_header th {
     font-family:Verdana, Arial, Helvetica, sans-serif;
     font-size:medium;
     font-weight:normal;
+}
+
+#myTextarea {
+    width:90%;
+    height:90%;
+    margin:0 0 0 10px;
+    padding: 10px;
+    -webkit-border-top-left-radius: 7px;
+    -moz-border-radius-topleft: 7px;
+    border-top-left-radius: 7px;
+}
+
+#mm_left_button {
+    position: absolute;
+    left: 30px;
 }
 
 div#messagemanager td {
@@ -85,11 +101,6 @@ th#mm_read {
     -webkit-border-top-right-radius: 7px;
     -moz-border-radius-topright: 7px;
     border-top-right-radius: 7px;
-}
-
-.ui-dialog-titlebar, .ui-widget-header {
-    background-color: #2b878b;
-
 }
 
 div#messagemanager td.mm_message {

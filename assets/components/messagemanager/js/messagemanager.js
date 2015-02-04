@@ -21,95 +21,10 @@
 
 
 
-function mmAjax(id, action) {
-    /* Ajax call to action; calls MODX resource pseudo-connector */
-    var ajaxRequest = $.ajax({
-         type: "POST",
-         url: "http://localhost/addons/mm-ajax.html",
-         data: {'action': action, 'id': id}
-     });
-
-    ajaxRequest.done(function (msg) {
-        // alert(action + ' succeeded on message ' + id);
-    });
-
-    ajaxRequest.fail(function (jqXHR, textStatus) {
-        alert(action + ' failed on message ' + id + ' ' + textStatus);
-    });
-}
-
-
-/* Pulls ID out of selector ID like 'mm_message12' */
-function getId(s) {
-    var number = s.match(/\d+$/);
-    number = parseInt(number, 10);
-    return number
-}
-
-/* Mark message read in DB and on screen */
-
-function mmMarkRead(id, message) {
-    var e = $('#mm_read' + id);
-
-    if (e.html() == 'No') {
-        e.html('Yes');
-        e.toggleClass("Yes No")
-        mmAjax(id, 'security/message/read')
-    }
-}
-
-/* Mark message unread in DB and on screen;
-   hide message if visible; change cursor to +
- */
-function mmMarkUnread(id, message) {
-    var e = $('#mm_read' + id);
-    if (e.html() == 'Yes') {
-            e.toggleClass("Yes No");
-        e.html('No');
-        mmAjax(id, 'security/message/unread');
-    }
-    e = $('#mm_message' + id);
-    mmCloseSubject(e, id);
-}
-
-/* Show message if hidden; mark read in DB and on screen;
-   change down arrow to up arrow; change cursor to -
- */
-
-function mmOpenSubject(e, id) {
-
-
-    e.show();
-    e.attr("style", "display:table-row");
-    var td = $('.mm_message');
-    td.attr('style', 'display:table-cell');
-    td.attr('colspan', "5");
-    mmMarkRead(id, 'Yes');
-    $('#mm_expand' + id).html('\u25B4');
-    $('#mm_subject' + id).toggleClass("zoomin zoomout");
-}
-
-/* Hide message if visible; change up arrow to down arrow */
-function mmCloseSubject(e, id) {
-    e.attr('colspan', 5);
-    e.hide();
-    $('#mm_expand' + id).html('\u25BE');
-    $('#mm_subject' + id).toggleClass("zoomin zoomout");
-}
-
-$(function () {
-    $("#mm_check_all").change(function () {
-        if (this.checked) {
-            $('.mm_box').prop("checked", true);
-        } else {
-            $('.mm_box').prop("checked", false);
-        }
-    });
-});
-
 
 /* *** Context Menu *** */
 $(function () {
+    var messageText = '';
     $('#the-node').contextMenu({
         /* selector: 'li', */
         selector: 'tr',
@@ -139,40 +54,166 @@ $(function () {
            "quit": {name: "Cancel", icon: "cancel"}
        }
    });
-    function emailButtonClicked() {
-        alert('Clicked');
-    }
-    function mmReply(id) {
+
+    function mmReply(id, newMessage) {
         var senderId = $('#mm_sender' + id).html();
         // alert('Sender: ' + senderId);
-
-
-
-
+        var messageText = $("#mm_message" + id).find('td:first').html();
+        // alert(messageText);
         $("#myDialog").dialog({
             autoOpen: true,
-            theme: 'southstreet'
+            maxWidth: 600,
+            maxHeight: 500,
+            width: 600,
+            height: 500,
+            modal: true,
+            draggable: false,
+            buttons: {
+                "Quote": {
+                    text: "Quote",
+                    id: "mm_left_button",
+                    class: 'mm_left_button',
+                    click: function() {
+                        $("#myTextarea").html("<< " + messageText + " >>");
+                    }
+                },
+
+                "Cancel": function () {
+                    $(this).dialog("close");
+                },
+                "Send": {
+                    text: "Send",
+                    click: function() {
+                        alert('Message Sent');
+                        $(this).dialog("close");
+                    }
+
+                }
+            }
          });
 
         $("#emailSubmit").on("click", function () {
             alert('Clicked');
             $("#myDialog").dialog("close");
         });
-
-        // $("#emailSubmit").on("click", emailButtonClicked);
-
-//    });
     }
+
+
+    /* onClick function for subject field */
+    $(".mm_subject").on("click", function() {
+        var id = getId(this.id);
+        var subject = $('#mm_message' + id);
+        if (subject.is(":visible")) {
+            mmCloseSubject(subject, id);
+        } else {
+            mmOpenSubject(subject, id);
+        }
+    });
+
+    $("#mm_submit_delete").on("click", function (e) {
+
+        e.preventDefault();
+        e.stopPropagation();
+        $('input:checked').each(function () {
+            id = $(this).val();
+            // alert(id);
+            // mmAjax(id, 'security/message/delete');
+            $('tr#' + id).remove();
+
+        });
+
+        // alert('Delete Clicked');
+    });
+
+
+    function mmAjax(id, action) {
+        /* Ajax call to action; calls MODX resource pseudo-connector */
+        var ajaxRequest = $.ajax({
+            type: "POST",
+            url: "http://localhost/addons/mm-ajax.html",
+            data: {'action': action, 'id': id}
+        });
+
+        ajaxRequest.done(function (msg) {
+            // alert(action + ' succeeded on message ' + id);
+        });
+
+        ajaxRequest.fail(function (jqXHR, textStatus) {
+            alert(action + ' failed on message ' + id + ' ' + textStatus);
+        });
+    }
+
+
+    /* Pulls ID out of selector ID like 'mm_message12' */
+    function getId(s) {
+        var number = s.match(/\d+$/);
+        number = parseInt(number, 10);
+        return number
+    }
+
+    /* Mark message read in DB and on screen */
+
+    function mmMarkRead(id, message) {
+        var e = $('#mm_read' + id);
+
+        if (e.html() == 'No') {
+            e.html('Yes');
+            e.toggleClass("Yes No")
+            mmAjax(id, 'security/message/read')
+        }
+    }
+
+    /* Mark message unread in DB and on screen;
+     hide message if visible; change cursor to +
+     */
+    function mmMarkUnread(id, message) {
+        var e = $('#mm_read' + id);
+        if (e.html() == 'Yes') {
+            e.toggleClass("Yes No");
+            e.html('No');
+            mmAjax(id, 'security/message/unread');
+        }
+        e = $('#mm_message' + id);
+        mmCloseSubject(e, id);
+    }
+
+    /* Show message if hidden; mark read in DB and on screen;
+     change down arrow to up arrow; change cursor to -
+     */
+
+    function mmOpenSubject(e, id) {
+
+
+        e.show();
+        e.attr("style", "display:table-row");
+        var td = $('.mm_message');
+        td.attr('style', 'display:table-cell');
+        td.attr('colspan', "5");
+        mmMarkRead(id, 'Yes');
+        $('#mm_expand' + id).html('\u25B4');
+        $('#mm_subject' + id).toggleClass("zoomin zoomout");
+    }
+
+    /* Hide message if visible; change up arrow to down arrow */
+    function mmCloseSubject(e, id) {
+        e.attr('colspan', 5);
+        e.hide();
+        $('#mm_expand' + id).html('\u25BE');
+        $('#mm_subject' + id).toggleClass("zoomin zoomout");
+    }
+
+    $(function () {
+        $("#mm_check_all").change(function () {
+            if (this.checked) {
+                $('.mm_box').prop("checked", true);
+            } else {
+                $('.mm_box').prop("checked", false);
+            }
+        });
+    });
+
 
 });
 
 
-/* onClick function for subject field */
-function mm_toggle(id) {
-    var e = $('#mm_message' + id);
-    if (e.is(":visible")) {
-        mmCloseSubject(e, id);
-    } else {
-        mmOpenSubject(e, id);
-    }
-}
+
