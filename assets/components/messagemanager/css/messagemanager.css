@@ -87,6 +87,11 @@ th#mm_read {
     border-top-right-radius: 7px;
 }
 
+.ui-dialog-titlebar, .ui-widget-header {
+    background-color: #2b878b;
+
+}
+
 div#messagemanager td.mm_message {
     border: #2b878b 2px solid;
     margin: 0;

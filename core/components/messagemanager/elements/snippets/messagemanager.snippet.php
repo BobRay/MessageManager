@@ -51,6 +51,13 @@ $assets_url = $modx->getOption('mm.assets_url', NULL, $modx->getOption('assets_u
 $path = $assets_url . 'css/' . $cssFile;
 $modx->regClientCSS($path);
 $modx->regClientStartupScript('//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"');
+// $modx->regClientStartupScript('//ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.js');
+$modx->regClientStartupScript($assets_url . 'js/jquery-ui.min.js');
+$modx->regClientStartupScript($assets_url . 'js/context-menu.js');
+
+$modx->regClientCSS($assets_url . 'css/jquery/jquery-ui.min.css');
+$modx->regClientCSS($assets_url . 'css/jquery/jquery-ui.theme.css');
+
 $path = $assets_url . 'js/' . $jsFile;
 $modx->regClientStartupScript($path);
 
