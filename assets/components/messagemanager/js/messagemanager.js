@@ -24,6 +24,13 @@
 
 /* *** Context Menu *** */
 $(function () {
+    var myTable = $('table#the-node');
+    var myTextarea = $('#myTextarea')
+    /* Display "No messages" if table is empty (except header row) */
+    if (myTable.find("tr").length == 1) {
+         $(myTable.append('<tr><td colspan="5">No messages</td></tr>'));
+    }
+
     var messageText = '';
     $('#the-node').contextMenu({
         /* selector: 'li', */
@@ -33,15 +40,18 @@ $(function () {
             // var m = "clicked: " + key + " on " + getId($(this).attr('id'));
             // window.console && console.log(m) || alert(m);
             switch (key) {
-            case 'markunread':
-                mmMarkUnread(id, 'No');
-                break;
-            case 'delete':
-                alert('Deleting');
-                break;
-            case 'reply':
-                mmReply(id);
-                break;
+                case 'markunread':
+                    mmMarkUnread(id, 'No');
+                    break;
+                case 'delete':
+                    alert('Deleting');
+                    break;
+                case 'reply':
+                    mmReply(id);
+                    break;
+                case 'newmessage':
+                    mmNewMessage();
+                    break;
             }
         },
        items: {
@@ -49,19 +59,26 @@ $(function () {
            "markunread": {name: "Mark Unread", icon: "markunread"},
            "delete": {name: "Delete", icon: "delete"},
            "reply": {name: "Reply", icon: "reply"},
-           "newmessage": {name: "New Message", icon: "newmessage", disabled: true},
+           "newmessage": {name: "New Message", icon: "newmessage"},
            "sep1": "---------",
            "quit": {name: "Cancel", icon: "cancel"}
        }
    });
 
+    function mmNewMessage() {
+        mmReply(null, true)
+    }
+
     function mmReply(id, newMessage) {
-        var senderId = $('#mm_sender' + id).html();
-        // alert('Sender: ' + senderId);
-        var messageText = $("#mm_message" + id).find('td:first').html();
+        if (id !== null) {
+            var senderId = $('#mm_sender' + id).html();
+            var messageText = $("#mm_message" + id).find('td:first').html();
+        }
         // alert(messageText);
-        $("#myDialog").dialog({
-            autoOpen: true,
+
+
+        var myDialog = $("#myDialog").dialog({
+            autoOpen: false,
             maxWidth: 600,
             maxHeight: 500,
             width: 600,
@@ -82,20 +99,44 @@ $(function () {
                     $(this).dialog("close");
                 },
                 "Send": {
-                    text: "Send",
-                    click: function() {
+                    id: 'mm_button_send',
+                    text: "Send"
+                    /*click: function() {
                         alert('Message Sent');
                         $(this).dialog("close");
-                    }
+                    }*/
 
                 }
             }
          });
+        if (id == null) {
+            $('#mm_left_button').hide();
+            myDialog.dialog('option', 'title', 'New Message');
+            $("#mm_button_send").unbind("click").click(function () {
 
-        $("#emailSubmit").on("click", function () {
-            alert('Clicked');
-            $("#myDialog").dialog("close");
-        });
+                if ($.trim(myTextarea.val()).length == 0) {
+                    alert("Can't send an empty message");
+                } else {
+                    alert('Clicked new message');
+                    myTextarea.val('');
+                    myDialog.dialog("close");
+                }
+            });
+        } else {
+            $("#mm_button_send").unbind("click").click(function () {
+                if ($.trim(myTextarea.val()).length == 0) {
+                    alert("Can't send an empty message");
+                } else {
+                    alert('Clicked reply');
+                    myTextarea.val('');
+                    myDialog.dialog("close");
+                }
+
+            });
+        }
+
+        myDialog.dialog("open");
+
     }
 
 
@@ -116,13 +157,20 @@ $(function () {
         e.stopPropagation();
         $('input:checked').each(function () {
             id = $(this).val();
-            // alert(id);
             // mmAjax(id, 'security/message/delete');
             $('tr#' + id).remove();
+            $('tr#mm_message' + id).remove();
+            $('tr#mm_sender_id' + id).remove();
 
         });
+        /* Uncheck checkbox in header */
+        $("#mm_check_all").prop("checked", false);
 
-        // alert('Delete Clicked');
+        /* Display "No messages" if table is empty (except header row) */
+        if (myTable.find("tr").length == 1) {
+            $(myTable.append('<tr><td colspan="5">No messages</td></tr>'));
+        }
+
     });
 
 
