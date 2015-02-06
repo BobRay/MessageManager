@@ -35,7 +35,7 @@
  **/
 
 $validActions = array(
-    'security/message/delete',
+    'security/message/remove',
     'security/message/read',
     'security/message/unread',
     'security/message/create'
@@ -47,9 +47,26 @@ if (isset($_POST) && !empty($_POST)) {
     if (! in_array($action, $validActions)) {
         return $modx->error->failure('Not Authorized');
     }
-    if ($id == null) {
-        return $modx->error->failure('Param not set');
+
+
+    switch($action) {
+        case 'security/message/create':
+            $props = array(
+                'subject' => $modx->getOption('subject', $_POST, 'SUBJECT'),
+                'message' => $modx->getOption('message', $_POST, 'MESSAGE'),
+                'user'    => $modx->getOption('recipient', $_POST, 'RECIPIENT'),
+            );
+            break;
+        default:
+            if ($id == NULL) {
+                return $modx->error->failure('Param not set');
+            }
+
+            $props = array(
+                'id' => $id = $modx->getOption('id', $_POST, '999999'),
+            );
+
     }
-    return $modx->runProcessor($action, array('id' => $id));
+    return $modx->runProcessor($action, $props);
 
 }

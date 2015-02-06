@@ -25,7 +25,7 @@
 /* *** Context Menu *** */
 $(function () {
     var myTable = $('table#the-node');
-    var myTextarea = $('#myTextarea')
+    var myTextarea = $('#myTextarea');
     /* Display "No messages" if table is empty (except header row) */
     if (myTable.find("tr").length == 1) {
          $(myTable.append('<tr><td colspan="5">No messages</td></tr>'));
@@ -70,19 +70,26 @@ $(function () {
     }
 
     function mmReply(id, newMessage) {
+        var senderId = $('#mm_sender' + id).html();
+        var mt = $('#myTextarea');
+        var action = 'security/message/create';
         if (id !== null) {
-            var senderId = $('#mm_sender' + id).html();
-            var messageText = $("#mm_message" + id).find('td:first').html();
+            // var originalMessageText = $("#mm_message" + id).find('td:first').html();
         }
-        // alert(messageText);
+        var subject = $.trim($('#mm_subject' + id).html().replace(/<span[^>]*>.*<\/span>/, ""));
+        var replyPrefix = "[re:] ";
+        if (subject.indexOf(replyPrefix) == -1) {
+              subject = replyPrefix + subject;
+        }
 
-
+        console.log('Subject: X' + subject + 'X');
+        var message = '';
         var myDialog = $("#myDialog").dialog({
             autoOpen: false,
-            maxWidth: 600,
-            maxHeight: 500,
-            width: 600,
-            height: 500,
+            maxWidth: 500,
+            maxHeight: 400,
+            width: 500,
+            height: 400,
             modal: true,
             draggable: false,
             buttons: {
@@ -91,43 +98,49 @@ $(function () {
                     id: "mm_left_button",
                     class: 'mm_left_button',
                     click: function() {
-                        $("#myTextarea").html("<< " + messageText + " >>");
+                        var originalMessageText = $("#mm_message" + id).find('td:first').html();
+                        console.log('Original: ' + originalMessageText);
+                        originalMessageText = originalMessageText.replace(/&lt;/g, '<');
+                        originalMessageText = originalMessageText.replace(/&gt;/g, '>');
+                        console.log('Original after replace: ' + originalMessageText);
+                        mt.val("<< " + originalMessageText + " >>");
                     }
                 },
 
                 "Cancel": function () {
+                    myTextarea.val('');
                     $(this).dialog("close");
                 },
                 "Send": {
                     id: 'mm_button_send',
                     text: "Send"
-                    /*click: function() {
-                        alert('Message Sent');
-                        $(this).dialog("close");
-                    }*/
-
                 }
             }
          });
-        if (id == null) {
+
+        if (id == null) { /* New Message */
             $('#mm_left_button').hide();
             myDialog.dialog('option', 'title', 'New Message');
-            $("#mm_button_send").unbind("click").click(function () {
 
-                if ($.trim(myTextarea.val()).length == 0) {
+            $("#mm_button_send").unbind("click").click(function () {
+                message = $.trim(mt.val());
+                if (message.length == 0) {
                     alert("Can't send an empty message");
                 } else {
-                    alert('Clicked new message');
+                    // alert('Clicked new message');
+                    /* Ajax here */
                     myTextarea.val('');
                     myDialog.dialog("close");
                 }
             });
-        } else {
+        } else { /* Reply */
             $("#mm_button_send").unbind("click").click(function () {
-                if ($.trim(myTextarea.val()).length == 0) {
+                message = $.trim(mt.val());
+                if (message.length == 0) {
                     alert("Can't send an empty message");
                 } else {
-                    alert('Clicked reply');
+                    // alert('Clicked reply');
+                    mmAjax(id, action, subject, message, senderId);
                     myTextarea.val('');
                     myDialog.dialog("close");
                 }
@@ -157,7 +170,7 @@ $(function () {
         e.stopPropagation();
         $('input:checked').each(function () {
             id = $(this).val();
-            // mmAjax(id, 'security/message/delete');
+            mmAjax(id, 'security/message/remove');
             $('tr#' + id).remove();
             $('tr#mm_message' + id).remove();
             $('tr#mm_sender_id' + id).remove();
@@ -174,12 +187,18 @@ $(function () {
     });
 
 
-    function mmAjax(id, action) {
+    function mmAjax(id, action, subject, message, recipient) {
+        /*id = id || null;
+        message = message || null;
+        subject = subject || null;
+        recipient = recipient || null;*/
         /* Ajax call to action; calls MODX resource pseudo-connector */
         var ajaxRequest = $.ajax({
             type: "POST",
             url: "http://localhost/addons/mm-ajax.html",
-            data: {'action': action, 'id': id}
+            data: {
+                'id': id, 'action': action, 'subject': subject, 'message': message,
+                'recipient' : recipient}
         });
 
         ajaxRequest.done(function (msg) {
@@ -206,7 +225,7 @@ $(function () {
 
         if (e.html() == 'No') {
             e.html('Yes');
-            e.toggleClass("Yes No")
+            e.toggleClass("Yes No");
             mmAjax(id, 'security/message/read')
         }
     }
@@ -229,11 +248,9 @@ $(function () {
      change down arrow to up arrow; change cursor to -
      */
 
-    function mmOpenSubject(e, id) {
-
-
-        e.show();
-        e.attr("style", "display:table-row");
+    function mmOpenSubject(msg, id) {
+        msg.show();
+        msg.attr("style", "display:table-row");
         var td = $('.mm_message');
         td.attr('style', 'display:table-cell');
         td.attr('colspan', "5");
@@ -243,9 +260,9 @@ $(function () {
     }
 
     /* Hide message if visible; change up arrow to down arrow */
-    function mmCloseSubject(e, id) {
-        e.attr('colspan', 5);
-        e.hide();
+    function mmCloseSubject(msg, id) {
+        msg.attr('colspan', 5);
+        msg.hide();
         $('#mm_expand' + id).html('\u25BE');
         $('#mm_subject' + id).toggleClass("zoomin zoomout");
     }
