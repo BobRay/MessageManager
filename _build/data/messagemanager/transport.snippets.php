@@ -43,8 +43,12 @@ $snippets[2]->fromArray(array (
   'property_preprocess' => false,
   'name' => 'mmAjax',
   'description' => 'MessageManager ajax connector snippet',
-  'properties' => NULL,
 ), '', true, true);
 $snippets[2]->setContent(file_get_contents($sources['source_core'] . '/elements/snippets/mmajax.snippet.php'));
+
+
+$properties = include $sources['data'].'properties/properties.mmajax.snippet.php';
+$snippets[2]->setProperties($properties);
+unset($properties);
 
 return $snippets;

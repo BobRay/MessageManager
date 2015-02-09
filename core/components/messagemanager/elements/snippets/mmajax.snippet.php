@@ -33,40 +33,97 @@
  *
  * @package messagemanager
  **/
+if (! function_exists('my_debug')) {
+    function my_debug($msg, $modx, $clear = false) {
+        /** @var $chunk modChunk */
+        /** @var $modx modX */
+        $content = '';
+        $chunk = $modx->getObject('modChunk', array('name' => 'Debug'));
+        if (! $clear) {
+            $content = $chunk->getContent();
+        }
+
+        $chunk->setContent($content . "\n" .  $msg);
+        $chunk->save();
+    }
+}
 
 $validActions = array(
     'security/message/remove',
     'security/message/read',
     'security/message/unread',
-    'security/message/create'
+    'security/message/create',
+    'security/user/getlist',
 );
 
-if (isset($_POST) && !empty($_POST)) {
-    $action = $modx->getOption('action', $_POST, '');
-    $id = $modx->getOption('id', $_POST, null);
+my_debug('In mmAjax', $modx, true);
+if (isset($_REQUEST) && !empty($_REQUEST)) {
+    $action = $modx->getOption('action', $_REQUEST, '');
+    my_debug('Action: ' . $action, $modx);
+    $id = $modx->getOption('id', $_REQUEST, null);
+    my_debug('Id: ' . $id, $modx);
     if (! in_array($action, $validActions)) {
+        my_debug('Invalid Action', $modx);
         return $modx->error->failure('Not Authorized');
+
     }
 
-
+    $props = array();
     switch($action) {
         case 'security/message/create':
             $props = array(
-                'subject' => $modx->getOption('subject', $_POST, 'SUBJECT'),
-                'message' => $modx->getOption('message', $_POST, 'MESSAGE'),
-                'user'    => $modx->getOption('recipient', $_POST, 'RECIPIENT'),
+                'subject' => $modx->getOption('subject', $_REQUEST, 'SUBJECT'),
+                'message' => $modx->getOption('message', $_REQUEST, 'MESSAGE'),
+                'user'    => $modx->getOption('recipient', $_REQUEST, 'RECIPIENT'),
             );
+            break;
+        case 'security/user/getlist':
+            $props['limit'] = 0;
+            $userGroup = $modx->getOption('usergroup', $scriptProperties, null, true);
+            // $userGroup = 'group1';
+            if ($userGroup) {
+                $group = $modx->getObject('modUserGroup', array('name' => $userGroup));
+                if ($group) {
+                    $props['usergroup'] = $group->get('id');
+                }
+            }
             break;
         default:
             if ($id == NULL) {
+                my_debug('No ID', $modx);
                 return $modx->error->failure('Param not set');
             }
 
-            $props = array(
-                'id' => $id = $modx->getOption('id', $_POST, '999999'),
-            );
+            $props['id'] = $modx->getOption('id', $_REQUEST, '999999');
+
 
     }
-    return $modx->runProcessor($action, $props);
+    /* @var $response modProcessorResponse */
+    $response =  $modx->runProcessor($action, $props);
 
+    if ($response->isError()) {
+        if ($response->hasFieldErrors()) {
+            $fieldErrors = $response->getAllErrors();
+            $errorMessage = implode("\n", $fieldErrors);
+        } else {
+            $errorMessage = 'An error occurred: ' . $response->getMessage();
+        }
+        $retVal = array(
+            'success' => false,
+            'error_message' => $errorMessage,
+        );
+    } else {
+        // my_debug("xxx" . print_r($r, true), $modx);
+
+        $retVal = array(
+            'success' => true,
+        );
+        if (isset($response->response)) {
+            $retVal['data'] = $modx->fromJSON($response->response);
+        }
+    }
+    return $modx->toJSON($retVal);
+
+} else {
+    my_debug('Empty Request', $modx);
 }

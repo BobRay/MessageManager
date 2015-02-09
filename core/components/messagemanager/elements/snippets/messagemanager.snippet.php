@@ -38,12 +38,6 @@
  * @package messagemanager
  **/
 
-
-
-if (! defined('MODX_CORE_PATH')) {
-    include 'C:\xampp\htdocs\addons\assets\mycomponents\instantiatemodx\instantiatemodx.php';
-}
-
 $cssFile = $modx->getOption('cssFile', $scriptProperties, 'messagemanager.css');
 $jsFile = $modx->getOption('jsFile', $scriptProperties, 'messagemanager.js?' . 'v=' . time());
 $assets_url = $modx->getOption('mm.assets_url', NULL, $modx->getOption('assets_url') .
@@ -51,7 +45,6 @@ $assets_url = $modx->getOption('mm.assets_url', NULL, $modx->getOption('assets_u
 $path = $assets_url . 'css/' . $cssFile;
 $modx->regClientCSS($path);
 $modx->regClientStartupScript('//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"');
-// $modx->regClientStartupScript('//ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.js');
 $modx->regClientStartupScript($assets_url . 'js/jquery-ui.min.js');
 $modx->regClientStartupScript($assets_url . 'js/context-menu.js');
 
@@ -61,21 +54,15 @@ $modx->regClientCSS($assets_url . 'css/jquery/jquery-ui.theme.css');
 $path = $assets_url . 'js/' . $jsFile;
 $modx->regClientStartupScript($path);
 
-// $modx->regClientStartupScript('http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.js');
-
-$modx->user =& $modx->getObject('modUser', 1);
 /* do nothing if user is not logged in */
 if (!$modx->user->hasSessionContext('web')) {
-    // return '';
+    return '';
 }
 
-
-
-// echo $modx->user->get('username');
 /* process form */
 
 if (isset($_POST['submit'])) {
-    echo print_r($_POST, true);
+    // echo print_r($_POST, true);
     if (isset($_POST['messages']) && (!empty($_POST['messages']))) {
         foreach ($_POST['messages'] as $messageId) {
             $msg = $modx->getObject('modUserMessage', (int) $messageId);
@@ -91,6 +78,7 @@ if (isset($_POST['submit'])) {
 $tpl = $modx->getOption('tpl', $scriptProperties, 'messageTpl');
 $outerTpl = $modx->getOption('outerTpl', $scriptProperties, 'messageOuterTpl');
 $uid = $modx->user->get('id');
+// echo "<p>UserId: " . $uid;
 $c = $modx->newQuery('modUserMessage');
 $c->sortby('date_sent', 'DESC');
 $c->where(
@@ -115,7 +103,6 @@ foreach ($messages as $message) {
     ));
     $query->select('username');
     $username = $modx->getValue($query->prepare());
-    // $fields['mm.date_sent'] = strftime("%b %d, %Y at %I:%M %p", strtotime($fields['mm.date_sent']));
     $fields['mm.sender_id'] = $fields['mm.sender'];
     $fields['mm.sender'] = $username;
     $fields['mm.class'] = $fields['mm.read']? 'read' : 'unread';
@@ -126,7 +113,5 @@ foreach ($messages as $message) {
 }
 
 $output = str_replace('[[+messages]]', $inner, $output);
-
-    // echo $output;
 
 return $output;

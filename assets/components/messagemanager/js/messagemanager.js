@@ -26,12 +26,16 @@
 $(function () {
     var myTable = $('table#the-node');
     var myTextarea = $('#myTextarea');
+    var myUserList = $('#mm_userlist');
+    var ajaxLoader = $('#ajax_loader');
+
     /* Display "No messages" if table is empty (except header row) */
     if (myTable.find("tr").length == 1) {
          $(myTable.append('<tr><td colspan="5">No messages</td></tr>'));
     }
 
     var messageText = '';
+
     $('#the-node').contextMenu({
         /* selector: 'li', */
         selector: 'tr',
@@ -50,7 +54,7 @@ $(function () {
                     mmReply(id);
                     break;
                 case 'newmessage':
-                    mmNewMessage();
+                    mmReply(id, true);
                     break;
             }
         },
@@ -65,17 +69,22 @@ $(function () {
        }
    });
 
-    function mmNewMessage() {
-        mmReply(null, true)
-    }
+    /*function mmNewMessage(id) {
+        mmReply(id, true)
+    }*/
 
     function mmReply(id, newMessage) {
-        var senderId = $('#mm_sender' + id).html();
-        var mt = $('#myTextarea');
+        newMessage = newMessage || null;
+        // var senderId = $('#mm_sender' + id).html();
+        // var mt = $('#myTextarea');
+        var mt = myTextarea;
+        var ul = myUserList;
+        ul.hide();
         var action = 'security/message/create';
-        if (id !== null) {
+        var recipient = $('#mm_sender' + id).html();
+        /*if (id !== null) {
             // var originalMessageText = $("#mm_message" + id).find('td:first').html();
-        }
+        }*/
         var subject = $.trim($('#mm_subject' + id).html().replace(/<span[^>]*>.*<\/span>/, ""));
         var replyPrefix = "[re:] ";
         if (subject.indexOf(replyPrefix) == -1) {
@@ -102,13 +111,14 @@ $(function () {
                         console.log('Original: ' + originalMessageText);
                         originalMessageText = originalMessageText.replace(/&lt;/g, '<');
                         originalMessageText = originalMessageText.replace(/&gt;/g, '>');
-                        console.log('Original after replace: ' + originalMessageText);
+                        // console.log('Original after replace: ' + originalMessageText);
                         mt.val("<< " + originalMessageText + " >>");
                     }
                 },
 
                 "Cancel": function () {
-                    myTextarea.val('');
+                    mt.val('');
+                    ul.val('');
                     $(this).dialog("close");
                 },
                 "Send": {
@@ -118,9 +128,76 @@ $(function () {
             }
          });
 
-        if (id == null) { /* New Message */
-            $('#mm_left_button').hide();
+        if (newMessage !== null) { /* New Message */
             myDialog.dialog('option', 'title', 'New Message');
+            mt.hide();
+            ajaxLoader.show();
+
+            $.getJSON("http://localhost/addons/mm-ajax.html", {
+                // , 'usergroup': 'group1'
+                'id': id, 'action': 'security/user/getlist'}, function(json_data) {
+
+
+                if (json_data.success) {
+                    // var data = jQuery.parseJSON(json_data.data);
+
+                    var results = json_data.data.results;
+                    var count = results.length;
+                    // alert (count);
+                    var r = [], j = -1;
+                    r[++j] = '<div id="mm_users"><h3>Select Recipient</h3>';
+                    for (var key = 0, size = results.length; key < size; key++) {
+                        r[++j] = '<span id="' + results[key].id + '" class="mm_user">';
+                        r[++j] = empty(results[key].fullname)
+                            ? results[key].username
+                            : results[key].fullname  ;
+                        r[++j] = '</span>';
+                    }
+                    r[++j] = '</div>';
+                    // $('#myDialog').dialog.append(r.join(' '));
+                    ul.html(r.join(' '));
+
+
+                    $('span.mm_user').on("click", function(e) {
+                        ul.hide();
+                        /*var userId = e.target.id;*/
+                        // alert(userId);
+                        recipient = e.target.id;
+                        mt.show();
+
+
+                    });
+                    ajaxLoader.hide();
+                    ul.show();
+
+
+                } else {
+                    ajaxLoader.hide();
+                    alert('getList Failed');
+                }
+
+            });
+
+
+
+            $('#mm_left_button').hide();
+            /*var ajaxRequest = $.ajax({
+            type: "POST",
+            url: "http://localhost/addons/mm-ajax.html",
+            data: {
+                'id': id, 'action': 'security/user/getlist'}
+        });
+
+        ajaxRequest.done(function (msg) {
+            // alert(action + ' succeeded on message ' + id);
+        });
+
+        ajaxRequest.fail(function (jqXHR, textStatus) {
+            alert(action + ' failed on message ' + id + ' ' + textStatus);
+        });
+*/
+
+
 
             $("#mm_button_send").unbind("click").click(function () {
                 message = $.trim(mt.val());
@@ -129,20 +206,24 @@ $(function () {
                 } else {
                     // alert('Clicked new message');
                     /* Ajax here */
-                    myTextarea.val('');
+                    mmAjax(id, action, subject, message, recipient);
+                    mt.val('');
                     myDialog.dialog("close");
                 }
             });
         } else { /* Reply */
+            ul.hide();
+            mt.show();
             $("#mm_button_send").unbind("click").click(function () {
                 message = $.trim(mt.val());
                 if (message.length == 0) {
                     alert("Can't send an empty message");
                 } else {
                     // alert('Clicked reply');
-                    mmAjax(id, action, subject, message, senderId);
+                    mmAjax(id, action, subject, message);
                     myTextarea.val('');
                     myDialog.dialog("close");
+
                 }
 
             });
@@ -193,19 +274,27 @@ $(function () {
         subject = subject || null;
         recipient = recipient || null;*/
         /* Ajax call to action; calls MODX resource pseudo-connector */
+        ajaxLoader.show();
         var ajaxRequest = $.ajax({
             type: "POST",
             url: "http://localhost/addons/mm-ajax.html",
             data: {
                 'id': id, 'action': action, 'subject': subject, 'message': message,
-                'recipient' : recipient}
+                'recipient' : recipient},
+            dataType: "json" //to parse string into JSON object
         });
 
-        ajaxRequest.done(function (msg) {
+        ajaxRequest.done(function (data) {
+            ajaxLoader.hide();
+            if (! data.success) {
+                alert(data.error_message);
+            }
+
             // alert(action + ' succeeded on message ' + id);
         });
 
         ajaxRequest.fail(function (jqXHR, textStatus) {
+            ajaxLoader.hide();
             alert(action + ' failed on message ' + id + ' ' + textStatus);
         });
     }
@@ -276,6 +365,25 @@ $(function () {
             }
         });
     });
+
+    function empty(data) {
+        if (typeof(data) == 'number' || typeof(data) == 'boolean') {
+            return false;
+        }
+        if (typeof(data) == 'undefined' || data === null) {
+            return true;
+        }
+        if (typeof(data.length) != 'undefined') {
+            return data.length == 0;
+        }
+        var count = 0;
+        for (var i in data) {
+            if (data.hasOwnProperty(i)) {
+                count++;
+            }
+        }
+        return count == 0;
+    }
 
 
 });

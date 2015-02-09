@@ -1,6 +1,6 @@
 
 <div id="messagemanager">
-    <h3>Your Messages</h3>
+    <h3>Your Messages [[+modx.user.username]]</h3>
     <form class="mm_form" method='post' id='userform' action=''>
         <table id="the-node">
             <tr id="mm_header">
@@ -15,10 +15,15 @@
         <input id="mm_submit_delete" type="submit" name="submit" value="Delete Selected">
     </form>
     <div id="myDialog" title="Reply" style="display:none">
+        <div id="mm_userlist" style="display:none"></div>
+
         <label for = "myTextarea">
-            <textarea id="myTextarea"></textarea>
+            <textarea id="myTextarea" style="display:none;"></textarea>
         </label>
 
     </div>
 
+</div>
+<div id="ajax_loader" style="display:none;">
+    <span id="ajax_loader_image"></span>
 </div>
