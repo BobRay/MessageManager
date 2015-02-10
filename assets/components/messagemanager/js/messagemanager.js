@@ -28,6 +28,7 @@ $(function () {
     var myTextarea = $('#myTextarea');
     var myUserList = $('#mm_userlist');
     var ajaxLoader = $('#ajax_loader');
+    var mm_body = $("body");
 
     /* Display "No messages" if table is empty (except header row) */
     if (myTable.find("tr").length == 1) {
@@ -48,7 +49,10 @@ $(function () {
                     mmMarkUnread(id, 'No');
                     break;
                 case 'delete':
-                    alert('Deleting');
+                    mmAjax(id, 'security/message/remove', null, null, null, true);
+                    $('tr#' + id).remove();
+                    $('tr#mm_message' + id).remove();
+                    $('tr#mm_sender_id' + id).remove();
                     break;
                 case 'reply':
                     mmReply(id);
@@ -90,7 +94,9 @@ $(function () {
         if (subject.indexOf(replyPrefix) == -1) {
               subject = replyPrefix + subject;
         }
-
+        if (newMessage == null) {
+            $("#dlg_subject").val(subject);
+        }
         console.log('Subject: X' + subject + 'X');
         var message = '';
         var myDialog = $("#myDialog").dialog({
@@ -131,7 +137,10 @@ $(function () {
         if (newMessage !== null) { /* New Message */
             myDialog.dialog('option', 'title', 'New Message');
             mt.hide();
-            ajaxLoader.show();
+
+            // ajaxLoader.show();
+            mm_body.addClass("loading");
+            // ajaxLoader.position("option", "position", {my: "center", at: "center", of: window});
 
             $.getJSON("http://localhost/addons/mm-ajax.html", {
                 // , 'usergroup': 'group1'
@@ -167,12 +176,14 @@ $(function () {
 
 
                     });
-                    ajaxLoader.hide();
+                    mm_body.removeClass("loading");
+                    // ajaxLoader.hide();
                     ul.show();
 
 
                 } else {
-                    ajaxLoader.hide();
+                    mm_body.removeClass("loading");
+                    // ajaxLoader.hide();
                     alert('getList Failed');
                 }
 
@@ -251,7 +262,7 @@ $(function () {
         e.stopPropagation();
         $('input:checked').each(function () {
             id = $(this).val();
-            mmAjax(id, 'security/message/remove');
+            mmAjax(id, 'security/message/remove', null, null, null, true);
             $('tr#' + id).remove();
             $('tr#mm_message' + id).remove();
             $('tr#mm_sender_id' + id).remove();
@@ -268,13 +279,16 @@ $(function () {
     });
 
 
-    function mmAjax(id, action, subject, message, recipient) {
-        /*id = id || null;
+    function mmAjax(id, action, subject, message, recipient, hideLoader) {
+        hideLoader = hideLoader || null;
         message = message || null;
         subject = subject || null;
-        recipient = recipient || null;*/
+        recipient = recipient || null;
         /* Ajax call to action; calls MODX resource pseudo-connector */
-        ajaxLoader.show();
+        /*ajaxLoader.show();*/
+        if (hideLoader === null) {
+            mm_body.addClass("loading");
+        }
         var ajaxRequest = $.ajax({
             type: "POST",
             url: "http://localhost/addons/mm-ajax.html",
@@ -285,7 +299,7 @@ $(function () {
         });
 
         ajaxRequest.done(function (data) {
-            ajaxLoader.hide();
+            mm_body.removeClass("loading");
             if (! data.success) {
                 alert(data.error_message);
             }
@@ -294,6 +308,7 @@ $(function () {
         });
 
         ajaxRequest.fail(function (jqXHR, textStatus) {
+            mm_body.removeClass("loading");
             ajaxLoader.hide();
             alert(action + ' failed on message ' + id + ' ' + textStatus);
         });
@@ -315,7 +330,7 @@ $(function () {
         if (e.html() == 'No') {
             e.html('Yes');
             e.toggleClass("Yes No");
-            mmAjax(id, 'security/message/read')
+            mmAjax(id, 'security/message/read', null, null, null, true)
         }
     }
 
@@ -327,10 +342,13 @@ $(function () {
         if (e.html() == 'Yes') {
             e.toggleClass("Yes No");
             e.html('No');
-            mmAjax(id, 'security/message/unread');
+            mmAjax(id, 'security/message/unread', null, null, null, true);
         }
-        e = $('#mm_message' + id);
-        mmCloseSubject(e, id);
+        messageId = $('#mm_message' + id);
+        if (! messageId.is(':hidden')) {
+            mmCloseSubject(messageId, id);
+        }
+
     }
 
     /* Show message if hidden; mark read in DB and on screen;

@@ -15,6 +15,24 @@
         <input id="mm_submit_delete" type="submit" name="submit" value="Delete Selected">
     </form>
     <div id="myDialog" title="Reply" style="display:none">
+
+        <div id="dlg_new_message" style="display:none">
+            <label for="dlg_select_type">Recipient Type</label>
+            <select id="dlg_select_type">
+                <option value="user">User</option>
+                <option value="usergroup">User Group</option>
+                <option value="all">All Users</option>
+            </select>
+            <label id="dlg_select_recipient_label" for="dlg_select_recipient">Recipient</label>
+            <select id="dlg_select_recipient">
+
+            </select>
+        </div>
+
+        <div id="dlg_subject_div">
+            <label for="dlg_subject">Subject</label>
+            <input id="dlg_subject"/>
+        </div>
         <div id="mm_userlist" style="display:none"></div>
 
         <label for = "myTextarea">
@@ -24,6 +42,4 @@
     </div>
 
 </div>
-<div id="ajax_loader" style="display:none;">
-    <span id="ajax_loader_image"></span>
-</div>
+<div class="modal"></div>

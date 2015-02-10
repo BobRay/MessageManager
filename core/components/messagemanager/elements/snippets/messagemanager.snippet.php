@@ -56,7 +56,7 @@ $modx->regClientStartupScript($path);
 
 /* do nothing if user is not logged in */
 if (!$modx->user->hasSessionContext('web')) {
-    return '';
+  //   return '';
 }
 
 /* process form */
