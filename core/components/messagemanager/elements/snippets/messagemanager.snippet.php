@@ -59,21 +59,6 @@ if (!$modx->user->hasSessionContext('web')) {
   //   return '';
 }
 
-/* process form */
-
-if (isset($_POST['submit'])) {
-    // echo print_r($_POST, true);
-    if (isset($_POST['messages']) && (!empty($_POST['messages']))) {
-        foreach ($_POST['messages'] as $messageId) {
-            $msg = $modx->getObject('modUserMessage', (int) $messageId);
-            if ($msg) {
-               // $msg->remove();
-                echo "removing message " . $messageId;
-            }
-        }
-    }
-}
-
 /* Display messages */
 $tpl = $modx->getOption('tpl', $scriptProperties, 'messageTpl');
 $outerTpl = $modx->getOption('outerTpl', $scriptProperties, 'messageOuterTpl');
@@ -89,9 +74,7 @@ $messages = $modx->getCollection('modUserMessage', $c);
 $count = !empty($messages) ? count($messages) : 'no';
 $modx->setPlaceholder('messageCount', $count);
 $modx->setPlaceholder('message_count', count($messages));
-if (empty($messages)) {
-    return 'No Messages';
-}
+
 
 $output = $modx->getChunk($outerTpl);
 

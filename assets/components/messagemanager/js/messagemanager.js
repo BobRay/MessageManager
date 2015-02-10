@@ -41,7 +41,7 @@ $(function () {
         /* selector: 'li', */
         selector: 'tr',
         callback: function (key, options) {
-            var id = getId($(this).attr('id'));
+            var id = getId($(this).attr('id')) || null;
             // var m = "clicked: " + key + " on " + getId($(this).attr('id'));
             // window.console && console.log(m) || alert(m);
             switch (key) {
@@ -79,6 +79,11 @@ $(function () {
 
     function mmReply(id, newMessage) {
         newMessage = newMessage || null;
+        if (id === null) {
+            if (newMessage == null) {
+                return;
+            }
+        }
         // var senderId = $('#mm_sender' + id).html();
         // var mt = $('#myTextarea');
         var mt = myTextarea;
@@ -89,10 +94,14 @@ $(function () {
         /*if (id !== null) {
             // var originalMessageText = $("#mm_message" + id).find('td:first').html();
         }*/
-        var subject = $.trim($('#mm_subject' + id).html().replace(/<span[^>]*>.*<\/span>/, ""));
-        var replyPrefix = "[re:] ";
-        if (subject.indexOf(replyPrefix) == -1) {
-              subject = replyPrefix + subject;
+        var subject = '';
+        if (id !== null) {
+
+            subject = $.trim($('#mm_subject' + id).html().replace(/<span[^>]*>.*<\/span>/, ""));
+            var replyPrefix = "[re:] ";
+            if (subject.indexOf(replyPrefix) == -1) {
+                subject = replyPrefix + subject;
+            }
         }
         if (newMessage == null) {
             $("#dlg_subject").val(subject);
@@ -317,6 +326,9 @@ $(function () {
 
     /* Pulls ID out of selector ID like 'mm_message12' */
     function getId(s) {
+        if (s === undefined) {
+            return null;
+        }
         var number = s.match(/\d+$/);
         number = parseInt(number, 10);
         return number
