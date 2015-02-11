@@ -31,9 +31,7 @@ $(function () {
     var mm_body = $("body");
 
     /* Display "No messages" if table is empty (except header row) */
-    if (myTable.find("tr").length == 1) {
-         $(myTable.append('<tr><td colspan="5">No messages</td></tr>'));
-    }
+    checkEmpty();
 
     var messageText = '';
 
@@ -49,16 +47,20 @@ $(function () {
                     mmMarkUnread(id, 'No');
                     break;
                 case 'delete':
+                    if (id === null) {
+                        break;
+                    }
                     mmAjax(id, 'security/message/remove', null, null, null, true);
                     $('tr#' + id).remove();
                     $('tr#mm_message' + id).remove();
                     $('tr#mm_sender_id' + id).remove();
+                    checkEmpty();
                     break;
                 case 'reply':
                     mmReply(id);
                     break;
                 case 'newmessage':
-                    mmReply(id, true);
+                    mmReply(null, true);
                     break;
             }
         },
@@ -73,9 +75,11 @@ $(function () {
        }
    });
 
-    /*function mmNewMessage(id) {
-        mmReply(id, true)
-    }*/
+    function checkEmpty() {
+        if (myTable.find("tr").length == 1) {
+            $(myTable.append('<tr><td colspan="5">No messages</td></tr>'));
+        }
+    }
 
     function mmReply(id, newMessage) {
         newMessage = newMessage || null;
@@ -84,6 +88,7 @@ $(function () {
                 return;
             }
         }
+
         // var senderId = $('#mm_sender' + id).html();
         // var mt = $('#myTextarea');
         var mt = myTextarea;
@@ -91,21 +96,17 @@ $(function () {
         ul.hide();
         var action = 'security/message/create';
         var recipient = $('#mm_sender' + id).html();
-        /*if (id !== null) {
-            // var originalMessageText = $("#mm_message" + id).find('td:first').html();
-        }*/
+        var dlgSubjectObj = $("#dlg_subject");
         var subject = '';
         if (id !== null) {
-
             subject = $.trim($('#mm_subject' + id).html().replace(/<span[^>]*>.*<\/span>/, ""));
             var replyPrefix = "[re:] ";
             if (subject.indexOf(replyPrefix) == -1) {
                 subject = replyPrefix + subject;
             }
         }
-        if (newMessage == null) {
-            $("#dlg_subject").val(subject);
-        }
+        dlgSubjectObj.val(subject);
+        console.log('ID: ' + id);
         console.log('Subject: X' + subject + 'X');
         var message = '';
         var myDialog = $("#myDialog").dialog({
@@ -225,7 +226,11 @@ $(function () {
                     alert("Can't send an empty message");
                 } else {
                     // alert('Clicked new message');
-                    /* Ajax here */
+                    subject = $('input#dlg_subject').val();
+                    if (subject.length === 0) {
+                        alert('You need to enter a subject');
+                        return false;
+                    }
                     mmAjax(id, action, subject, message, recipient);
                     mt.val('');
                     myDialog.dialog("close");
@@ -281,10 +286,7 @@ $(function () {
         $("#mm_check_all").prop("checked", false);
 
         /* Display "No messages" if table is empty (except header row) */
-        if (myTable.find("tr").length == 1) {
-            $(myTable.append('<tr><td colspan="5">No messages</td></tr>'));
-        }
-
+        checkEmpty();
     });
 
 
@@ -350,10 +352,15 @@ $(function () {
      hide message if visible; change cursor to +
      */
     function mmMarkUnread(id, message) {
-        var e = $('#mm_read' + id);
-        if (e.html() == 'Yes') {
-            e.toggleClass("Yes No");
-            e.html('No');
+        var read = $('#mm_read' + id);
+        if (read.html() === undefined) {
+            return false;
+        }
+        console.log("READ.html: " + read.html());
+
+        if (read.html() == 'Yes') {
+            read.toggleClass("Yes No");
+            read.html('No');
             mmAjax(id, 'security/message/unread', null, null, null, true);
         }
         messageId = $('#mm_message' + id);
