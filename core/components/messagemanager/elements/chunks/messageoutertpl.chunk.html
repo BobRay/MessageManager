@@ -19,14 +19,10 @@
         <div id="dlg_new_message" style="display:none">
             <label for="dlg_select_type">Recipient Type</label>
             <select id="dlg_select_type">
-                <option value="user">User</option>
-                <option value="usergroup">User Group</option>
-                <option value="all">All Users</option>
+                [[+recipient_options]]
             </select>
-            <label id="dlg_select_recipient_label" for="dlg_select_recipient">Recipient</label>
-            <select id="dlg_select_recipient">
-
-            </select>
+            <label id="dlg_select_recipient_label" for="dlg_recipient_type" style="display:none">
+                <input id="dlg_recipient_type" type="text" disabled /></label>
         </div>
 
         <div id="dlg_subject_div">

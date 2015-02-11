@@ -29,6 +29,7 @@ $(function () {
     var myUserList = $('#mm_userlist');
     var ajaxLoader = $('#ajax_loader');
     var mm_body = $("body");
+    var mm_new_message = $('#dlg_new_message');
 
     /* Display "No messages" if table is empty (except header row) */
     checkEmpty();
@@ -146,9 +147,30 @@ $(function () {
 
         if (newMessage !== null) { /* New Message */
             myDialog.dialog('option', 'title', 'New Message');
+            mm_new_message.show();
             mt.hide();
 
-            // ajaxLoader.show();
+            var selectTypeOptions = $("#dlg_select_type");
+            selectTypeOptions.prepend('<option selected="selected" value="0"> Select Type </option>');
+            selectTypeOptions.change(function () {
+                var selection = this.value;
+                $("#dlg_recipient_type").html(selection);
+
+                switch(selection) {
+                    case 'user':
+                        break;
+                    case 'usergroup':
+                        mmAjax(null, 'security/group/getlist');
+                        break;
+                    case 'all':
+                        break;
+                    default:
+                        break;
+                }
+                    // alert( "Selected: " + selection);                                                                    // $("div").text(str);
+            });
+
+            /* // ajaxLoader.show();
             mm_body.addClass("loading");
             // ajaxLoader.position("option", "position", {my: "center", at: "center", of: window});
 
@@ -179,7 +201,7 @@ $(function () {
 
                     $('span.mm_user').on("click", function(e) {
                         ul.hide();
-                        /*var userId = e.target.id;*/
+                        // var userId = e.target.id;
                         // alert(userId);
                         recipient = e.target.id;
                         mt.show();
@@ -198,6 +220,8 @@ $(function () {
                 }
 
             });
+
+             */
 
 
 
@@ -228,7 +252,7 @@ $(function () {
                     // alert('Clicked new message');
                     subject = $('input#dlg_subject').val();
                     if (subject.length === 0) {
-                        alert('You need to enter a subject');
+                        alert('Please enter a subject');
                         return false;
                     }
                     mmAjax(id, action, subject, message, recipient);

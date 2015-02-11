@@ -76,7 +76,25 @@ $modx->setPlaceholder('messageCount', $count);
 $modx->setPlaceholder('message_count', count($messages));
 
 
+/*
+<option value="user">User</option>
+<option value="usergroup">User Group</option>
+<option value="all">All Users</option>
+
+*/
+$rOptions = 'user:User,usergroup:User Group,all:All Users';
+
+$recipientOptions = $modx->getOption('recipientOptions', $scriptProperties, $rOptions, true);
+$optionArray = explode(',', $recipientOptions);
+$finalOptions = '';
+foreach( $optionArray as $opt) {
+    $couple = explode(':', $opt);
+    $finalOptions .= "\n    " . '<option value="' . $couple[0] . '">' . $couple[1] . '</option>';
+}
+
+
 $output = $modx->getChunk($outerTpl);
+$output = str_replace('[[+recipient_options]]', $finalOptions, $output);
 
 foreach ($messages as $message) {
     /** @var $message xPDOObject */

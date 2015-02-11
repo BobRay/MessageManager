@@ -54,6 +54,7 @@ $validActions = array(
     'security/message/unread',
     'security/message/create',
     'security/user/getlist',
+    'security/group/getlist',
 );
 
 my_debug('In mmAjax', $modx, true);
@@ -87,6 +88,9 @@ if (isset($_REQUEST) && !empty($_REQUEST)) {
                     $props['usergroup'] = $group->get('id');
                 }
             }
+            break;
+        case 'security/group/getlist':
+            $props['addAll'] = true;
             break;
         default:
             if ($id == NULL) {
