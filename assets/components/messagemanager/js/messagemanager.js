@@ -251,6 +251,8 @@ $(function () {
                 } else {
                     // alert('Clicked new message');
                     subject = $('input#dlg_subject').val();
+                    console.log('SendSubject: ' + subject);
+
                     if (subject.length === 0) {
                         alert('Please enter a subject');
                         return false;
@@ -269,6 +271,8 @@ $(function () {
                     alert("Can't send an empty message");
                 } else {
                     // alert('Clicked reply');
+                    subject = $('input#dlg_subject').val();
+                    console.log('SendSubject: ' + subject);
                     mmAjax(id, action, {'subject': subject, 'message': message, 'recipient': recipient});
                     myTextarea.val('');
                     myDialog.dialog("close");
