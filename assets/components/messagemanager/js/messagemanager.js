@@ -51,7 +51,7 @@ $(function () {
                     if (id === null) {
                         break;
                     }
-                    mmAjax(id, 'security/message/remove', null, null, null, true);
+                    mmAjax(id, 'security/message/remove', {}, true);
                     $('tr#' + id).remove();
                     $('tr#mm_message' + id).remove();
                     $('tr#mm_sender_id' + id).remove();
@@ -255,7 +255,7 @@ $(function () {
                         alert('Please enter a subject');
                         return false;
                     }
-                    mmAjax(id, action, subject, message, recipient);
+                    mmAjax(id, action, {'subject':subject, 'message':message, 'recipient':recipient});
                     mt.val('');
                     myDialog.dialog("close");
                 }
@@ -269,7 +269,7 @@ $(function () {
                     alert("Can't send an empty message");
                 } else {
                     // alert('Clicked reply');
-                    mmAjax(id, action, subject, message);
+                    mmAjax(id, action, {'subject': subject, 'message': message, 'recipient': recipient});
                     myTextarea.val('');
                     myDialog.dialog("close");
 
@@ -300,7 +300,7 @@ $(function () {
         e.stopPropagation();
         $('input:checked').each(function () {
             id = $(this).val();
-            mmAjax(id, 'security/message/remove', null, null, null, true);
+            mmAjax(id, 'security/message/remove', {}, true);
             $('tr#' + id).remove();
             $('tr#mm_message' + id).remove();
             $('tr#mm_sender_id' + id).remove();
@@ -314,22 +314,28 @@ $(function () {
     });
 
 
-    function mmAjax(id, action, subject, message, recipient, hideLoader) {
+    function mmAjax(id, action, dataIn, hideLoader) {
+        dataIn = dataIn || {};
+        dataIn['id'] = id;
+        dataIn['action'] = action;
+        /*dataIn.push({
+            id: id,
+            action: action
+        });*/
         hideLoader = hideLoader || null;
-        message = message || null;
-        subject = subject || null;
-        recipient = recipient || null;
+
         /* Ajax call to action; calls MODX resource pseudo-connector */
-        /*ajaxLoader.show();*/
+
         if (hideLoader === null) {
             mm_body.addClass("loading");
         }
         var ajaxRequest = $.ajax({
             type: "POST",
             url: "http://localhost/addons/mm-ajax.html",
-            data: {
+            data: dataIn,
+            /*data: {
                 'id': id, 'action': action, 'subject': subject, 'message': message,
-                'recipient' : recipient},
+                'recipient' : recipient},*/
             dataType: "json" //to parse string into JSON object
         });
 
@@ -368,7 +374,7 @@ $(function () {
         if (e.html() == 'No') {
             e.html('Yes');
             e.toggleClass("Yes No");
-            mmAjax(id, 'security/message/read', null, null, null, true)
+            mmAjax(id, 'security/message/read', {}, true)
         }
     }
 
@@ -385,7 +391,7 @@ $(function () {
         if (read.html() == 'Yes') {
             read.toggleClass("Yes No");
             read.html('No');
-            mmAjax(id, 'security/message/unread', null, null, null, true);
+            mmAjax(id, 'security/message/unread', {}, true);
         }
         messageId = $('#mm_message' + id);
         if (! messageId.is(':hidden')) {

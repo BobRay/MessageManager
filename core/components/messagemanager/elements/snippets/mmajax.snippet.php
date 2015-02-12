@@ -63,8 +63,10 @@ if (isset($_REQUEST) && !empty($_REQUEST)) {
     my_debug('Action: ' . $action, $modx);
     $id = $modx->getOption('id', $_REQUEST, null);
     my_debug('Id: ' . $id, $modx);
+    my_debug("REQUEST: " . print_r($_REQUEST, true), $modx);
+    my_debug("SP: " . print_r($scriptProperties, true), $modx);
     if (! in_array($action, $validActions)) {
-        my_debug('Invalid Action', $modx);
+        my_debug('Invalid Action: ' . $action, $modx);
         return $modx->error->failure('Not Authorized');
 
     }
@@ -72,10 +74,11 @@ if (isset($_REQUEST) && !empty($_REQUEST)) {
     $props = array();
     switch($action) {
         case 'security/message/create':
+
             $props = array(
-                'subject' => $modx->getOption('subject', $_REQUEST, 'SUBJECT'),
-                'message' => $modx->getOption('message', $_REQUEST, 'MESSAGE'),
-                'user'    => $modx->getOption('recipient', $_REQUEST, 'RECIPIENT'),
+                'subject' => $modx->getOption('subject', $_REQUEST, 'subject'),
+                'message' => $modx->getOption('message', $_REQUEST, 'message'),
+                'user'    => $modx->getOption('recipient', $_REQUEST, 'recipient'),
             );
             break;
         case 'security/user/getlist':
