@@ -86,7 +86,7 @@ $rOptions = 'user:User,usergroup:User Group,all:All Users';
 
 $recipientOptions = $modx->getOption('recipientOptions', $scriptProperties, $rOptions, true);
 $optionArray = explode(',', $recipientOptions);
-$finalOptions = '';
+$finalOptions = "\n" . ' <option value = "0" > Select One </option > ';
 foreach( $optionArray as $opt) {
     $couple = explode(':', $opt);
     $finalOptions .= "\n    " . '<option value="' . $couple[0] . '">' . $couple[1] . '</option>';

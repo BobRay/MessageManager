@@ -86,17 +86,18 @@ $(function () {
         newMessage = newMessage || null;
         if (id === null) {
             if (newMessage == null) {
-                return;
+                return false;
             }
         }
-
-        // var senderId = $('#mm_sender' + id).html();
-        // var mt = $('#myTextarea');
+        var recipientId = null;
+        var recipientType = null;
+        var toNameField = $('span#mm_recipient');
+        var mmUsers = $('#mm_users');
         var mt = myTextarea;
         var ul = myUserList;
         ul.hide();
+        toNameField.hide();
         var action = 'security/message/create';
-        var recipient = $('#mm_sender' + id).html();
         var dlgSubjectObj = $("#dlg_subject");
         var subject = '';
         if (id !== null) {
@@ -146,21 +147,127 @@ $(function () {
          });
 
         if (newMessage !== null) { /* New Message */
+            document.forms['dlg_form'].reset();
+
+
+            var selectTypeOptions = $("#dlg_select_type");
+            var ddl = $('#mm_dropdown_list');
+            var groupId = null;
             myDialog.dialog('option', 'title', 'New Message');
             mm_new_message.show();
             mt.hide();
-
-            var selectTypeOptions = $("#dlg_select_type");
-            selectTypeOptions.prepend('<option selected="selected" value="0"> Select Type </option>');
+            ddl.hide();
+            // selectTypeOptions.find('option:first').attr('selected', 'selected');
+            // selectTypeOptions[0].selectedIndex = 0;
+                       // selectTypeOptions.prepend('<option selected="selected" value="0"> Select Type </option>');
             selectTypeOptions.change(function () {
                 var selection = this.value;
+                console.log("Selection: " + selection);
+                console.debug(this);
+                if (selection == 0) {
+                    return false;
+                }
                 $("#dlg_recipient_type").html(selection);
+                recipientType = selection;
 
                 switch(selection) {
                     case 'user':
+                        ddl.hide();
+                        var promise1 = mmAjax(null, 'security/user/getlist', {limit:0});
+                        promise1.done(function (data) {
+                            var results = data.data.results;
+                            var count = results.length;
+                            var r = [], j = 0;
+                            r[++j] = '<div id="mm_users"><h3>Select Recipient</h3>';
+                            for (var key = 0, size = results.length; key < size; key++) {
+                                r[++j] = '<span id="' + results[key].id +
+                                         '" class="mm_user">';
+
+                                r[++j] = empty(results[key].fullname)
+                                    ? results[key].username
+                                    : results[key].fullname;
+                                r[++j] = '</span>';
+                            }
+                            r[++j] = '</div>';
+
+                            mmUsers.html(r.join(' '));
+                            mmUsers.show();
+                            // ul.html(r.join(' '));
+                            // $('#mm_dropdown_select').append(r.join(' '));
+                            // mt.html(r.join(' '));
+                            // mt.show();
+
+
+                            $('span.mm_user').on("click", function (e) {
+                                //ul.hide();
+                                // var userId = e.target.id;
+                                // alert(userId);
+                                recipientId = e.target.id;
+                                var recipientName = $(this).html();
+                                console.log('Recipient: ' + recipientName);
+                                if (recipientId == undefined) {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    return;
+                                }
+                                toNameField.html(recipientName);
+                                toNameField.show();
+                                console.log('Recipient ID: ' + recipientId);
+                                mmUsers.hide();
+                                mt.show();
+
+
+                            });
+                            // console.debug(data.data.results);
+
+                        });
+
+
                         break;
                     case 'usergroup':
-                        mmAjax(null, 'security/group/getlist');
+                        mmUsers.hide();
+                        toNameField.hide();
+                        var promise = mmAjax(null, 'security/group/getlist');
+                        promise.done(function(data) {
+                            // var data = jQuery.parseJSON(json_data.data);
+
+                            var results = data.data.results;
+                            // console.debug(results);
+                            var count = results.length;
+                            var r = [], j = 0;
+                            // r[++j] = '<div id="mm_users"><h3>Select Recipient</h3>';
+                            for (var key = 0, size = results.length; key < size; key++) {
+                                r[++j] = '<option value="' + results[key].id + '" class="mm_user">';
+                                r[++j] = results[key].name;
+                                r[++j] = '</option>';
+                            }
+                            // r[++j] = '</div>';
+                            // $('#myDialog').dialog.append(r.join(' '));
+                            // ul.html(r.join(' '));
+                            $('#mm_dropdown_select').append(r.join(' '));
+
+
+                            ddl.on("click", function (e) {
+                                //ul.hide();
+                                // var userId = e.target.id;
+                                // alert(userId);
+                                groupId = e.target.value;
+
+                                if (groupId == 0) {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    return;
+                                }
+
+                                console.log('Group ID: ' + groupId);
+                                mt.show();
+
+
+                            });
+                            // console.debug(data.data.results);
+                            ddl.show();
+                        });
+
                         break;
                     case 'all':
                         break;
@@ -169,79 +276,16 @@ $(function () {
                 }
                     // alert( "Selected: " + selection);                                                                    // $("div").text(str);
             });
-
-            /* // ajaxLoader.show();
-            mm_body.addClass("loading");
-            // ajaxLoader.position("option", "position", {my: "center", at: "center", of: window});
-
-            $.getJSON("http://localhost/addons/mm-ajax.html", {
-                // , 'usergroup': 'group1'
-                'id': id, 'action': 'security/user/getlist'}, function(json_data) {
-
-
-                if (json_data.success) {
-                    // var data = jQuery.parseJSON(json_data.data);
-
-                    var results = json_data.data.results;
-                    var count = results.length;
-                    // alert (count);
-                    var r = [], j = -1;
-                    r[++j] = '<div id="mm_users"><h3>Select Recipient</h3>';
-                    for (var key = 0, size = results.length; key < size; key++) {
-                        r[++j] = '<span id="' + results[key].id + '" class="mm_user">';
-                        r[++j] = empty(results[key].fullname)
-                            ? results[key].username
-                            : results[key].fullname  ;
-                        r[++j] = '</span>';
-                    }
-                    r[++j] = '</div>';
-                    // $('#myDialog').dialog.append(r.join(' '));
-                    ul.html(r.join(' '));
-
-
-                    $('span.mm_user').on("click", function(e) {
-                        ul.hide();
-                        // var userId = e.target.id;
-                        // alert(userId);
-                        recipient = e.target.id;
-                        mt.show();
-
-
-                    });
-                    mm_body.removeClass("loading");
-                    // ajaxLoader.hide();
-                    ul.show();
-
-
-                } else {
-                    mm_body.removeClass("loading");
-                    // ajaxLoader.hide();
-                    alert('getList Failed');
-                }
-
+            // ddl[0].selectedIndex = 0;
+            // $('select option:first-child').attr("selected", "selected");
+           //  $('#mm_dropdown_list option:first-child').attr("selected", "selected");
+           /* $('#periodSelect option').each(function () {
+                this.removeAttribute('selected');
             });
-
-             */
-
+*/
 
 
             $('#mm_left_button').hide();
-            /*var ajaxRequest = $.ajax({
-            type: "POST",
-            url: "http://localhost/addons/mm-ajax.html",
-            data: {
-                'id': id, 'action': 'security/user/getlist'}
-        });
-
-        ajaxRequest.done(function (msg) {
-            // alert(action + ' succeeded on message ' + id);
-        });
-
-        ajaxRequest.fail(function (jqXHR, textStatus) {
-            alert(action + ' failed on message ' + id + ' ' + textStatus);
-        });
-*/
-
 
 
             $("#mm_button_send").unbind("click").click(function () {
@@ -249,14 +293,27 @@ $(function () {
                 if (message.length == 0) {
                     alert("Can't send an empty message");
                 } else {
-                    // alert('Clicked new message');
                     subject = $('input#dlg_subject').val();
                     // console.log('SendSubject: ' + subject);
                     if (subject.length === 0) {
                         alert('Please enter a subject');
                         return false;
                     }
-                    mmAjax(id, action, {'subject':subject, 'message':message, 'recipient':recipient});
+
+                    console.log('Type: ' + recipientType);
+                    switch(recipientType) {
+                        case 'all':
+                            alert('All');
+                            break;
+                        case 'user':
+                            alert('User');
+                            break;
+                        case 'usergroup':
+                            alert('User Group');
+                            break;
+                    }
+
+                    // mmAjax(id, action, {'subject':subject, 'message':message, 'user':recipientId});
                     mt.val('');
                     myDialog.dialog("close");
                 }
@@ -264,6 +321,7 @@ $(function () {
         } else { /* Reply */
             ul.hide();
             mt.show();
+            recipientId = $('#mm_sender' + id).html();
             $("#mm_button_send").unbind("click").click(function () {
                 message = $.trim(mt.val());
                 if (message.length == 0) {
@@ -276,12 +334,10 @@ $(function () {
                         return false;
                     }
                     // console.log('SendSubject: ' + subject);
-                    mmAjax(id, action, {'subject': subject, 'message': message, 'recipient': recipient});
+                    mmAjax(id, action, {'subject': subject, 'message': message, 'user': recipientId});
                     myTextarea.val('');
                     myDialog.dialog("close");
-
                 }
-
             });
         }
 
@@ -322,40 +378,26 @@ $(function () {
 
 
     function mmAjax(id, action, dataIn, hideLoader) {
+        var retVal = false;
         dataIn = dataIn || {};
         dataIn['id'] = id;
         dataIn['action'] = action;
-        /*dataIn.push({
-            id: id,
-            action: action
-        });*/
         hideLoader = hideLoader || null;
-
-        /* Ajax call to action; calls MODX resource pseudo-connector */
 
         if (hideLoader === null) {
             mm_body.addClass("loading");
         }
-        var ajaxRequest = $.ajax({
+
+        /* Ajax call to action; calls MODX resource pseudo-connector */
+        return ajaxRequest = $.ajax({
             type: "POST",
             url: "http://localhost/addons/mm-ajax.html",
             data: dataIn,
-            /*data: {
-                'id': id, 'action': action, 'subject': subject, 'message': message,
-                'recipient' : recipient},*/
-            dataType: "json" //to parse string into JSON object
-        });
+            dataType: "json"
 
-        ajaxRequest.done(function (data) {
+        }).done(function () {
             mm_body.removeClass("loading");
-            if (! data.success) {
-                alert(data.error_message);
-            }
-
-            // alert(action + ' succeeded on message ' + id);
-        });
-
-        ajaxRequest.fail(function (jqXHR, textStatus) {
+        }).fail(function (jqXHR, textStatus) {
             mm_body.removeClass("loading");
             ajaxLoader.hide();
             alert(action + ' failed on message ' + id + ' ' + textStatus);
@@ -374,7 +416,6 @@ $(function () {
     }
 
     /* Mark message read in DB and on screen */
-
     function mmMarkRead(id, message) {
         var e = $('#mm_read' + id);
 

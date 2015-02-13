@@ -15,12 +15,13 @@
         <input id="mm_submit_delete" type="submit" name="submit" value="Delete Selected">
     </form>
     <div id="myDialog" title="Reply" style="display:none">
+        <form id="dlg_form">
+        <div  id="dlg_new_message" style="display:none">
 
-        <div id="dlg_new_message" style="display:none">
             <label for="dlg_select_type">Recipient Type</label>
             <select id="dlg_select_type">
                 [[+recipient_options]]
-            </select>
+            </select><span id="mm_recipient"></span>
             <label id="dlg_select_recipient_label" for="dlg_recipient_type" style="display:none">
                 <input id="dlg_recipient_type" type="text" disabled /></label>
         </div>
@@ -36,11 +37,13 @@
             <label for="dlg_subject">Subject</label>
             <input id="dlg_subject"/>
         </div>
-
+        <div id="mm_users" style="display:none"></div>
 
         <label for = "myTextarea">
             <textarea id="myTextarea" style="display:none;"></textarea>
         </label>
+
+        </form>
 
     </div>
 
