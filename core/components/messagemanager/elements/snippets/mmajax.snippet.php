@@ -57,54 +57,27 @@ $validActions = array(
     'security/group/getlist',
 );
 
-my_debug('In mmAjax', $modx, true);
+$validActions = $modx->getOption ('validActions', $scriptProperties, $validActions, true);
+
 if (isset($_REQUEST) && !empty($_REQUEST)) {
     $action = $modx->getOption('action', $_REQUEST, '');
-    my_debug('Action: ' . $action, $modx);
+    if (! empty($action)) {
+        unset($_REQUEST['action']);
+    }
+
+    /*my_debug('Action: ' . $action, $modx);
     $id = $modx->getOption('id', $_REQUEST, null);
     my_debug('Id: ' . $id, $modx);
     my_debug("REQUEST: " . print_r($_REQUEST, true), $modx);
-    my_debug("SP: " . print_r($scriptProperties, true), $modx);
+    my_debug("SP: " . print_r($scriptProperties, true), $modx);*/
     if (! in_array($action, $validActions)) {
         my_debug('Invalid Action: ' . $action, $modx);
         return $modx->error->failure('Not Authorized');
 
     }
-
-    $props = array();
-    switch($action) {
-        case 'security/message/create':
-
-            $props = array(
-                'subject' => $modx->getOption('subject', $_REQUEST, 'subject'),
-                'message' => $modx->getOption('message', $_REQUEST, 'message'),
-                'user'    => $modx->getOption('recipient', $_REQUEST, 'recipient'),
-            );
-            break;
-        case 'security/user/getlist':
-            $props['limit'] = 0;
-            $userGroup = $modx->getOption('usergroup', $scriptProperties, null, true);
-            // $userGroup = 'group1';
-            if ($userGroup) {
-                $group = $modx->getObject('modUserGroup', array('name' => $userGroup));
-                if ($group) {
-                    $props['usergroup'] = $group->get('id');
-                }
-            }
-            break;
-        case 'security/group/getlist':
-            $props['addAll'] = true;
-            break;
-        default:
-            if ($id == NULL) {
-                my_debug('No ID', $modx);
-                return $modx->error->failure('Param not set');
-            }
-
-            $props['id'] = $modx->getOption('id', $_REQUEST, '999999');
+    $props = $modx::sanitize($_REQUEST, $modx->sanitizePatterns);
 
 
-    }
     /* @var $response modProcessorResponse */
     $response =  $modx->runProcessor($action, $props);
 
@@ -120,8 +93,6 @@ if (isset($_REQUEST) && !empty($_REQUEST)) {
             'error_message' => $errorMessage,
         );
     } else {
-        // my_debug("xxx" . print_r($r, true), $modx);
-
         $retVal = array(
             'success' => true,
         );
@@ -129,8 +100,12 @@ if (isset($_REQUEST) && !empty($_REQUEST)) {
             $retVal['data'] = $modx->fromJSON($response->response);
         }
     }
-    return $modx->toJSON($retVal);
 
 } else {
-    my_debug('Empty Request', $modx);
+    $retVal =  array(
+        'success' => false,
+        'error_message' => 'Empty Request',
+    );
 }
+
+return $modx->toJSON($retVal);
