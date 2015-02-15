@@ -67,11 +67,11 @@ tr#mm_header th {
 #myTextarea {
   width: 90%;
   height: 90%;
-  margin: 0 0 0 10px;
+  margin: 10px 0 0 0;
   padding: 10px;
-  -webkit-border-top-left-radius: 7px;
-  -moz-border-radius-topleft: 7px;
-  border-top-left-radius: 7px; }
+  -moz-border-radius: 7px;
+  -webkit-border-radius: 7px;
+  border-radius: 7px; }
 
 #mm_left_button {
   position: absolute;
@@ -327,6 +327,10 @@ span.mm_user {
   margin: 1px;
   border: 1px darkgray solid; }
 
+span#mm_recipient {
+  display: inline;
+  margin: 0 0 0 10px; }
+
 span.mm_user:hover {
   background-color: darkgray;
   color: #f5f5f5;
@@ -354,15 +358,22 @@ body.loading {
 body.loading .modal {
   display: block; }
 
-#dlg_subject_div {
-  margin: 0 0 5px 20px; }
-
 input#dlg_subject {
-  margin: 0 0 0 7px;
+  margin: 10px 0 0 0;
   width: 80%;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   border-radius: 5px; }
+
+div#dlg_subject_div {
+  margin: 0;
+  padding: 0; }
+
+div#dls_new_message select {
+  margin: 10px 0 0 0; }
+
+div#mm_dropdown_list {
+  margin: 10px 0 0 0; }
 
 /* #56A717 read */
 
