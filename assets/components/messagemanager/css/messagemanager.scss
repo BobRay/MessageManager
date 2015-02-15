@@ -1,0 +1,440 @@
+/**
+ * CSS file for MessageManager extra
+ *
+ * Copyright 2015 by Bob Ray
+ * Created on 1/05/2015
+ *
+ * @package messagemanager
+ * Icon image credits:
+      Licensed under CC BY 2.5 via Wikimedia Commons -
+          http://commons.wikimedia.org/wiki/File:Email.png#mediaviewer/File:Email.png
+      "Silk arrow turn left" by Mark James - http://famfamfam.com/lab/icons/silk/. Licensed under CC BY 2.5
+          via Wikimedia Commons -
+          http://commons.wikimedia.org/wiki/File:Silk_arrow_turn_left.png#mediaviewer/File:silk_arrow_turn_left.png
+      "Cancel". Licensed under CC BY 2.5 via Wikimedia Commons -
+          http://commons.wikimedia.org/wiki/File:Cancel.png#mediaviewer/File:Cancel.png
+      "Email open image". Licensed under CC BY 2.5 via Wikimedia Commons -
+           http://commons.wikimedia.org/wiki/File:Email_open_image.png#mediaviewer/File:Email_open_image.png
+      "Email add". Licensed under CC BY 2.5 via Wikimedia Commons -
+           http://commons.wikimedia.org/wiki/File:Email_add.png#mediaviewer/File:Email_add.png
+      "Silk arrow down" by Mark James - http://famfamfam.com/lab/icons/silk/.
+          Licensed under CC BY 2.5 via Wikimedia Commons -
+          http://commons.wikimedia.org/wiki/File:Silk_arrow_down.png#mediaviewer/File:Silk_arrow_down.png
+      "Silk cross" by Mark James - http://famfamfam.com/lab/icons/silk/.
+          Licensed under CC BY 2.5 via Wikimedia Commons -
+          http://commons.wikimedia.org/wiki/File:Silk_cross.png#mediaviewer/File:Silk_cross.png
+      "Email". Licensed under CC BY 2.5 via Wikimedia Commons -
+          http://commons.wikimedia.org/wiki/File:Email.png#mediaviewer/File:Email.png
+      "Add". Licensed under CC BY 2.5 via Wikimedia Commons -
+          http://commons.wikimedia.org/wiki/File:Add.png#mediaviewer/File:Add.png
+ */
+
+$visibleMessageBackground: #f5f5f5;
+
+@mixin rounded($amount) {
+  -moz-border-radius: $amount;
+  -webkit-border-radius: $amount;
+  border-radius: $amount;
+}
+
+div#messagemanager {
+    /*background-color: darkgray;*/
+    background-color: #fffffa;
+    padding: 50px;
+    margin: 50px;
+    width:80%;
+}
+
+
+form#mm_form {
+    border: none;
+    text-align: left;
+    padding: 0;
+    margin: 0;
+    width: 50%
+
+}
+
+table#the-node {
+    border: 1px darkgray solid;
+    border-collapse: separate !important;
+    -webkit-border-top-left-radius: 7px;
+    -moz-border-radius-topleft: 7px;
+    border-top-left-radius: 7px;
+    -webkit-border-top-right-radius: 7px;
+    -moz-border-radius-topright: 7px;
+    border-top-right-radius: 7px;
+}
+
+tr#mm_header {
+    -webkit-border-top-left-radius: 7px;
+    -moz-border-radius-topleft: 7px;
+    border-top-left-radius: 7px;
+}
+tr#mm_header th {
+    /*background-color: ivory;*/
+    background-color: darkgray;
+    font-family:Verdana, Arial, Helvetica, sans-serif;
+    font-size:medium;
+    font-weight:normal;
+}
+
+#myTextarea {
+    width:90%;
+    height:90%;
+    margin:0 0 0 10px;
+    padding: 10px;
+    -webkit-border-top-left-radius: 7px;
+    -moz-border-radius-topleft: 7px;
+    border-top-left-radius: 7px;
+}
+
+#mm_left_button {
+    position: absolute;
+    left: 30px;
+}
+
+div#messagemanager td {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    border: 1px black solid;
+    font-size: small;
+    margin:0;
+    padding:5px 10px;
+}
+
+td.Yes {
+    /* background-color: rgba(0, 255, 0, 0.25); */
+    background-color: rgba(86, 167, 23, 1);
+}
+
+tr.mm_message_tr {
+    border-top: transparent 1px solid;
+}
+
+th#mm_checkbox {
+  width: 10px;
+  margin: 0;
+  padding: 0;
+  -webkit-border-top-left-radius: 7px;
+  -moz-border-radius-topleft: 7px;
+  border-top-left-radius: 7px;
+}
+
+th#mm_read {
+    -webkit-border-top-right-radius: 7px;
+    -moz-border-radius-topright: 7px;
+    border-top-right-radius: 7px;
+}
+
+div#messagemanager td.mm_message {
+    /*border: #56A717 3px solid;*/
+    white-space:pre-wrap;
+    margin:0;
+    /*padding: 5px 15px;*/
+    padding: 20px;
+    background-color: $visibleMessageBackground;
+    border-top: transparent 1px solid;
+}
+
+
+
+td.mm_checkbox {
+    margin:0;
+    padding:0;
+}
+
+/* sender, subject, sent, read */
+th#mm_sender {
+    width: 20%;
+}
+
+th#mm_subject {
+    width: 50%;
+}
+
+
+
+th#mm_sent {
+    width: 20%;
+}
+
+td.mm_date_sent {
+    margin:5px 10px;
+}
+th#mm_read {
+    width: 10%;
+    margin:0;
+    padding:0;
+}
+
+/* .zoomin {
+    border-color: black;
+}
+*/
+.zoomout {
+   border-bottom: transparent 1px solid !important;
+   background-color: $visibleMessageBackground;  /* whitesmoke */
+
+}
+.mm_tr {
+    margin-bottom:0;
+}
+
+.zoomin:hover {
+    cursor: zoom-in;
+}
+
+.zoomout:hover {
+    cursor: zoom-out;
+}
+
+.mm_message_tr {
+    display:none;
+}
+
+span.mm_expand {
+    background-color: #e8e8e8;
+    border: dimgray 1px solid;
+    padding: 2px;
+    margin:0 10px 0 0;
+}
+
+/*!
+ * jQuery contextMenu - Plugin for simple contextMenu handling
+ *
+ * Version: 1.6.6
+ *
+ * Authors: Rodney Rehm, Addy Osmani (patches for FF)
+ * Web: http://medialize.github.com/jQuery-contextMenu/
+ *
+ * Licensed under
+ *   MIT License http://www.opensource.org/licenses/mit-license
+ *   GPL v3 http://opensource.org/licenses/GPL-3.0
+ *
+ */
+
+.context-menu-list {
+    margin: 0;
+    // padding: 0;
+    padding:5px;
+
+    min-width: 120px;
+    max-width: 250px;
+    display: inline-block;
+    position: absolute;
+    list-style-type: none;
+
+    border: 1px solid #DDD;
+    background: #EEE;
+
+    -webkit-box-shadow: 5pc 5px 5px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+    -ms-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+    -o-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+
+  @include rounded(10px);
+}
+
+.context-menu-item {
+    padding: 4px 2px 2px 24px;
+    background-color: #EEE;
+    position: relative;
+    -webkit-user-select: none;
+    -moz-user-select: -moz-none;
+    -ms-user-select: none;
+    user-select: none;
+    @include rounded(5px);
+}
+
+.context-menu-separator {
+   // padding-bottom: 0;
+   // border-bottom: 1px solid #DDD;
+   border-bottom: 3px solid #DDD;
+   padding: 1px 0 5px 0;
+   margin-bottom:5px;
+}
+
+.context-menu-item > label > input,
+.context-menu-item > label > textarea {
+   -webkit-user-select: text;
+   -moz-user-select: text;
+   -ms-user-select: text;
+   user-select: text;
+}
+
+.context-menu-item.hover {
+   cursor: pointer;
+   background-color: rgba(41, 230, 16, 0.13);
+}
+
+.context-menu-item.disabled {
+   color: #666;
+}
+
+.context-menu-input.hover,
+.context-menu-item.disabled.hover {
+   cursor: default;
+   background-color: #EEE;
+}
+
+.context-menu-submenu:after {
+   content: ">";
+   color: #666;
+   position: absolute;
+   top: 0;
+   right: 3px;
+   z-index: 1;
+}
+
+/* icons
+   #protip:
+   In case you want to use sprites for icons (which I would suggest you do) have a look at
+   http://css-tricks.com/13224-pseudo-spriting/ to get an idea of how to implement
+   .context-menu-item.icon:before {}
+*/
+.context-menu-item.icon {
+    min-height: 18px;
+    background-repeat: no-repeat;
+    background-position: 4px 2px;
+}
+
+/*.context-menu-item.icon-edit {
+    background-image: url(images/page_white_edit.png);
+}
+
+.context-menu-item.icon-cut {
+    background-image: url(images/cut.png);
+}
+
+.context-menu-item.icon-copy {
+    background-image: url(images/page_white_copy.png);
+}
+
+.context-menu-item.icon-paste {
+    background-image: url(images/page_white_paste.png);
+}*/
+
+.context-menu-item.icon-delete {
+    background-image: url(silk_cross.png);
+}
+
+.context-menu-item.icon-newmessage {
+    background-image: url(add.png);
+}
+
+.context-menu-item.icon-markunread {
+    background-image: url(email.png);
+}
+.context-menu-item.icon-reply {
+    background-image: url(silk_arrow_turn_left.png);
+}
+
+.context-menu-item.icon-cancel {
+    background-image: url(cancel.png);
+}
+
+/* vertically align inside labels */
+.context-menu-input > label > * {
+    vertical-align: top;
+}
+
+/* position checkboxes and radios as icons */
+.context-menu-input > label > input[type="checkbox"],
+.context-menu-input > label > input[type="radio"] {
+    margin-left: -17px;
+}
+
+.context-menu-input > label > span {
+    margin-left: 5px;
+}
+
+.context-menu-input > label,
+.context-menu-input > label > input[type="text"],
+.context-menu-input > label > textarea,
+.context-menu-input > label > select {
+    display: block;
+    width: 100%;
+
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.context-menu-input > label > textarea {
+    height: 100px;
+}
+
+.context-menu-item > .context-menu-list {
+    display: none;
+    /* re-positioned by js */
+    right: -5px;
+    top: 5px;
+}
+
+.context-menu-item.hover > .context-menu-list {
+    display: block;
+}
+
+.context-menu-accesskey {
+    text-decoration: underline;
+}
+
+span.mm_user {
+    display:block;
+    float:left;
+    padding: 3px 10px;
+    margin:1px;
+    border: 1px darkgray solid;
+}
+
+span.mm_user:hover {
+    background-color:darkgray;
+    color:#f5f5f5; /* whitesmoke */
+}
+
+
+
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    top: 25%;
+    left: 23%;
+    height: 50%;
+    width: 50%;
+    /*color:ivory;*/
+    background: rgba(255, 255, 240, 0.0) url('loading/weave-green-small.gif') 50% 50% no-repeat;
+}
+/* images/ui-bg_highlight-hard_15_459e00_1x100.png */
+/* When the body has the loading class, we turn
+   the scrollbar off with overflow:hidden */
+body.loading {
+    overflow: hidden;
+}
+
+/* Anytime the body has the loading class, our
+   modal element will be visible */
+body.loading .modal {
+    display: block;
+}
+
+#dlg_subject_div {
+    margin: 0 0 5px 20px;
+}
+
+input#dlg_subject {
+    margin: 0 0 0 7px;
+    width: 80%;
+  @include rounded(5px);
+}
+
+
+
+/* #56A717 read */
