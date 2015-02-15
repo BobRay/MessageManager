@@ -30,6 +30,11 @@ $(function () {
     var ajaxLoader = $('#ajax_loader');
     var mm_body = $("body");
     var mm_new_message = $('#dlg_new_message');
+    var toNameField = $('span#mm_recipient');
+    var mmUsers = $('#mm_users');
+    var mt = myTextarea;
+    var ul = myUserList;
+    var ddl = $('#mm_dropdown_list');
 
     /* Display "No messages" if table is empty (except header row) */
     checkEmpty();
@@ -76,6 +81,18 @@ $(function () {
        }
    });
 
+    function clearDialog() {
+        mt.val('');
+        ul.val('');
+        ul.hide();
+        mt.hide();
+        ddl.hide();
+        mm_new_message.hide();
+        toNameField.html('');
+        toNameField.hide();
+
+    }
+
     function checkEmpty() {
         if (myTable.find("tr").length == 1) {
             $(myTable.append('<tr><td colspan="5">No messages</td></tr>'));
@@ -91,10 +108,11 @@ $(function () {
         }
         var recipientId = null;
         var recipientType = null;
-        var toNameField = $('span#mm_recipient');
+        /*var toNameField = $('span#mm_recipient');
         var mmUsers = $('#mm_users');
         var mt = myTextarea;
         var ul = myUserList;
+        var ddl = $('#mm_dropdown_list');*/
         ul.hide();
         toNameField.hide();
         var action = 'security/message/create';
@@ -135,8 +153,7 @@ $(function () {
                 },
 
                 "Cancel": function () {
-                    mt.val('');
-                    ul.val('');
+                    clearDialog();
                     $(this).dialog("close");
                 },
                 "Send": {
@@ -151,7 +168,7 @@ $(function () {
 
 
             var selectTypeOptions = $("#dlg_select_type");
-            var ddl = $('#mm_dropdown_list');
+
             var groupId = null;
             myDialog.dialog('option', 'title', 'New Message');
             mm_new_message.show();
@@ -270,6 +287,7 @@ $(function () {
 
                         break;
                     case 'all':
+                        mt.show();
                         break;
                     default:
                         break;
@@ -314,7 +332,7 @@ $(function () {
                     }
 
                     // mmAjax(id, action, {'subject':subject, 'message':message, 'user':recipientId});
-                    mt.val('');
+                   clearDialog();
                     myDialog.dialog("close");
                 }
             });
@@ -334,9 +352,11 @@ $(function () {
                         return false;
                     }
                     // console.log('SendSubject: ' + subject);
-                    mmAjax(id, action, {'subject': subject, 'message': message, 'user': recipientId});
-                    myTextarea.val('');
-                    myDialog.dialog("close");
+                    var promise3 = mmAjax(id, action, {'subject': subject, 'message': message, 'user': recipientId});
+                    promise3.done(function (data) {
+                        clearDialog();
+                        myDialog.dialog("close");
+                    });
                 }
             });
         }
