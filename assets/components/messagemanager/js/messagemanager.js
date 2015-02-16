@@ -90,6 +90,8 @@ $(function () {
         mm_new_message.hide();
         toNameField.html('');
         toNameField.hide();
+        mmUsers.val('');
+        mmUsers.hide();
 
     }
 
@@ -190,8 +192,10 @@ $(function () {
                 switch(selection) {
                     case 'user':
                         ddl.hide();
+                        mm_body.addClass("loading");
                         var promise1 = mmAjax(null, 'security/user/getlist', {limit:0});
                         promise1.done(function (data) {
+                            mm_body.removeClass("loading");
                             var results = data.data.results;
                             var count = results.length;
                             var r = [], j = 0;
@@ -209,11 +213,6 @@ $(function () {
 
                             mmUsers.html(r.join(' '));
                             mmUsers.show();
-                            // ul.html(r.join(' '));
-                            // $('#mm_dropdown_select').append(r.join(' '));
-                            // mt.html(r.join(' '));
-                            // mt.show();
-
 
                             $('span.mm_user').on("click", function (e) {
                                 //ul.hide();
@@ -319,21 +318,25 @@ $(function () {
                     }
 
                     console.log('Type: ' + recipientType);
+                    mm_body.addClass('loading');
                     switch(recipientType) {
                         case 'all':
-                            alert('All');
+                            mmAjax(null, 'security/message/create', {'type':'all','subject': subject,'message': message});
+                            // alert('All');
                             break;
                         case 'user':
-                            alert('User');
+                            mmAjax(null, 'security/message/create', {'type':'user','user':recipientId,'subject':subject,'message':message});
+
                             break;
                         case 'usergroup':
-                            alert('User Group');
+                            mmAjax(null, 'security/message/create', {'type':'usergroup','group':groupId,'subject': subject,'message': message});
+                            // alert('User Group');
                             break;
                     }
-
-                    // mmAjax(id, action, {'subject':subject, 'message':message, 'user':recipientId});
-                   clearDialog();
-                    myDialog.dialog("close");
+                    clearDialog();
+                    mm_body.removeClass('loading');
+                    $.alert('Message Sent', 'MessageManager');
+                   myDialog.dialog("close");
                 }
             });
         } else { /* Reply */
@@ -352,11 +355,15 @@ $(function () {
                         return false;
                     }
                     // console.log('SendSubject: ' + subject);
-                    var promise3 = mmAjax(id, action, {'subject': subject, 'message': message, 'user': recipientId});
-                    promise3.done(function (data) {
+                    mm_body.addClass("loading");
+                    mmAjax(id, action, {'subject': subject, 'message': message, 'user': recipientId});
+                    // promise3.done(function (data) {
+
                         clearDialog();
                         myDialog.dialog("close");
-                    });
+                    mm_body.removeClass("loading");
+                        // $.alert('Message Sent', 'MessageManager');
+                    // });
                 }
             });
         }
@@ -405,11 +412,11 @@ $(function () {
         hideLoader = hideLoader || null;
 
         if (hideLoader === null) {
-            mm_body.addClass("loading");
+            // mm_body.addClass("loading");
         }
 
         /* Ajax call to action; calls MODX resource pseudo-connector */
-        return ajaxRequest = $.ajax({
+        return $.ajax({
             type: "POST",
             url: "http://localhost/addons/mm-ajax.html",
             data: dataIn,
@@ -419,7 +426,6 @@ $(function () {
             mm_body.removeClass("loading");
         }).fail(function (jqXHR, textStatus) {
             mm_body.removeClass("loading");
-            ajaxLoader.hide();
             alert(action + ' failed on message ' + id + ' ' + textStatus);
         });
     }
@@ -520,6 +526,15 @@ $(function () {
         return count == 0;
     }
 
+    $.extend({ alert: function (message, title) {
+        $("<div></div>").dialog( {
+            buttons: { "Ok": function () { $(this).dialog("close"); } },
+            close: function (event, ui) { $(this).remove(); },
+            resizable: false,
+            title: title,
+            modal: true
+        }).text(message);
+    }});
 
 });
 
