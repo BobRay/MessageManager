@@ -54,9 +54,9 @@ $modx->regClientCSS($assets_url . 'css/jquery/jquery-ui.theme.css');
 $path = $assets_url . 'js/' . $jsFile;
 $modx->regClientStartupScript($path);
 
-/* do nothing if user is not logged in */
-if (!$modx->user->hasSessionContext('web')) {
-  //   return '';
+/* do nothing if user is not logged in or member of admin group*/
+if ( (!$modx->user->hasSessionContext('web')) && (! $modx->user->isMember('Administrator'))) {
+  return '';
 }
 
 /* Display messages */
