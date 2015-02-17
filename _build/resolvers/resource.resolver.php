@@ -57,7 +57,7 @@ if($object->xpdo) {
                 1 =>  array (
                   'pagetitle' => 'mmAjax',
                   'parent' => 'Message Manager',
-                  'template' => 0,
+                  'template' => '0',
                 ),
             );
 
