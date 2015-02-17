@@ -418,7 +418,7 @@ $(function () {
         /* Ajax call to action; calls MODX resource pseudo-connector */
         return $.ajax({
             type: "POST",
-            url: "http://localhost/addons/mm-ajax.html",
+            url: "mm-ajax.html",
             data: dataIn,
             dataType: "json"
 
