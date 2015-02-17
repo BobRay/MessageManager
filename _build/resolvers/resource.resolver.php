@@ -73,6 +73,8 @@ if($object->xpdo) {
                     }
                     if ($fields['template'] == 'default') {
                         $resource->set('template', $modx->getOption('default_template'));
+                    } elseif (empty($fields['template'])) {
+                        $resource->set('template', 0);
                     } else {
                         $templateObj = $modx->getObject('modTemplate', array('templatename' => $fields['template']));
                         if ($templateObj) {
