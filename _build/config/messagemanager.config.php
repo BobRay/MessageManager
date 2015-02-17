@@ -196,6 +196,7 @@ $components = array(
         ),
         'mmAjax' => array(
             'pagetitle' => 'mmAjax',
+            'template' => '0',
             'alias' => 'mm-ajax',
             'published' => '1',
             'hidemenu' => '1',
