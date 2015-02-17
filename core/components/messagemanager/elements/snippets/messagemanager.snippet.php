@@ -41,7 +41,7 @@
 $cssFile = $modx->getOption('cssFile', $scriptProperties, 'messagemanager.css');
 $jsFile = $modx->getOption('jsFile', $scriptProperties, 'messagemanager.js?' . 'v=' . time());
 $assets_url = $modx->getOption('mm.assets_url', NULL, $modx->getOption('assets_url') .
-    '/assets/components/messagemanager/');
+    'components/messagemanager/');
 $path = $assets_url . 'css/' . $cssFile;
 $modx->regClientCSS($path);
 $modx->regClientStartupScript('//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"');
