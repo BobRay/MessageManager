@@ -72,7 +72,11 @@ if (isset($_REQUEST) && !empty($_REQUEST)) {
     my_debug("SP: " . print_r($scriptProperties, true), $modx);*/
     if (! in_array($action, $validActions)) {
         my_debug('Invalid Action: ' . $action, $modx);
-        return $modx->error->failure('Not Authorized');
+        $retVal = array(
+            'success'       => false,
+            'error_message' => 'Invalid Action',
+        );
+        return $modx->toJSON($retVal);
 
     }
     $props = $modx::sanitize($_REQUEST, $modx->sanitizePatterns);
