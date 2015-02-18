@@ -58,7 +58,7 @@ $(function () {
                     if (id === null) {
                         break;
                     }
-                    mmAjax(id, 'security/message/remove', {}, true);
+                    mmAjax(id, 'security/message/remove', {});
                     $('tr#' + id).remove();
                     $('tr#mm_message' + id).remove();
                     $('tr#mm_sender_id' + id).remove();
@@ -194,34 +194,9 @@ $(function () {
                 switch(selection) {
                     case 'user':
                         ddl.hide();
-
-                        // mm_body.addClass("loading");
-                        //var target = document.getElementsByTagName("body")[0];
-                       /* var opts = {
-                            lines: 17, // The number of lines to draw
-                            length: 20, // The length of each line
-                            width: 5, // The line thickness
-                            radius: 14, // The radius of the inner circle
-                            corners: 1, // Corner roundness (0..1)
-                            rotate: 0, // The rotation offset
-                            direction: 1, // 1: clockwise, -1: counterclockwise
-                            color: '#56A717', // #rgb or #rrggbb or array of colors
-                            speed: 0.6, // Rounds per second
-                            trail: 81, // Afterglow percentage
-                            shadow: false, // Whether to render a shadow
-                            hwaccel: false, // Whether to use hardware acceleration
-                            className: 'spinner', // The CSS class to assign to the spinner
-                            zIndex: 2e9, // The z-index (defaults to 2000000000)
-                            top: '50%', // Top position relative to parent
-                            left: '50%' // Left position relative to parent
-                        };*/
-                        // var target = document.getElementById('foo');
-                        // var spinner = new Spinner(opts).spin(target);
-                        //var spinner = new Spinner(opts);
                         mmSpinner.spin(spinnerTarget);
                         var promise1 = mmAjax(null, 'security/user/getlist', {limit:0});
                         promise1.done(function (data) {
-                            // mm_body.removeClass("loading");
                             var results = data.data.results;
                             var count = results.length;
                             var r = [], j = 0;
@@ -269,7 +244,6 @@ $(function () {
                     case 'usergroup':
                         mmUsers.hide();
                         toNameField.hide();
-                        // mm_body.addClass("loading");
                         mmSpinner.spin(spinnerTarget);
                         var promise = mmAjax(null, 'security/group/getlist');
                         promise.done(function(data) {
@@ -347,7 +321,6 @@ $(function () {
 
                     console.log('Type: ' + recipientType);
                     mmSpinner.spin(spinnerTarget);
-                    // mm_body.addClass('loading');
                     switch(recipientType) {
                         case 'all':
                            promise4 = mmAjax(null, 'security/message/create', {'type':'all','subject': subject,'message': message});
@@ -365,7 +338,6 @@ $(function () {
                     promise4.done(function (data) {
                         clearDialog();
                         mmSpinner.stop();
-                        // mm_body.removeClass('loading');
                         // $.alert('Message Sent', 'MessageManager');
                         myDialog.dialog("close");
                     });
@@ -388,14 +360,12 @@ $(function () {
                     }
                     // console.log('SendSubject: ' + subject);
                     mmSpinner.spin(spinnerTarget);
-                    // mm_body.addClass("loading");
                     promise5 = mmAjax(id, action, {'subject': subject, 'message': message, 'user': recipientId});
                     promise5.done(function (data) {
 
                         clearDialog();
                         myDialog.dialog("close");
                         mmSpinner.stop();
-                        // mm_body.removeClass("loading");
                         // $.alert('Message Sent', 'MessageManager');
 
                     });
@@ -423,11 +393,10 @@ $(function () {
 
         e.preventDefault();
         e.stopPropagation();
-        // mm_body.addClass("loading");
         mmSpinner.spin(spinnerTarget);
         $('input:checked').each(function () {
             id = $(this).val();
-            promise6 = mmAjax(id, 'security/message/remove', {}, true);
+            promise6 = mmAjax(id, 'security/message/remove', {});
             $('tr#' + id).remove();
             $('tr#mm_message' + id).remove();
             $('tr#mm_sender_id' + id).remove();
@@ -438,23 +407,17 @@ $(function () {
 
         promise6.done(function (data) {
             mmSpinner.stop();
-            // mm_body.removeClass("loading");
             /* Display "No messages" if table is empty (except header row) */
             checkEmpty();
         });
     });
 
 
-    function mmAjax(id, action, dataIn, hideLoader) {
+    function mmAjax(id, action, dataIn) {
         var retVal = false;
         dataIn = dataIn || {};
         dataIn['id'] = id;
         dataIn['action'] = action;
-        hideLoader = hideLoader || null;
-
-        if (hideLoader === null) {
-            // mm_body.addClass("loading");
-        }
 
         /* Ajax call to action; calls MODX resource pseudo-connector */
         return $.ajax({
@@ -465,10 +428,8 @@ $(function () {
 
         }).done(function () {
             mmSpinner.stop();
-            // mm_body.removeClass("loading");
         }).fail(function (jqXHR, textStatus) {
             mmSpinner.stop();
-            //mm_body.removeClass("loading");
             alert(action + ' failed on message ' + id + ' ' + textStatus);
         });
     }
@@ -491,7 +452,7 @@ $(function () {
         if (e.html() == 'No') {
             e.html('Yes');
             e.toggleClass("Yes No");
-            mmAjax(id, 'security/message/read', {}, true)
+            mmAjax(id, 'security/message/read', {})
         }
     }
 
@@ -508,7 +469,7 @@ $(function () {
         if (read.html() == 'Yes') {
             read.toggleClass("Yes No");
             read.html('No');
-            mmAjax(id, 'security/message/unread', {}, true);
+            mmAjax(id, 'security/message/unread', {});
         }
         messageId = $('#mm_message' + id);
         if (! messageId.is(':hidden')) {

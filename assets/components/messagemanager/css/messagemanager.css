@@ -336,31 +336,6 @@ span.mm_user:hover {
   color: #f5f5f5;
   /* whitesmoke */ }
 
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 1000;
-  /*top: 25%;
-  left: 23%;*/
-  /*height: 50%;
-  width: 50%;*/
-  top: 45%;
-  left: 45%;
-  height: 36px;
-  width: 36px;
-  /*color:ivory;*/
-  background: rgba(255, 255, 240, 0) url("loading/weave-green-small.gif") 50% 50% no-repeat; }
-
-/* When the body has the loading class, we turn
-   the scrollbar off with overflow:hidden */
-body.loading {
-  overflow: hidden; }
-
-/* Anytime the body has the loading class, our
-   modal element will be visible */
-body.loading .modal {
-  display: block; }
-
 input#dlg_subject {
   margin: 10px 0 0 0;
   width: 80%;
