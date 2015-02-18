@@ -192,10 +192,11 @@ $(function () {
                 switch(selection) {
                     case 'user':
                         ddl.hide();
+
                         mm_body.addClass("loading");
                         var promise1 = mmAjax(null, 'security/user/getlist', {limit:0});
                         promise1.done(function (data) {
-                            mm_body.removeClass("loading");
+                            // mm_body.removeClass("loading");
                             var results = data.data.results;
                             var count = results.length;
                             var r = [], j = 0;
@@ -243,6 +244,7 @@ $(function () {
                     case 'usergroup':
                         mmUsers.hide();
                         toNameField.hide();
+                        mm_body.addClass("loading");
                         var promise = mmAjax(null, 'security/group/getlist');
                         promise.done(function(data) {
                             // var data = jQuery.parseJSON(json_data.data);
@@ -321,22 +323,24 @@ $(function () {
                     mm_body.addClass('loading');
                     switch(recipientType) {
                         case 'all':
-                            mmAjax(null, 'security/message/create', {'type':'all','subject': subject,'message': message});
+                           promise4 = mmAjax(null, 'security/message/create', {'type':'all','subject': subject,'message': message});
                             // alert('All');
                             break;
                         case 'user':
-                            mmAjax(null, 'security/message/create', {'type':'user','user':recipientId,'subject':subject,'message':message});
+                            promise4 = mmAjax(null, 'security/message/create', {'type':'user','user':recipientId,'subject':subject,'message':message});
 
                             break;
                         case 'usergroup':
-                            mmAjax(null, 'security/message/create', {'type':'usergroup','group':groupId,'subject': subject,'message': message});
+                            promise4 = mmAjax(null, 'security/message/create', {'type':'usergroup','group':groupId,'subject': subject,'message': message});
                             // alert('User Group');
                             break;
                     }
-                    clearDialog();
-                    mm_body.removeClass('loading');
-                    $.alert('Message Sent', 'MessageManager');
-                   myDialog.dialog("close");
+                    promise4.done(function (data) {
+                        clearDialog();
+                        mm_body.removeClass('loading');
+                        // $.alert('Message Sent', 'MessageManager');
+                        myDialog.dialog("close");
+                    });
                 }
             });
         } else { /* Reply */
@@ -356,14 +360,14 @@ $(function () {
                     }
                     // console.log('SendSubject: ' + subject);
                     mm_body.addClass("loading");
-                    mmAjax(id, action, {'subject': subject, 'message': message, 'user': recipientId});
-                    // promise3.done(function (data) {
+                    promise5 = mmAjax(id, action, {'subject': subject, 'message': message, 'user': recipientId});
+                    promise5.done(function (data) {
 
                         clearDialog();
                         myDialog.dialog("close");
-                    mm_body.removeClass("loading");
+                        mm_body.removeClass("loading");
                         // $.alert('Message Sent', 'MessageManager');
-                    // });
+                    });
                 }
             });
         }
@@ -388,9 +392,10 @@ $(function () {
 
         e.preventDefault();
         e.stopPropagation();
+        mm_body.addClass("loading");
         $('input:checked').each(function () {
             id = $(this).val();
-            mmAjax(id, 'security/message/remove', {}, true);
+            promise6 = mmAjax(id, 'security/message/remove', {}, true);
             $('tr#' + id).remove();
             $('tr#mm_message' + id).remove();
             $('tr#mm_sender_id' + id).remove();
@@ -399,8 +404,11 @@ $(function () {
         /* Uncheck checkbox in header */
         $("#mm_check_all").prop("checked", false);
 
-        /* Display "No messages" if table is empty (except header row) */
-        checkEmpty();
+        promise6.done(function (data) {
+            mm_body.removeClass("loading");
+            /* Display "No messages" if table is empty (except header row) */
+            checkEmpty();
+        });
     });
 
 

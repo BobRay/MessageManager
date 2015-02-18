@@ -408,12 +408,17 @@ span.mm_user:hover {
     display: none;
     position: fixed;
     z-index: 1000;
-    top: 25%;
-    left: 23%;
-    height: 50%;
-    width: 50%;
+    /*top: 25%;
+    left: 23%;*/
+    /*height: 50%;
+    width: 50%;*/
+  top:45%;
+  left:45%;
+  height:89px;
+  width:89px;
     /*color:ivory;*/
-    background: rgba(255, 255, 240, 0.0) url('loading/weave-green-small.gif') 50% 50% no-repeat;
+    background: rgba(255, 255, 240, 0) url('loading/spinner.gif') 50% 50% no-repeat;
+    /* background: rgba(255, 255, 240, 0.0) url('loading/weave-green-small.gif') 50% 50% no-repeat; */
 }
 /* images/ui-bg_highlight-hard_15_459e00_1x100.png */
 /* When the body has the loading class, we turn
