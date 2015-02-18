@@ -414,13 +414,12 @@ span.mm_user:hover {
     width: 50%;*/
   top:45%;
   left:45%;
-  height:89px;
-  width:89px;
+  height:36px;
+  width:36px;
     /*color:ivory;*/
-    background: rgba(255, 255, 240, 0) url('loading/spinner.gif') 50% 50% no-repeat;
-    /* background: rgba(255, 255, 240, 0.0) url('loading/weave-green-small.gif') 50% 50% no-repeat; */
-}
-/* images/ui-bg_highlight-hard_15_459e00_1x100.png */
+    background: rgba(255, 255, 240, 0) url('loading/weave-green-small.gif') 50% 50% no-repeat;
+ }
+
 /* When the body has the loading class, we turn
    the scrollbar off with overflow:hidden */
 body.loading {

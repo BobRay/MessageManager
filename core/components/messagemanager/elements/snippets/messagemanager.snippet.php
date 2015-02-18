@@ -47,6 +47,7 @@ $modx->regClientCSS($path);
 $modx->regClientStartupScript('//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"');
 $modx->regClientStartupScript($assets_url . 'js/jquery-ui.min.js');
 $modx->regClientStartupScript($assets_url . 'js/context-menu.js');
+$modx->regClientStartupScript($assets_url . 'js/spin-min.js');
 
 $modx->regClientCSS($assets_url . 'css/jquery/jquery-ui.min.css');
 $modx->regClientCSS($assets_url . 'css/jquery/jquery-ui.theme.css');

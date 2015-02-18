@@ -35,6 +35,8 @@ $(function () {
     var mt = myTextarea;
     var ul = myUserList;
     var ddl = $('#mm_dropdown_list');
+    var spinnerTarget = document.getElementsByTagName("body")[0];
+    var mmSpinner = createSpinner();
 
     /* Display "No messages" if table is empty (except header row) */
     checkEmpty();
@@ -193,7 +195,30 @@ $(function () {
                     case 'user':
                         ddl.hide();
 
-                        mm_body.addClass("loading");
+                        // mm_body.addClass("loading");
+                        //var target = document.getElementsByTagName("body")[0];
+                       /* var opts = {
+                            lines: 17, // The number of lines to draw
+                            length: 20, // The length of each line
+                            width: 5, // The line thickness
+                            radius: 14, // The radius of the inner circle
+                            corners: 1, // Corner roundness (0..1)
+                            rotate: 0, // The rotation offset
+                            direction: 1, // 1: clockwise, -1: counterclockwise
+                            color: '#56A717', // #rgb or #rrggbb or array of colors
+                            speed: 0.6, // Rounds per second
+                            trail: 81, // Afterglow percentage
+                            shadow: false, // Whether to render a shadow
+                            hwaccel: false, // Whether to use hardware acceleration
+                            className: 'spinner', // The CSS class to assign to the spinner
+                            zIndex: 2e9, // The z-index (defaults to 2000000000)
+                            top: '50%', // Top position relative to parent
+                            left: '50%' // Left position relative to parent
+                        };*/
+                        // var target = document.getElementById('foo');
+                        // var spinner = new Spinner(opts).spin(target);
+                        //var spinner = new Spinner(opts);
+                        mmSpinner.spin(spinnerTarget);
                         var promise1 = mmAjax(null, 'security/user/getlist', {limit:0});
                         promise1.done(function (data) {
                             // mm_body.removeClass("loading");
@@ -214,7 +239,7 @@ $(function () {
 
                             mmUsers.html(r.join(' '));
                             mmUsers.show();
-
+                            mmSpinner.stop();
                             $('span.mm_user').on("click", function (e) {
                                 //ul.hide();
                                 // var userId = e.target.id;
@@ -244,7 +269,8 @@ $(function () {
                     case 'usergroup':
                         mmUsers.hide();
                         toNameField.hide();
-                        mm_body.addClass("loading");
+                        // mm_body.addClass("loading");
+                        mmSpinner.spin(spinnerTarget);
                         var promise = mmAjax(null, 'security/group/getlist');
                         promise.done(function(data) {
                             // var data = jQuery.parseJSON(json_data.data);
@@ -320,7 +346,8 @@ $(function () {
                     }
 
                     console.log('Type: ' + recipientType);
-                    mm_body.addClass('loading');
+                    mmSpinner.spin(spinnerTarget);
+                    // mm_body.addClass('loading');
                     switch(recipientType) {
                         case 'all':
                            promise4 = mmAjax(null, 'security/message/create', {'type':'all','subject': subject,'message': message});
@@ -337,7 +364,8 @@ $(function () {
                     }
                     promise4.done(function (data) {
                         clearDialog();
-                        mm_body.removeClass('loading');
+                        mmSpinner.stop();
+                        // mm_body.removeClass('loading');
                         // $.alert('Message Sent', 'MessageManager');
                         myDialog.dialog("close");
                     });
@@ -359,14 +387,17 @@ $(function () {
                         return false;
                     }
                     // console.log('SendSubject: ' + subject);
-                    mm_body.addClass("loading");
+                    mmSpinner.spin(spinnerTarget);
+                    // mm_body.addClass("loading");
                     promise5 = mmAjax(id, action, {'subject': subject, 'message': message, 'user': recipientId});
                     promise5.done(function (data) {
 
                         clearDialog();
                         myDialog.dialog("close");
-                        mm_body.removeClass("loading");
+                        mmSpinner.stop();
+                        // mm_body.removeClass("loading");
                         // $.alert('Message Sent', 'MessageManager');
+
                     });
                 }
             });
@@ -392,7 +423,8 @@ $(function () {
 
         e.preventDefault();
         e.stopPropagation();
-        mm_body.addClass("loading");
+        // mm_body.addClass("loading");
+        mmSpinner.spin(spinnerTarget);
         $('input:checked').each(function () {
             id = $(this).val();
             promise6 = mmAjax(id, 'security/message/remove', {}, true);
@@ -405,7 +437,8 @@ $(function () {
         $("#mm_check_all").prop("checked", false);
 
         promise6.done(function (data) {
-            mm_body.removeClass("loading");
+            mmSpinner.stop();
+            // mm_body.removeClass("loading");
             /* Display "No messages" if table is empty (except header row) */
             checkEmpty();
         });
@@ -431,9 +464,11 @@ $(function () {
             dataType: "json"
 
         }).done(function () {
-            mm_body.removeClass("loading");
+            mmSpinner.stop();
+            // mm_body.removeClass("loading");
         }).fail(function (jqXHR, textStatus) {
-            mm_body.removeClass("loading");
+            mmSpinner.stop();
+            //mm_body.removeClass("loading");
             alert(action + ' failed on message ' + id + ' ' + textStatus);
         });
     }
@@ -534,6 +569,27 @@ $(function () {
         return count == 0;
     }
 
+    function createSpinner() {
+        var opts = {
+            lines: 17, // The number of lines to draw
+            length: 17, // The length of each line
+            width: 4, // The line thickness
+            radius: 5, // The radius of the inner circle
+            corners: 1, // Corner roundness (0..1)
+            rotate: 0, // The rotation offset
+            direction: 1, // 1: clockwise, -1: counterclockwise
+            color: '#56A717', // #rgb or #rrggbb or array of colors
+            speed: 0.6, // Rounds per second
+            trail: 81, // Afterglow percentage
+            shadow: false, // Whether to render a shadow
+            hwaccel: false, // Whether to use hardware acceleration
+            className: 'spinner', // The CSS class to assign to the spinner
+            zIndex: 2e9, // The z-index (defaults to 2000000000)
+            top: '50%', // Top position relative to parent
+            left: '50%' // Left position relative to parent
+        };
+        return new Spinner(opts);
+    }
     $.extend({ alert: function (message, title) {
         $("<div></div>").dialog( {
             buttons: { "Ok": function () { $(this).dialog("close"); } },
