@@ -96,12 +96,12 @@
                     // .position() is provided as a jQuery UI utility
                     // (...and it won't work on hidden elements)
                     $menu.css('display', 'block').position({
-                                                               my: "center top",
-                                                               at: "center bottom",
-                                                               of: this,
-                                                               offset: "0 5",
-                                                               collision: "fit"
-                                                           }).css('display', 'none');
+                       my: "center top",
+                       at: "center bottom",
+                       of: this,
+                       offset: "0 5",
+                       collision: "fit"
+                    }).css('display', 'none');
                 } else {
                     // determine contextMenu position
                     var offset = this.offset();
@@ -149,11 +149,11 @@
                     // .position() is provided as a jQuery UI utility
                     // (...and it won't work on hidden elements)
                     $menu.css('display', 'block').position({
-                                                               my: "left top",
-                                                               at: "right top",
-                                                               of: this,
-                                                               collision: "flipfit fit"
-                                                           }).css('display', '');
+                        my: "left top",
+                        at: "right top",
+                        of: this,
+                        collision: "flipfit fit"
+                    }).css('display', '');
                 } else {
                     // determine contextMenu position
                     var offset = {
@@ -1137,11 +1137,11 @@
                 // elements' widths wouldn't be calculatable otherwise
                 if (!nested) {
                     $menu.find('ul').andSelf().css({
-                                                       position: '',
-                                                       display: '',
-                                                       minWidth: '',
-                                                       maxWidth: ''
-                                                   }).width(function () {
+                        position: '',
+                        display: '',
+                        minWidth: '',
+                        maxWidth: ''
+                    }).width(function () {
                         return $(this).data('width');
                     });
                 }
@@ -1203,9 +1203,9 @@
                 // IE6 doesn't know position:fixed;
                 if (!$.support.fixedPosition) {
                     $layer.css({
-                                   'position': 'absolute',
-                                   'height': $(document).height()
-                               });
+                        'position': 'absolute',
+                        'height': $(document).height()
+                    });
                 }
 
                 return $layer;
@@ -1314,22 +1314,22 @@
                     // make sure item click is registered first
                     $document
                         .on({
-                                'contextmenu:hide.contextMenu': handle.hideMenu,
-                                'prevcommand.contextMenu': handle.prevItem,
-                                'nextcommand.contextMenu': handle.nextItem,
-                                'contextmenu.contextMenu': handle.abortevent,
-                                'mouseenter.contextMenu': handle.menuMouseenter,
-                                'mouseleave.contextMenu': handle.menuMouseleave
-                            }, '.context-menu-list')
+                            'contextmenu:hide.contextMenu': handle.hideMenu,
+                            'prevcommand.contextMenu': handle.prevItem,
+                            'nextcommand.contextMenu': handle.nextItem,
+                            'contextmenu.contextMenu': handle.abortevent,
+                            'mouseenter.contextMenu': handle.menuMouseenter,
+                            'mouseleave.contextMenu': handle.menuMouseleave
+                        }, '.context-menu-list')
                         .on('mouseup.contextMenu', '.context-menu-input', handle.inputClick)
                         .on({
-                                'mouseup.contextMenu': handle.itemClick,
-                                'contextmenu:focus.contextMenu': handle.focusItem,
-                                'contextmenu:blur.contextMenu': handle.blurItem,
-                                'contextmenu.contextMenu': handle.abortevent,
-                                'mouseenter.contextMenu': handle.itemMouseenter,
-                                'mouseleave.contextMenu': handle.itemMouseleave
-                            }, '.context-menu-item');
+                            'mouseup.contextMenu': handle.itemClick,
+                            'contextmenu:focus.contextMenu': handle.focusItem,
+                            'contextmenu:blur.contextMenu': handle.blurItem,
+                            'contextmenu.contextMenu': handle.abortevent,
+                            'mouseenter.contextMenu': handle.itemMouseenter,
+                            'mouseleave.contextMenu': handle.itemMouseleave
+                        }, '.context-menu-item');
 
                     initialized = true;
                 }
@@ -1442,9 +1442,9 @@
                     $('menu[type="context"]').each(function () {
                         if (this.id) {
                             $.contextMenu({
-                                              selector: '[contextmenu=' + this.id + ']',
-                                              items: $.contextMenu.fromMenu(this)
-                                          });
+                                selector: '[contextmenu=' + this.id + ']',
+                                items: $.contextMenu.fromMenu(this)
+                            });
                         }
                     }).css('display', 'none');
                 }
