@@ -65,11 +65,6 @@ if (isset($_REQUEST) && !empty($_REQUEST)) {
         unset($_REQUEST['action']);
     }
 
-    /*my_debug('Action: ' . $action, $modx);
-    $id = $modx->getOption('id', $_REQUEST, null);
-    my_debug('Id: ' . $id, $modx);
-    my_debug("REQUEST: " . print_r($_REQUEST, true), $modx);
-    my_debug("SP: " . print_r($scriptProperties, true), $modx);*/
     if (! in_array($action, $validActions)) {
         my_debug('Invalid Action: ' . $action, $modx);
         $retVal = array(
@@ -101,8 +96,19 @@ if (isset($_REQUEST) && !empty($_REQUEST)) {
             'success' => true,
         );
         if (isset($response->response)) {
-            $retVal['data'] = $modx->fromJSON($response->response);
+            $retVal['data'] =& $modx->fromJSON($response->response);
+            if ($action == 'security/user/getlist') {
+                $users =& $retVal['data']['results'];
+                foreach ($users as &$user) {
+                    unset($user['class_key'], $user['remote_key'], $user['remote_data'],
+                        $user['hash_class'], $user['session_stale'], $user['email'], $user['cls'],
+                        $user['sudo'], $user['active'], $user['blocked'], $user['primary_group']);
+                }
+            }
+
         }
+
+
     }
 
 } else {
