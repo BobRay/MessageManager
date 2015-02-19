@@ -76,13 +76,6 @@ $count = !empty($messages) ? count($messages) : 'no';
 $modx->setPlaceholder('messageCount', $count);
 $modx->setPlaceholder('message_count', count($messages));
 
-
-/*
-<option value="user">User</option>
-<option value="usergroup">User Group</option>
-<option value="all">All Users</option>
-
-*/
 $rOptions = 'user:User,usergroup:User Group,all:All Users';
 
 $recipientOptions = $modx->getOption('recipientOptions', $scriptProperties, $rOptions, true);
