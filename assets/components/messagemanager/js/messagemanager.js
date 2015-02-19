@@ -27,7 +27,6 @@ $(function () {
     var myTable = $('table#the-node');
     var myTextarea = $('#myTextarea');
     var myUserList = $('#mm_userlist');
-    var ajaxLoader = $('#ajax_loader');
     var mm_body = $("body");
     var mm_new_message = $('#dlg_new_message');
     var toNameField = $('span#mm_recipient');
@@ -38,18 +37,16 @@ $(function () {
     var spinnerTarget = document.getElementsByTagName("body")[0];
     var mmSpinner = createSpinner();
 
+    var pop = new Popup($("#popup_box"), mm_body);
+
     /* Display "No messages" if table is empty (except header row) */
     checkEmpty();
-
-    var messageText = '';
 
     $('#the-node').contextMenu({
         /* selector: 'li', */
         selector: 'tr',
         callback: function (key, options) {
             var id = getId($(this).attr('id')) || null;
-            // var m = "clicked: " + key + " on " + getId($(this).attr('id'));
-            // window.console && console.log(m) || alert(m);
             switch (key) {
                 case 'markunread':
                     mmMarkUnread(id, 'No');
@@ -58,11 +55,17 @@ $(function () {
                     if (id === null) {
                         break;
                     }
-                    mmAjax(id, 'security/message/remove', {});
-                    $('tr#' + id).remove();
-                    $('tr#mm_message' + id).remove();
-                    $('tr#mm_sender_id' + id).remove();
-                    checkEmpty();
+                    promise7 = mmAjax(id, 'security/message/remove', {});
+                    mmSpinner.spin(spinnerTarget);
+                    promise7.done(function (data) {
+                        mmSpinner.stop();
+                        $('tr#' + id).remove();
+                        $('tr#mm_message' + id).remove();
+                        $('tr#mm_sender_id' + id).remove();
+                        checkEmpty();
+                        pop.setText('Message Deleted');
+                        pop.load(1);
+                    });
                     break;
                 case 'reply':
                     mmReply(id);
@@ -198,7 +201,7 @@ $(function () {
                         var promise1 = mmAjax(null, 'security/user/getlist', {limit:0});
                         promise1.done(function (data) {
                             var results = data.data.results;
-                            var count = results.length;
+                            // var count = results.length;
                             var r = [], j = 0;
                             r[++j] = '<div id="mm_users"><h3>Select Recipient</h3>';
                             for (var key = 0, size = results.length; key < size; key++) {
@@ -216,9 +219,6 @@ $(function () {
                             mmUsers.show();
                             mmSpinner.stop();
                             $('span.mm_user').on("click", function (e) {
-                                //ul.hide();
-                                // var userId = e.target.id;
-                                // alert(userId);
                                 recipientId = e.target.id;
                                 var recipientName = $(this).html();
                                 console.log('Recipient: ' + recipientName);
@@ -247,28 +247,18 @@ $(function () {
                         mmSpinner.spin(spinnerTarget);
                         var promise = mmAjax(null, 'security/group/getlist');
                         promise.done(function(data) {
-                            // var data = jQuery.parseJSON(json_data.data);
-
                             var results = data.data.results;
-                            // console.debug(results);
-                            var count = results.length;
                             var r = [], j = 0;
-                            // r[++j] = '<div id="mm_users"><h3>Select Recipient</h3>';
+
                             for (var key = 0, size = results.length; key < size; key++) {
                                 r[++j] = '<option value="' + results[key].id + '" class="mm_user">';
                                 r[++j] = results[key].name;
                                 r[++j] = '</option>';
                             }
-                            // r[++j] = '</div>';
-                            // $('#myDialog').dialog.append(r.join(' '));
-                            // ul.html(r.join(' '));
                             $('#mm_dropdown_select').append(r.join(' '));
 
 
                             ddl.on("click", function (e) {
-                                //ul.hide();
-                                // var userId = e.target.id;
-                                // alert(userId);
                                 groupId = e.target.value;
 
                                 if (groupId == 0) {
@@ -293,29 +283,21 @@ $(function () {
                     default:
                         break;
                 }
-                    // alert( "Selected: " + selection);                                                                    // $("div").text(str);
-            });
-            // ddl[0].selectedIndex = 0;
-            // $('select option:first-child').attr("selected", "selected");
-           //  $('#mm_dropdown_list option:first-child').attr("selected", "selected");
-           /* $('#periodSelect option').each(function () {
-                this.removeAttribute('selected');
-            });
-*/
 
+            });
 
             $('#mm_left_button').hide();
-
-
             $("#mm_button_send").unbind("click").click(function () {
                 message = $.trim(mt.val());
                 if (message.length == 0) {
-                    alert("Can't send an empty message");
+                    pop.setText("Can't send an empty message");
+                    pop.load(20);
                 } else {
                     subject = $('input#dlg_subject').val();
                     // console.log('SendSubject: ' + subject);
                     if (subject.length === 0) {
-                        alert('Please enter a subject');
+                        pop.setText("Please enter a subject");
+                        pop.load(20);
                         return false;
                     }
 
@@ -324,22 +306,22 @@ $(function () {
                     switch(recipientType) {
                         case 'all':
                            promise4 = mmAjax(null, 'security/message/create', {'type':'all','subject': subject,'message': message});
-                            // alert('All');
                             break;
+
                         case 'user':
                             promise4 = mmAjax(null, 'security/message/create', {'type':'user','user':recipientId,'subject':subject,'message':message});
-
                             break;
+
                         case 'usergroup':
                             promise4 = mmAjax(null, 'security/message/create', {'type':'usergroup','group':groupId,'subject': subject,'message': message});
-                            // alert('User Group');
                             break;
                     }
                     promise4.done(function (data) {
                         clearDialog();
                         mmSpinner.stop();
-                        // $.alert('Message Sent', 'MessageManager');
+                        pop.setText('Message Sent');
                         myDialog.dialog("close");
+                        pop.load();
                     });
                 }
             });
@@ -350,24 +332,26 @@ $(function () {
             $("#mm_button_send").unbind("click").click(function () {
                 message = $.trim(mt.val());
                 if (message.length == 0) {
-                    alert("Can't send an empty message");
+                    pop.setText("Can't send an empty message");
+                    pop.load(20);
                 } else {
                     // alert('Clicked reply');
                     subject = $('input#dlg_subject').val();
                     if (subject.length === 0) {
-                        alert('Please enter a subject');
+                        pop.setText('Please enter a subject');
+                        pop.load(20);
                         return false;
                     }
-                    // console.log('SendSubject: ' + subject);
+
                     mmSpinner.spin(spinnerTarget);
                     promise5 = mmAjax(id, action, {'subject': subject, 'message': message, 'user': recipientId});
                     promise5.done(function (data) {
 
                         clearDialog();
-                        myDialog.dialog("close");
                         mmSpinner.stop();
-                        // $.alert('Message Sent', 'MessageManager');
-
+                        pop.setText('Message Sent');
+                        myDialog.dialog("close");
+                        pop.load();
                     });
                 }
             });
@@ -407,6 +391,9 @@ $(function () {
 
         promise6.done(function (data) {
             mmSpinner.stop();
+            pop.setText('Messages Deleted');
+            pop.load();
+
             /* Display "No messages" if table is empty (except header row) */
             checkEmpty();
         });
@@ -414,7 +401,6 @@ $(function () {
 
 
     function mmAjax(id, action, dataIn) {
-        var retVal = false;
         dataIn = dataIn || {};
         dataIn['id'] = id;
         dataIn['action'] = action;
@@ -430,7 +416,8 @@ $(function () {
             mmSpinner.stop();
         }).fail(function (jqXHR, textStatus) {
             mmSpinner.stop();
-            alert(action + ' failed on message ' + id + ' ' + textStatus);
+            pop.setText(action + ' failed on message' + id + ' ' + textStatus);
+            pop.load(40);
         });
     }
 
@@ -467,9 +454,14 @@ $(function () {
         console.log("READ.html: " + read.html());
 
         if (read.html() == 'Yes') {
-            read.toggleClass("Yes No");
-            read.html('No');
-            mmAjax(id, 'security/message/unread', {});
+
+            mmSpinner.spin(spinnerTarget);
+            promise8 = mmAjax(id, 'security/message/unread', {});
+            promise8.done(function (data) {
+                mmSpinner.stop();
+                read.toggleClass("Yes No");
+                read.html('No');
+            });
         }
         messageId = $('#mm_message' + id);
         if (! messageId.is(':hidden')) {
@@ -551,15 +543,53 @@ $(function () {
         };
         return new Spinner(opts);
     }
-    $.extend({ alert: function (message, title) {
-        $("<div></div>").dialog( {
-            buttons: { "Ok": function () { $(this).dialog("close"); } },
-            close: function (event, ui) { $(this).remove(); },
-            resizable: false,
-            title: title,
-            modal: true
-        }).text(message);
-    }});
+
+     function Popup(popup,container) {
+        var thisPopup = this,
+            timer,
+            counter = 2,
+            countDown = $("#countDown").text(counter.toString());
+
+        thisPopup.setText = function(text) {
+            popup.find('p').html(text);
+        };
+
+        thisPopup.load = function(counter, fadeTime) {
+            counter = counter || 2;
+            fadeTime = fadeTime || 150;
+            container.animate({
+                "opacity": "1"
+            },fadeTime, function() {
+                popup.fadeIn(fadeTime);
+            });
+
+            container.off("click").on("click", function() {
+                thisPopup.unload(fadeTime);
+            });
+
+            $('#popupBoxClose').off("click").on("click", function() {
+                thisPopup.unload(fadeTime);
+            });
+
+            timer = setInterval(function() {
+                counter--;
+                if(counter < 0) {
+                    thisPopup.unload(fadeTime);
+                }
+            }, 500);
+        };
+
+        thisPopup.unload = function(fadeTime) {
+
+            clearInterval(timer);
+
+            popup.fadeOut(fadeTime, function(){
+                container.animate({
+                    "opacity": "1"
+                },fadeTime);
+            });
+        };
+    }
 
 });
 

@@ -45,9 +45,9 @@ form#mm_form {
 table#the-node {
   border: 1px darkgray solid;
   border-collapse: separate !important;
-  -webkit-border-top-left-radius: 7px;
   -moz-border-radius-topleft: 7px;
   border-top-left-radius: 7px;
+  -webkit-border-top-left-radius: 7px;
   -webkit-border-top-right-radius: 7px;
   -moz-border-radius-topright: 7px;
   border-top-right-radius: 7px; }
@@ -251,21 +251,6 @@ span.mm_expand {
   background-repeat: no-repeat;
   background-position: 4px 2px; }
 
-/*.context-menu-item.icon-edit {
-    background-image: url(images/page_white_edit.png);
-}
-
-.context-menu-item.icon-cut {
-    background-image: url(images/cut.png);
-}
-
-.context-menu-item.icon-copy {
-    background-image: url(images/page_white_copy.png);
-}
-
-.context-menu-item.icon-paste {
-    background-image: url(images/page_white_paste.png);
-}*/
 .context-menu-item.icon-delete {
   background-image: url(silk_cross.png); }
 
@@ -352,6 +337,49 @@ div#dls_new_message select {
 
 div#mm_dropdown_list {
   margin: 10px 0 0 0; }
+
+#popup_box {
+  display: none;
+  position: fixed;
+  height: 30px;
+  width: 300px;
+  background: #fff;
+  left: 45%;
+  top: 60%;
+  margin-left: -150px;
+  margin-top: -150px;
+  z-index: 600;
+  padding: 15px;
+  font-size: 15px;
+  -moz-box-shadow: 0 0 5px;
+  -webkit-box-shadow: 0 0 5px;
+  box-shadow: 0 0 5px;
+  -moz-border-radius-topleft: 7px;
+  border-top-left-radius: 7px;
+  -webkit-border-top-left-radius: 7px;
+  -webkit-border-top-right-radius: 7px;
+  -moz-border-radius-topright: 7px;
+  border-top-right-radius: 7px; }
+
+#popupBoxClose {
+  background: rgba(93, 176, 21, 0.45);
+  cursor: pointer;
+  color: #3E3E3E;
+  padding: 3px 20px;
+  margin: -15px -15px 10px -15px;
+  display: block;
+  position: relative;
+  text-align: right; }
+
+#popupBoxClose:hover {
+  cursor: pointer;
+  background: rgba(40, 90, 18, 0.45);
+  color: ivory; }
+
+p#popup_text {
+  text-align: center;
+  padding: 0 0 15px 0;
+  margin: 8px; }
 
 /* #56A717 read */
 
