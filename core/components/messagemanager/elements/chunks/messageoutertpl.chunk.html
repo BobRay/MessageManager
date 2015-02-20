@@ -1,24 +1,24 @@
 
 <div id="messagemanager">
-    <h3>Your Messages ([[+modx.user.username]])</h3>
+    <h3>[[%mm_your_messages]] ([[+modx.user.username]])</h3>
     <form class="mm_form" method='post' id='userform' action=''>
         <table id="the-node">
             <tr id="mm_header">
                 <th id="mm_checkbox"><input type="checkbox" id="mm_check_all"></th>
-                <th id="mm_sender">Sender</th>
-                <th id="mm_subject">Subject</th>
-                <th id="mm_sent">Sent</th>
-                <th id="mm_read">Read</th></tr>
+                <th id="mm_sender">[[%mm_sender]]</th>
+                <th id="mm_subject">[[%mm_subject]]</th>
+                <th id="mm_sent">[[%mm_sent]]</th>
+                <th id="mm_read">[[%mm_read]]</th></tr>
             [[+messages]]
         </table>
         <br/>
-        <input id="mm_submit_delete" type="submit" name="submit" value="Delete Selected">
+        <input id="mm_submit_delete" type="submit" name="submit" value="[[%mm_delete_selected]]">
     </form>
-    <div id="myDialog" title="Reply" style="display:none">
+    <div id="myDialog" title="[[%mm_reply]]" style="display:none">
         <form id="dlg_form">
         <div  id="dlg_new_message" style="display:none">
 
-            <label for="dlg_select_type">Recipient Type</label>
+            <label for="dlg_select_type">[[%mm_recipient_type]]</label>
             <select id="dlg_select_type">
                 [[+recipient_options]]
             </select><span id="mm_recipient"></span>
@@ -26,15 +26,15 @@
                 <input id="dlg_recipient_type" type="text" disabled /></label>
         </div>
         <div id="mm_dropdown_list" style="display:none">
-            <label for="mm_dropdown_select">To: </label>
+            <label for="mm_dropdown_select">[[%mm_to]]: </label>
             <select id="mm_dropdown_select">
-                <option value="0" selected="selected"> Select one</option>
+                <option value="0" selected="selected"> [[%mm_select_one]]</option>
             </select>
 
         </div>
 
         <div id="dlg_subject_div">
-            <label for="dlg_subject">Subject</label>
+            <label for="dlg_subject">[[%mm_subject]]</label>
             <input id="dlg_subject"/>
         </div>
         <div id="mm_users" style="display:none"></div>
@@ -48,7 +48,7 @@
     </div>
 </div>
 <div id="popup_box">    <!-- OUR PopupBox DIV-->
-    <a id="popupBoxClose">Close</a>
+    <a id="popupBoxClose">[[%mm_close]]</a>
 
-    <p id="popup_text">This is a Popup</p>
+    <p id="popup_text"></p>
 </div>

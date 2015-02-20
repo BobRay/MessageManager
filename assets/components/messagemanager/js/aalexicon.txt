@@ -1,0 +1,7 @@
+<script type="text/javascript">
+var lexicon = [[+mm_lexicon]];
+
+function mmLex(key) {
+    return lexicon[key] || key;
+}
+</script>

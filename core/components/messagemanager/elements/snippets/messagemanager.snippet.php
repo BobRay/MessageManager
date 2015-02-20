@@ -37,11 +37,22 @@
  *
  * @package messagemanager
  **/
+$language = $modx->getOption('language', $scriptProperties, $modx->getOption('culture_key'));
+$language = empty($language) ? 'en' : $language;
+$modx->lexicon->load($language . ':messagemanager:default');
+$lex = $modx->lexicon->getFileTopic($language, 'messagemanager', 'default');
+$jsonLex = $modx->toJSON($lex);
+
 
 $cssFile = $modx->getOption('cssFile', $scriptProperties, 'messagemanager.css');
 $jsFile = $modx->getOption('jsFile', $scriptProperties, 'messagemanager.js?' . 'v=' . time());
 $assets_url = $modx->getOption('mm.assets_url', NULL, $modx->getOption('assets_url') .
     'components/messagemanager/');
+$assets_path = $modx->getOption('mm.assets_path', NULL, $modx->getOption('assets_path') .
+    'components/messagemanager/');
+$aaLex = file_get_contents($assets_path . 'js/aalexicon.txt');
+$aaLex = str_replace('[[+mm_lexicon]]', $jsonLex, $aaLex);
+$modx->regClientStartupScript($aaLex);
 $path = $assets_url . 'css/' . $cssFile;
 $modx->regClientCSS($path);
 $modx->regClientStartupScript('//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"');
@@ -102,7 +113,7 @@ foreach ($messages as $message) {
     $fields['mm.sender'] = $username;
     $fields['mm.class'] = $fields['mm.read']? 'read' : 'unread';
     $fields['mm.read_indicator'] = $fields['mm.read'] ? 'Yes' : 'No';
-    $fields['mm.read'] = $fields['mm.read'] ? 'Yes' : 'No';
+    $fields['mm.read'] = $fields['mm.read'] ? $modx->lexicon('mm_yes') : $modx->lexicon('mm_no');
 
     $inner .= $modx->getChunk($tpl, $fields);
 }

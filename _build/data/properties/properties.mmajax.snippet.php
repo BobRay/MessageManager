@@ -16,13 +16,13 @@ $properties = array (
   'usergroup' => 
   array (
     'name' => 'usergroup',
-    'desc' => 'User Group that can be sent messages in MessageManager',
+    'desc' => 'mm_usergroup_desc',
     'type' => 'textfield',
     'options' => 
     array (
     ),
     'value' => '',
-    'lexicon' => NULL,
+    'lexicon' => 'messagemanager:properties',
     'area' => '',
   ),
 );

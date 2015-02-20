@@ -34,3 +34,25 @@
  * @package messagemanager
  **/
 
+$_lang['mm_empty_subject'] = "Please enter a subject";
+$_lang['mm_empty_message'] = "Can't send an empty message";
+
+
+/* Used in messageoutertpl.chunk.html */
+$_lang['mm_your_messages'] = 'Your Messages';
+$_lang['mm_sender'] = 'Sender';
+$_lang['mm_subject'] = 'Subject';
+$_lang['mm_sent'] = 'Sent';
+$_lang['mm_read'] = 'Read';
+$_lang['mm_delete_selected'] = 'Delete Selected';
+$_lang['mm_reply'] = 'Reply';
+$_lang['mm_recipient_type'] = 'Recipient Type';
+$_lang['mm_to'] = 'To';
+$_lang['mm_select_one'] = 'Select one';
+$_lang['mm_close'] = 'Close';
+$_lang['mm_message_deleted'] = 'Message Deleted';
+$_lang['mm_message_sent'] = 'Message Sent';
+$_lang['mm_messages_deleted'] = 'Messages Deleted';
+$_lang['mm_yes'] = 'Yes';
+$_lang['mm_no'] = 'No';
+$_lang['mm_no_messages'] = 'No Messages';

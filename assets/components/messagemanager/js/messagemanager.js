@@ -49,7 +49,7 @@ $(function () {
             var id = getId($(this).attr('id')) || null;
             switch (key) {
                 case 'markunread':
-                    mmMarkUnread(id, 'No');
+                    mmMarkUnread(id, mmLex('mm_no'));
                     break;
                 case 'delete':
                     if (id === null) {
@@ -63,7 +63,7 @@ $(function () {
                         $('tr#mm_message' + id).remove();
                         $('tr#mm_sender_id' + id).remove();
                         checkEmpty();
-                        pop.setText('Message Deleted');
+                        pop.setText(mmLex('mm_message_deleted'));
                         pop.load(1);
                     });
                     break;
@@ -102,7 +102,7 @@ $(function () {
 
     function checkEmpty() {
         if (myTable.find("tr").length == 1) {
-            $(myTable.append('<tr><td colspan="5">No messages</td></tr>'));
+            $(myTable.append('<tr><td colspan="5">' + mmLex('mm_no_messages') + '</td></tr>'));
         }
     }
 
@@ -290,13 +290,13 @@ $(function () {
             $("#mm_button_send").unbind("click").click(function () {
                 message = $.trim(mt.val());
                 if (message.length == 0) {
-                    pop.setText("Can't send an empty message");
+                    pop.setText(mmLex("mm_empty_message"));
                     pop.load(20);
                 } else {
                     subject = $('input#dlg_subject').val();
                     // console.log('SendSubject: ' + subject);
                     if (subject.length === 0) {
-                        pop.setText("Please enter a subject");
+                        pop.setText(mmLex("mm_empty_subject"));
                         pop.load(20);
                         return false;
                     }
@@ -319,7 +319,7 @@ $(function () {
                     promise4.done(function (data) {
                         clearDialog();
                         mmSpinner.stop();
-                        pop.setText('Message Sent');
+                        pop.setText(mmLex('mm_message_sent'));
                         myDialog.dialog("close");
                         pop.load();
                     });
@@ -332,13 +332,13 @@ $(function () {
             $("#mm_button_send").unbind("click").click(function () {
                 message = $.trim(mt.val());
                 if (message.length == 0) {
-                    pop.setText("Can't send an empty message");
+                    pop.setText(mmLex("mm_empty_message"));
                     pop.load(20);
                 } else {
                     // alert('Clicked reply');
                     subject = $('input#dlg_subject').val();
                     if (subject.length === 0) {
-                        pop.setText('Please enter a subject');
+                        pop.setText(mmLex('mm_empty_subject'));
                         pop.load(20);
                         return false;
                     }
@@ -349,7 +349,7 @@ $(function () {
 
                         clearDialog();
                         mmSpinner.stop();
-                        pop.setText('Message Sent');
+                        pop.setText(mmLex('mm_message_sent'));
                         myDialog.dialog("close");
                         pop.load();
                     });
@@ -391,7 +391,7 @@ $(function () {
 
         promise6.done(function (data) {
             mmSpinner.stop();
-            pop.setText('Messages Deleted');
+            pop.setText(mmLex('mm_messages_deleted'));
             pop.load();
 
             /* Display "No messages" if table is empty (except header row) */
@@ -436,8 +436,8 @@ $(function () {
     function mmMarkRead(id, message) {
         var e = $('#mm_read' + id);
 
-        if (e.html() == 'No') {
-            e.html('Yes');
+        if (e.html() == mmLex('mm_no')) {
+            e.html(mmLex('mm_yes'));
             e.toggleClass("Yes No");
             mmAjax(id, 'security/message/read', {})
         }
@@ -453,14 +453,14 @@ $(function () {
         }
         console.log("READ.html: " + read.html());
 
-        if (read.html() == 'Yes') {
+        if (read.html() == mmLex('mm_yes')) {
 
             mmSpinner.spin(spinnerTarget);
             promise8 = mmAjax(id, 'security/message/unread', {});
             promise8.done(function (data) {
                 mmSpinner.stop();
                 read.toggleClass("Yes No");
-                read.html('No');
+                read.html(mmLex('mm_no'));
             });
         }
         messageId = $('#mm_message' + id);
@@ -480,7 +480,7 @@ $(function () {
         var td = $('.mm_message');
         td.attr('style', 'display:table-cell');
         td.attr('colspan', "5");
-        mmMarkRead(id, 'Yes');
+        mmMarkRead(id, mmLex('mm_yes'));
         $('#mm_expand' + id).html('\u25B4');
         $('#mm_subject' + id).toggleClass("zoomin zoomout");
     }
