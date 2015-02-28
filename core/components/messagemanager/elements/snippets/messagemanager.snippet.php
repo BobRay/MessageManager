@@ -45,7 +45,7 @@ $jsonLex = $modx->toJSON($lex);
 
 
 $cssFile = $modx->getOption('cssFile', $scriptProperties, 'messagemanager.css');
-$jsFile = $modx->getOption('jsFile', $scriptProperties, 'messagemanager.js?' . 'v=' . time());
+$jsFile = $modx->getOption('jsFile', $scriptProperties, 'messagemanager.js' . '?v=' . time());
 $assets_url = $modx->getOption('mm.assets_url', NULL, $modx->getOption('assets_url') .
     'components/messagemanager/');
 $assets_path = $modx->getOption('mm.assets_path', NULL, $modx->getOption('assets_path') .
