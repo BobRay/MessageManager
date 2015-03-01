@@ -37,6 +37,16 @@
  *
  * @package messagemanager
  **/
+
+/** Properties
+
+ * @property &recipient_options textfield -- Options for sending messages; these options show up in the dropdown list when sending a new message; you must include at least one option; Default: user,usergroup,all.
+ *
+ * @property &redirect_to textfield -- Id of Resource to redirect to if user is not logged in (e.g. the Login page); If this is not set, MessageManager will redirect to the Login page if its pagetitle is Login, or the site_start page if not; Default: (empty)..
+ *
+ * @property &allowed_groups textfield -- Comma-separated list of User Group names or IDs that are allowed to access MessageManager; if empty all groups are allowed; Default: (empty)..
+
+ */
 $language = $modx->getOption('language', $scriptProperties, $modx->getOption('culture_key'));
 $language = empty($language) ? 'en' : $language;
 $modx->lexicon->load($language . ':messagemanager:default');
@@ -94,8 +104,6 @@ if (!empty($allowedGroups)) {
     }
 }
 
-/* ToDo: Add allowed_groups and redirect_to properties */
-
 /* Display messages */
 $tpl = $modx->getOption('tpl', $scriptProperties, 'messageTpl');
 $outerTpl = $modx->getOption('outerTpl', $scriptProperties, 'messageOuterTpl');
@@ -116,6 +124,7 @@ $rOptions = 'user,usergroup,all';
 
 $recipientOptions = $modx->getOption('recipient_options', $scriptProperties, $rOptions, true);
 $optionArray = explode(',', $recipientOptions);
+$optionArray = array_map('trim', $optionArray);
 $finalOptions = "\n" . ' <option value = "0" > Select One </option > ';
 foreach($optionArray as $opt) {
     $finalOptions .= "\n    " . '<option value="' . $opt . '">' .
