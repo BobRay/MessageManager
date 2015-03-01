@@ -13,10 +13,22 @@
 
 
 $properties = array (
-  'usergroup' => 
+  'exclude_groups' => 
   array (
-    'name' => 'usergroup',
-    'desc' => 'mm_usergroup_desc',
+    'name' => 'exclude_groups',
+    'desc' => 'mm_exclude_groups_desc',
+    'type' => 'textfield',
+    'options' => 
+    array (
+    ),
+    'value' => '',
+    'lexicon' => 'messagemanager:properties',
+    'area' => '',
+  ),
+  'user_group' => 
+  array (
+    'name' => 'user_group',
+    'desc' => 'mm_user_group_desc',
     'type' => 'textfield',
     'options' => 
     array (

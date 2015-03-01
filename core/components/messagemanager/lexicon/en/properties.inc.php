@@ -35,3 +35,10 @@
  **/
 
 
+
+
+/* Used in properties.mmajax.snippet.php */
+
+$_lang['mm_exclude_groups_desc'] = 'Comma-separated list of User Group IDs or names that can not be sent bulk messages; if empty all user groups can be sent messages; default: empty';
+
+$_lang['mm_user_group_desc'] = 'User Group ID or name that has opted to receive messages; if empty, all users can be sent a message; default: empty.';

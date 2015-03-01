@@ -45,7 +45,7 @@ $jsonLex = $modx->toJSON($lex);
 
 
 $cssFile = $modx->getOption('cssFile', $scriptProperties, 'messagemanager.css');
-$jsFile = $modx->getOption('jsFile', $scriptProperties, 'messagemanager.js' . '?v=' . time());
+$jsFile = $modx->getOption('jsFile', $scriptProperties, 'messagemanager.js?' . 'v=' . time());
 $assets_url = $modx->getOption('mm.assets_url', NULL, $modx->getOption('assets_url') .
     'components/messagemanager/');
 $assets_path = $modx->getOption('mm.assets_path', NULL, $modx->getOption('assets_path') .
@@ -113,7 +113,9 @@ foreach ($messages as $message) {
     $fields['mm.sender'] = $username;
     $fields['mm.class'] = $fields['mm.read']? 'read' : 'unread';
     $fields['mm.read_indicator'] = $fields['mm.read'] ? 'Yes' : 'No';
-    $fields['mm.read'] = $fields['mm.read'] ? $modx->lexicon('mm_yes') : $modx->lexicon('mm_no');
+    $fields['mm.read'] = $fields['mm.read']
+        ? $modx->lexicon('mm_yes')
+        : $modx->lexicon('mm_no');
 
     $inner .= $modx->getChunk($tpl, $fields);
 }

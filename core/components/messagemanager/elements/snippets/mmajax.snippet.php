@@ -1,8 +1,8 @@
 <?php
-/**
+/** 
  * mmAjax snippet for MessageManager extra
  *
- * Copyright 2014 by Bob Ray <http://bobsguides.com>
+ * Copyright 2015 by Bob Ray <http://bobsguides.com>
  * Created on 01-29-2015
  *
  * MessageManager is free software; you can redistribute it and/or modify it under the
@@ -48,16 +48,29 @@ if (! function_exists('my_debug')) {
     }
 }
 
-$validActions = array(
-    'security/message/remove',
-    'security/message/read',
-    'security/message/unread',
-    'security/message/create',
-    'security/user/getlist',
-    'security/group/getlist',
-);
+if (!function_exists('getGroupId')) {
+    function getGroupId($group) {
+        global $modx;
+        if (! is_numeric(substr($group, 0, 1))) {
+            $key = 'name';
+        } else {
+            $key = 'id';
+        }
+        $query = $modx->newQuery('modUserGroup', array(
+            $key => $group,
+        ));
+        $query->select('id');
+        return $modx->getValue($query->prepare());
+    }
+
+}
+
+$validActions =  'security/message/remove,security/message/read,security/message/unread,security/message/create,security/user/getlist,security/group/getlist';
+
 
 $validActions = $modx->getOption ('validActions', $scriptProperties, $validActions, true);
+$validActions = explode(',', $validActions);
+$validActions = array_map('trim', $validActions);
 
 if (isset($_REQUEST) && !empty($_REQUEST)) {
     $action = $modx->getOption('action', $_REQUEST, '');
@@ -65,7 +78,7 @@ if (isset($_REQUEST) && !empty($_REQUEST)) {
         unset($_REQUEST['action']);
     }
 
-    if (! in_array($action, $validActions)) {
+    if (! in_array($action, $validActions, true)) {
         my_debug('Invalid Action: ' . $action, $modx);
         $retVal = array(
             'success'       => false,
@@ -75,6 +88,35 @@ if (isset($_REQUEST) && !empty($_REQUEST)) {
 
     }
     $props = $modx::sanitize($_REQUEST, $modx->sanitizePatterns);
+
+    if ($action === 'security/user/getlist') {
+        $userGroup = $modx->getOption('user_group', $scriptProperties, '', true);
+        $userGroup = getGroupId($userGroup);
+        if (!empty($userGroup)) {
+            $props['usergroup'] = $userGroup;
+        }
+        unset($userGroup);
+
+    }
+
+    if ($action === 'security/group/getlist') {
+        $exGroups = $modx->getOption('exclude_groups', $scriptProperties, '', true);
+        if (!empty($exGroups)) {
+            $temp = array();
+            $exGroups = explode(',', $exGroups);
+            foreach($exGroups as $exGroup) {
+                $v = getGroupId($exGroup);
+                if (! empty($v)) {
+                    $temp[] = $v;
+                }
+            }
+            if (!empty($temp)) {
+                $temp = implode(',', $temp);
+                $props['exclude'] = $temp;
+            }
+        }
+        unset($exGroups, $v, $temp);
+    }
 
 
     /* @var $response modProcessorResponse */
@@ -105,10 +147,7 @@ if (isset($_REQUEST) && !empty($_REQUEST)) {
                         $user['sudo'], $user['active'], $user['blocked'], $user['primary_group']);
                 }
             }
-
         }
-
-
     }
 
 } else {

@@ -56,3 +56,4 @@ $_lang['mm_messages_deleted'] = 'Messages Deleted';
 $_lang['mm_yes'] = 'Yes';
 $_lang['mm_no'] = 'No';
 $_lang['mm_no_messages'] = 'No Messages';
+
