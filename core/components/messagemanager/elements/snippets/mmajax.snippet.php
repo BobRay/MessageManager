@@ -97,14 +97,36 @@ if (isset($_REQUEST) && !empty($_REQUEST)) {
     }
     $props = $modx::sanitize($_REQUEST, $modx->sanitizePatterns);
 
+    $userGroup = $modx->getOption('user_group', $scriptProperties, '', true);
+    $userGroup = getGroupId($userGroup);
+
     if ($action === 'security/user/getlist') {
-        $userGroup = $modx->getOption('user_group', $scriptProperties, '', true);
-        $userGroup = getGroupId($userGroup);
         if (!empty($userGroup)) {
             $props['usergroup'] = $userGroup;
         }
         unset($userGroup);
+    }
 
+    if ($action === 'security/message/create') {
+        if (!empty($userGroup)) {
+            /* See if user has opted-in */
+            $recipientId = $modx->getOption('user', $_REQUEST, 0);
+            $query = $modx->newQuery('modUserGroupMember', array(
+                'member' => $recipientId,
+                'user_group' => $userGroup,
+            ));
+            $query->select('member');
+            $member = $modx->getValue($query->prepare());
+
+            if (empty($member)) {
+                /* Not a member, bypass processor */
+                $retVal = array(
+                    'success' => true,
+                );
+                return $modx->toJSON($retVal);
+            }
+
+        }
     }
 
     if ($action === 'security/group/getlist') {
