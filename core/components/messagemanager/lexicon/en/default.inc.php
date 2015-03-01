@@ -58,6 +58,7 @@ $_lang['mm_no'] = 'No';
 $_lang['mm_no_messages'] = 'No Messages';
 
 /* Used in messagemanager.snippet.php */
+$_lang['mm_unauthorized'] = '<h3>Sorry, you\'re not authorized for messages</h3>';
 $_lang['mm_user'] = 'User';
 $_lang['mm_usergroup'] = 'User Group';
 $_lang['mm_all'] = 'All Users';

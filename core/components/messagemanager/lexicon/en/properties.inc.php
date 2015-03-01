@@ -44,4 +44,6 @@ $_lang['mm_exclude_groups_desc'] = 'Comma-separated list of User Group IDs or na
 $_lang['mm_user_group_desc'] = 'User Group ID or name that has opted to receive messages; if empty, all users can be sent a message; default: empty.';
 
 /* Used in properties.messagemanager.snippet.php */
+$_lang['redirect_to_desc'] = 'Id of Resource to redirect to if user is not logged in (e.g. the Login page); If this is not set, MessageManager will redirect to the Login page if its pagetitle is Login, or the site_start page if not.';
+$_lang['allowed_groups_desc'] = 'Comma-separated list of User Group names or IDs that are allowed to access MessageManager; if empty all groups are allowed.';
 $_lang['mm_recipient_options_desc'] = 'Options for sending messages; default: user,usergroup,all.';

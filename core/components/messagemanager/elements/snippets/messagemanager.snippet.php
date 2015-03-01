@@ -66,10 +66,35 @@ $modx->regClientCSS($assets_url . 'css/jquery/jquery-ui.theme.css');
 $path = $assets_url . 'js/' . $jsFile;
 $modx->regClientStartupScript($path);
 
-/* do nothing if user is not logged in or member of admin group*/
-if ( (!$modx->user->hasSessionContext('web')) && (! $modx->user->isMember('Administrator'))) {
-  return '';
+/* Forward to redirect_to resource if user is not logged in */
+if ( (!$modx->user->hasSessionContext($modx->context->get('key')))) {
+    $redirectToId = $modx->getOption('redirect_to', $scriptProperties, null, true);
+    if ($redirectToId === null) {
+        /* Try to find the Login page */
+        $query = $modx->newQuery('modResource', array(
+            'pagetitle' => 'Login',
+        ));
+        $query->select('id');
+        $redirectToId =  $modx->getValue($query->prepare());
+        /* Use site_start as default */
+        $redirectToId = empty($redirectToId)
+            ? $modx->getOption('site_start', null)
+            : $redirectToId;
+    }
+    $url = $modx->makeUrl($redirectToId, "", "", "full");
+    $modx->sendRedirect($url);
 }
+
+$allowedGroups = $modx->getOption('allowed_groups', $scriptProperties, '', true);
+
+if (!empty($allowedGroups)) {
+    $allowedGroups = explode(',', $allowedGroups);
+    if (! $modx->user->isMember($allowedGroups)) {
+        return $modx->lexicon('mm_unauthorized');
+    }
+}
+
+/* ToDo: Add allowed_groups and redirect_to properties */
 
 /* Display messages */
 $tpl = $modx->getOption('tpl', $scriptProperties, 'messageTpl');
