@@ -33,6 +33,14 @@
  *
  * @package messagemanager
  **/
+
+/** Properties
+
+ * @property &exclude_groups textfield -- Comma-separated list of User Group IDs or names that can not be sent bulk messages; if empty all user groups can be sent messages; Default: empty.
+ *
+ * @property &user_group textfield -- User Group ID or name that has opted to receive messages; if empty, all users can be sent a message; Default: empty.
+ */
+
 if (! function_exists('my_debug')) {
     function my_debug($msg, $modx, $clear = false) {
         /** @var $chunk modChunk */
