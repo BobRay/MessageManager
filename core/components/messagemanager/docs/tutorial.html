@@ -1,4 +1,6 @@
-<p>MessageManager lets users see and delete their messages in the front end of the site. Depending on the configuration, they can also reply to messages and send messages to another user, all members of a User Group, or all users on the site. Optionally, users can opt in or out of receiving message based on their member ship in a particular user group.</p>
+<p>MessageManager lets users see and delete their messages in the front end of the site. They can also mark the messages as read or unread. The messages are the same ones available in the Manager as part of the MODX messaging system.</p>
+
+<p>Depending on the configuration, users can also reply to messages and send messages to another user, to all members of a User Group, or to all users on the site. Optionally, users can opt in or out of receiving message based on their membership in a particular user group.</p>
 
 <p>(Jump to <a href="[[~[[*id]]]]#propertiesTable1">MessageManager snippet Properties Table</a>.)</p>
 <p>(Jump to <a href="[[~[[*id]]]]#propertiesTable">mmAjax snippet Properties Table</a>.)</p>
@@ -11,9 +13,48 @@ Go to System | Package Management on the main menu in the MODX Manager and click
 
 <h3>Usage</h3>
 
-<p>Users can access MessageManager simply by visiting the Message Manager resource. </p>
+<p>Users can access MessageManager simply by visiting the Message Manager resource. They have to be logged in to the front end of the site in order for MessageManager to know which messages are theirs. Clicking on a message subject reveals the message and marks it as read. Right-clicking on a message opens a context menu that allows users to delete the current message, reply to it, mark it as unread, or send a new message. Messages can also be bulk deleted using the checkboxes next to the messages and the &quot;Delete&quot; button.</p>
+
+<p>When replying to a message, users can quote the original message by clicking on the &quot;Quote&quot; button.</p>
+
+<p>When the &quot;New Message&quot; option is selected from the context menu, users can have the option to send a message to an individual user, to all members of a User Group, or to all users on the site. You can control which of these options appear by setting the <code>recipient_options</code> property of the MessageManager snippet.</p>
+
+<p>You can select which User Groups are allowed to use MessageManager, which groups are shown in the &quot;User Groups&quot; dropdown menu, and which Users can be sent messages.</p>
 
 
+<h3>Login</h3>
+
+<p>If the current user is not logged in to the current context (e.g., 'web'), MessageManager will redirect the user to the Resource whose ID is set in the <code>redirect_to</code> property of the MessageManager snippet. If the <code>redirect_to</code> property is not set, MessageManager will redirect to the Login page if its <code>pagetitle</code> is &quot;Login&quot; or to the resource specified by the <code>site_start</code> System Setting if no Login page is found</p>
+
+<p>If you have <code>&redirecToPrior=`1`</code> in your Login snippet tag, the user will be redirected back to the MessageManager page after successfully logging in.</p>
+
+<h3>Controlling Which Users Can Use MessageManager</h3>
+
+<p>The <code>allowed_groups</code> property of the MessageManager snippet controls who can use MessageManager. That property takes a comma-separated list of User Group Names or IDs. If the current user is logged in, but not a member of any of the groups, they will see an error message. If the <code>allowed_groups</code> property is empty, all users will be allowed to use MessageManager.</p>
+
+<p>If you use the <code>allowed_groups</code> property, be sure the User Group names are spelled correctly or the IDs are correct. Otherwise, some users will not be able to user MessageManager.</p>
+
+<h3>Recipient Options</h3>
+
+<p>When a user selects &quot;New Message&quot; from the context menu, they can send messages (optionally) to individual users, to selected user groups, or to all users. The available options are controlled by the <code>recipient_options</code> property of the MessageManager snippet. The default setting is <code>user,usergroup,all</code>. To change the options, just leave out one or two of the options. You must have one option selected, or no messages will be sent.</p>
+
+<p>The captions for the Options are lexicon strings in the default.inc.php lexicon file. If you change them in Lexicon Management in the Manager, your changes will survive upgrades to both MODX and MessageManager. Look in the <code>messagemanager</code> namespace and the <code>default</code> topic.</p>
+
+<div class="box">
+    <p>The options above are properties of the MessageManager snippet. The ones below are properties of the mmAjax snippet.</p>
+</div>
+
+<h3>Limiting the User Group List</h3>
+
+<p>The <code>exclude_groups</code> property of the mmAjax snippet controls which User Groups will appear in the drop-down menu when a user selects &quot;New Message -&gt; User Group&quot;. The property takes a comma-separated list of User Group names or IDs to exclude from the list. If the property is empty, all groups will be shown.</p>
+
+<h3>Opting Out of the Message System</h3>
+
+<p>The <code>user_group</code> property controls which users will show up as possible recipients if the user selects &quot;New Message -&gt; User&quot;. If the property is empty, all users on the site will be shown. The property takes the name or ID of a single user group, because that's all the &quot;user/getlist&quot; processor understands. Only users who are members of the specified group will be shown. Since users can belong to more than one User Group, any user can be placed in the group.</p>
+
+<p>The Subscribe extra can be configured to allow users to select user groups they want to belong to when they register, so you can use it to allow users to opt-in to the Message System. It also allows them to change their preferences later.</p>
+
+<p>Even if a user has opted out of receiving messages, they can still reply to a message sent to them before they opted out.</p>
 
 
 <a name="propertiesTable1"></a>
