@@ -31,11 +31,13 @@ $snippets[1]->fromArray(array (
   'property_preprocess' => false,
   'name' => 'MessageManager',
   'description' => 'MessageManager snippet',
-  'properties' => 
-  array (
-  ),
 ), '', true, true);
 $snippets[1]->setContent(file_get_contents($sources['source_core'] . '/elements/snippets/messagemanager.snippet.php'));
+
+
+$properties = include $sources['data'].'properties/properties.messagemanager.snippet.php';
+$snippets[1]->setProperties($properties);
+unset($properties);
 
 $snippets[2] = $modx->newObject('modSnippet');
 $snippets[2]->fromArray(array (

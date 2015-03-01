@@ -87,14 +87,14 @@ $count = !empty($messages) ? count($messages) : 'no';
 $modx->setPlaceholder('messageCount', $count);
 $modx->setPlaceholder('message_count', count($messages));
 
-$rOptions = 'user:User,usergroup:User Group,all:All Users';
+$rOptions = 'user,usergroup,all';
 
-$recipientOptions = $modx->getOption('recipientOptions', $scriptProperties, $rOptions, true);
+$recipientOptions = $modx->getOption('recipient_options', $scriptProperties, $rOptions, true);
 $optionArray = explode(',', $recipientOptions);
 $finalOptions = "\n" . ' <option value = "0" > Select One </option > ';
-foreach( $optionArray as $opt) {
-    $couple = explode(':', $opt);
-    $finalOptions .= "\n    " . '<option value="' . $couple[0] . '">' . $couple[1] . '</option>';
+foreach($optionArray as $opt) {
+    $finalOptions .= "\n    " . '<option value="' . $opt . '">' .
+        $modx->lexicon('mm_' . $opt) . '</option>';
 }
 
 

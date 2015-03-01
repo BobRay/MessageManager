@@ -57,3 +57,7 @@ $_lang['mm_yes'] = 'Yes';
 $_lang['mm_no'] = 'No';
 $_lang['mm_no_messages'] = 'No Messages';
 
+/* Used in messagemanager.snippet.php */
+$_lang['mm_user'] = 'User';
+$_lang['mm_usergroup'] = 'User Group';
+$_lang['mm_all'] = 'All Users';
