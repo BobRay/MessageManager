@@ -73,6 +73,16 @@ if (!function_exists('getGroupId')) {
 
 }
 
+if (!$modx->hasPermission('messages')) {
+    $retVal = array(
+        'success'       => false,
+        'error_message' => $modx->lexicon('permission_denied'),
+    );
+
+    return $modx->toJSON($retVal);
+}
+
+
 $validActions =  'security/message/remove,security/message/read,security/message/unread,security/message/create,security/user/getlist,security/group/getlist';
 
 
@@ -87,7 +97,6 @@ if (isset($_REQUEST) && !empty($_REQUEST)) {
     }
 
     if (! in_array($action, $validActions, true)) {
-        my_debug('Invalid Action: ' . $action, $modx);
         $retVal = array(
             'success'       => false,
             'error_message' => 'Invalid Action',
@@ -99,6 +108,7 @@ if (isset($_REQUEST) && !empty($_REQUEST)) {
 
     $userGroup = $modx->getOption('user_group', $scriptProperties, '', true);
     $userGroup = getGroupId($userGroup);
+    $type = $modx->getOption('type', $_REQUEST, '', true);
 
     if ($action === 'security/user/getlist') {
         if (!empty($userGroup)) {
@@ -108,31 +118,59 @@ if (isset($_REQUEST) && !empty($_REQUEST)) {
     }
 
     if ($action === 'security/message/create') {
-        if (!empty($userGroup)) {
-            /* See if user has opted-in */
-            $recipientId = $modx->getOption('user', $_REQUEST, 0);
-            $query = $modx->newQuery('modUserGroupMember', array(
-                'member' => $recipientId,
-                'user_group' => $userGroup,
-            ));
-            $query->select('member');
-            $member = $modx->getValue($query->prepare());
+        if ((!empty($userGroup)) && $type == 'all' ) {
+            /* Bypass processor to send only to user group */
 
-            if (empty($member)) {
-                /* Not a member, bypass processor */
-                $retVal = array(
-                    'success' => true,
-                );
-                return $modx->toJSON($retVal);
+            $c = $modx->newQuery('modUserGroupMember');
+            $c->where(array(
+                 'user_group' => $userGroup,
+            ));
+
+            $members = $modx->getCollection('modUserGroupMember', $c);
+            $subject = $modx->getOption('subject', $_REQUEST, 'No Subject');
+            $messagetext = $modx->getOption('message', $_REQUEST, 'No Message');
+            $sender = $modx->user->get('id');
+
+            foreach ($members as $member) {
+                /** @var $member modUserGroupMember */
+                $message = $modx->newObject('modUserMessage');
+                $message->set('recipient', $member->get('member'));
+                $message->set('sender', $sender);
+                $message->set('subject', $subject);
+                $message->set('message', $messagetext);
+                $message->set('date_sent', time());
+                $message->set('private', false);
+                @$message->save();
+
             }
+            $retVal = array(
+                'success' => true,
+            );
+
+            return $modx->toJSON($retVal);
 
         }
     }
 
     if ($action === 'security/group/getlist') {
         $exGroups = $modx->getOption('exclude_groups', $scriptProperties, '', true);
-        if (!empty($exGroups)) {
-            $temp = array();
+        $temp = array();
+
+        if (!empty($userGroup)) {
+            $grps = $modx->getCollection('modUserGroup');
+
+            foreach($grps as $grp) {
+                /** @var $grp modUserGroup */
+                if ($grp->get('id') == $userGroup) {
+                    continue;
+                }
+                $temp[] = $grp->get('id');
+            }
+            if (!empty($temp)) {
+                $props['exclude'] = implode(',', $temp);
+            }
+
+        } elseif (!empty($exGroups)) {
             $exGroups = explode(',', $exGroups);
             foreach($exGroups as $exGroup) {
                 $v = getGroupId($exGroup);
@@ -141,11 +179,10 @@ if (isset($_REQUEST) && !empty($_REQUEST)) {
                 }
             }
             if (!empty($temp)) {
-                $temp = implode(',', $temp);
-                $props['exclude'] = $temp;
+                $props['exclude'] = implode(',', $temp);
             }
         }
-        unset($exGroups, $v, $temp);
+        unset($exGroups, $exGroup, $grps, $grp, $v, $temp);
     }
 
 
