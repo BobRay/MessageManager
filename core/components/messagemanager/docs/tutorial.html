@@ -30,7 +30,9 @@ Go to System | Package Management on the main menu in the MODX Manager and click
 
 <h3>Controlling Which Users Can Use MessageManager</h3>
 
-<p>The <code>allowed_groups</code> property of the MessageManager snippet controls who can use MessageManager. That property takes a comma-separated list of User Group Names or IDs. If the current user is logged in, but not a member of any of the groups, they will see an error message. If the <code>allowed_groups</code> property is empty, all users will be allowed to use MessageManager.</p>
+<p>Only users with the <code>messages</code> permission in the Context Access ACL entry for the current context will be able to use MessageManager.</p>
+
+<p>In addition to the <code>messages</code> permission, the <code>allowed_groups</code> property of the MessageManager snippet controls who can use MessageManager. The property takes a comma-separated list of User Group Names or IDs. If the current user is logged in, but not a member of any of the groups, they will see an error message. If the <code>allowed_groups</code> property is empty, all users will be allowed to use MessageManager.</p>
 
 <p>If you use the <code>allowed_groups</code> property, be sure the User Group names are spelled correctly or the IDs are correct. Otherwise, some users will not be able to user MessageManager.</p>
 
@@ -48,13 +50,17 @@ Go to System | Package Management on the main menu in the MODX Manager and click
 
 <p>The <code>exclude_groups</code> property of the mmAjax snippet controls which User Groups will appear in the drop-down menu when a user selects &quot;New Message -&gt; User Group&quot;. The property takes a comma-separated list of User Group names or IDs to exclude from the list. If the property is empty, all groups will be shown.</p>
 
+<p>If the property below (<code>user_group</code>) is not empty, it will override <code>exclude_groups</code> and only the specified group will be shown in the dropdown.</p>
+
 <h3>Opting Out of the Message System</h3>
 
 <p>The <code>user_group</code> property controls which users will show up as possible recipients if the user selects &quot;New Message -&gt; User&quot;. If the property is empty, all users on the site will be shown. The property takes the name or ID of a single user group, because that's all the &quot;user/getlist&quot; processor understands. Only users who are members of the specified group will be shown. Since users can belong to more than one User Group, any user can be placed in the group.</p>
 
+<p>If this property is set, the <code>exclude_groups</code> property will be ignored when producing the User Group dropdown. Only the group specified in <code>user_group</code> will be shown.</p>
+
 <p>The Subscribe extra can be configured to allow users to select user groups they want to belong to when they register, so you can use it to allow users to opt-in to the Message System. It also allows them to change their preferences later.</p>
 
-<p>Even if a user has opted out of receiving messages, they can still reply to a message sent to them before they opted out.</p>
+<p>Even if a user has opted out of receiving messages, they can still reply to a message sent to them before they opted out, but they will not receive any new messages.</p>
 
 
 <a name="propertiesTable1"></a>
@@ -70,15 +76,13 @@ Go to System | Package Management on the main menu in the MODX Manager and click
 
     <tr>
         <td>recipient_options</td>
-        <td>Options for sending messages; these options show up in the dropdown list when sending a new message; you must include at least
-            one option
+        <td>Options for sending messages; these options show up in the dropdown list when sending a new message; you must include at least one option
         </td>
         <td>user,usergroup,all</td>
     </tr>
     <tr>
         <td>redirect_to</td>
-        <td>Id of Resource to redirect to if user is not logged in (e.g. the Login page); If this is not set, MessageManager will redirect
-            to the Login page if its pagetitle is Login, or the site_start page if not
+        <td>Id of Resource to redirect to if user is not logged in (e.g. the Login page); If this is not set, MessageManager will redirect to the Login page if its pagetitle is &quot;Login&quot;, or the site_start page if not
         </td>
         <td></td>
     </tr>
