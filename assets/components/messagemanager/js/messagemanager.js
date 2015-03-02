@@ -268,6 +268,9 @@ $(function () {
 
                         break;
                     case 'all':
+                        mmUsers.hide();
+                        toNameField.hide();
+                        ddl.hide();
                         mt.show();
                         break;
                     default:
