@@ -133,8 +133,7 @@ $(function () {
             }
         }
         dlgSubjectObj.val(subject);
-        console.log('ID: ' + id);
-        console.log('Subject: X' + subject + 'X');
+
         var message = '';
         var myDialog = $("#myDialog").dialog({
             autoOpen: false,
@@ -151,10 +150,8 @@ $(function () {
                     class: 'mm_left_button',
                     click: function() {
                         var originalMessageText = $("#mm_message" + id).find('td:first').html();
-                        console.log('Original: ' + originalMessageText);
                         originalMessageText = originalMessageText.replace(/&lt;/g, '<');
                         originalMessageText = originalMessageText.replace(/&gt;/g, '>');
-                        // console.log('Original after replace: ' + originalMessageText);
                         mt.val("<< " + originalMessageText + " >>");
                     }
                 },
@@ -186,8 +183,7 @@ $(function () {
                        // selectTypeOptions.prepend('<option selected="selected" value="0"> Select Type </option>');
             selectTypeOptions.change(function () {
                 var selection = this.value;
-                console.log("Selection: " + selection);
-                console.debug(this);
+
                 if (selection == 0) {
                     return false;
                 }
@@ -221,7 +217,6 @@ $(function () {
                             $('span.mm_user').on("click", function (e) {
                                 recipientId = e.target.id;
                                 var recipientName = $(this).html();
-                                console.log('Recipient: ' + recipientName);
                                 if (recipientId == undefined) {
                                     e.preventDefault();
                                     e.stopPropagation();
@@ -229,16 +224,12 @@ $(function () {
                                 }
                                 toNameField.html(recipientName);
                                 toNameField.show();
-                                console.log('Recipient ID: ' + recipientId);
                                 mmUsers.hide();
                                 mt.show();
 
 
                             });
-                            // console.debug(data.data.results);
-
                         });
-
 
                         break;
                     case 'usergroup':
@@ -267,12 +258,11 @@ $(function () {
                                     return;
                                 }
 
-                                console.log('Group ID: ' + groupId);
                                 mt.show();
 
 
                             });
-                            // console.debug(data.data.results);
+
                             ddl.show();
                         });
 
@@ -294,14 +284,13 @@ $(function () {
                     pop.load(20);
                 } else {
                     subject = $('input#dlg_subject').val();
-                    // console.log('SendSubject: ' + subject);
+
                     if (subject.length === 0) {
                         pop.setText(mmLex("mm_empty_subject"));
                         pop.load(20);
                         return false;
                     }
 
-                    console.log('Type: ' + recipientType);
                     mmSpinner.spin(spinnerTarget);
                     switch(recipientType) {
                         case 'all':
@@ -416,7 +405,7 @@ $(function () {
             mmSpinner.stop();
         }).fail(function (jqXHR, textStatus) {
             mmSpinner.stop();
-            pop.setText(action + ' failed on message' + id + ' ' + textStatus);
+            pop.setText(action + ' failed on message ' + id + ' ' + textStatus);
             pop.load(40);
         });
     }
@@ -451,7 +440,6 @@ $(function () {
         if (read.html() === undefined) {
             return false;
         }
-        console.log("READ.html: " + read.html());
 
         if (read.html() == mmLex('mm_yes')) {
 
