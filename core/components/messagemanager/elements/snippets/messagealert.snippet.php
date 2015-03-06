@@ -48,11 +48,14 @@ $unreadCount = (int) $modx->getCount('modUserMessage',
         'read'      => false,
     )
 );
+$unread = $modx->lexicon('mm_unread');
+$unreadCount = '(' . $unreadCount . ' ' . $unread . ')';
 $noun = $modx->lexicon('mm_messages');
 
 switch ($count) {
     case 0:
         $count = $modx->lexicon('mm_count_no');
+        $unreadCount = '';
         break;
     case 1:
         $noun = $modx->lexicon('mm_message');
@@ -61,5 +64,5 @@ switch ($count) {
         break;
 }
 
-$unread = $modx->lexicon('mm_unread');
-return "{$count} {$noun} ({$unreadCount} {$unread})";
+
+return "{$count} {$noun} {$unreadCount}";
