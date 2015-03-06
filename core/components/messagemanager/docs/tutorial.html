@@ -24,7 +24,7 @@ Go to System | Package Management on the main menu in the MODX Manager and click
 
 <h3>Login</h3>
 
-<p>If the current user is not logged in to the current context (e.g., 'web'), MessageManager will redirect the user to the Resource whose ID is set in the <code>redirect_to</code> property of the MessageManager snippet. If the <code>redirect_to</code> property is not set, MessageManager will redirect to the Login page if its <code>pagetitle</code> is &quot;Login&quot; or to the resource specified by the <code>site_start</code> System Setting if no Login page is found</p>
+<p>If the current user is not logged in to the current context (e.g., 'web'), MessageManager will redirect the user to the Resource whose ID is set in the <code>redirect_to</code> property of the MessageManager snippet. If the <code>redirect_to</code> property is not set, MessageManager will redirect to the Login page if its <code>pagetitle</code> is &quot;Login&quot; or to the resource specified by the <code>site_start</code> System Setting if no Login page is found.</p>
 
 <p>If you have <code>&redirecToPrior=`1`</code> in your Login snippet tag, the user will be redirected back to the MessageManager page after successfully logging in.</p>
 
@@ -42,9 +42,13 @@ Go to System | Package Management on the main menu in the MODX Manager and click
 
 <p>The captions for the Options are lexicon strings in the default.inc.php lexicon file. If you change them in Lexicon Management in the Manager, your changes will survive upgrades to both MODX and MessageManager. Look in the <code>messagemanager</code> namespace and the <code>default</code> topic.</p>
 
+<p>&nbsp;</p>
+
 <div class="box">
     <p>The options above are properties of the MessageManager snippet. The ones below are properties of the mmAjax snippet.</p>
 </div>
+
+<p>&nbsp;</p>
 
 <h3>Limiting the User Group List</h3>
 
@@ -61,6 +65,29 @@ Go to System | Package Management on the main menu in the MODX Manager and click
 <p>The Subscribe extra can be configured to allow users to select user groups they want to belong to when they register, so you can use it to allow users to opt-in to the Message System. It also allows them to change their preferences later.</p>
 
 <p>Even if a user has opted out of receiving messages, they can still reply to a message sent to them before they opted out, but they will not receive any new messages.</p>
+
+<h3>MessageAlert Snippet</h3>
+
+<p>This snippet is provided to let you notify users of any available messages. Except for the numbers, the results are lexicon strings in the <code>default.inc.php</code> file.</p>
+
+<p>As with the captions described above, if you change them in Lexicon Management in the Manager, your changes will survive upgrades to both MODX and MessageManager. Look in the
+<code>messagemanager</code> namespace and the <code>default</code> topic.</p>
+
+<p>To add the alert message, put code like this anywhere in the page template or the page content:</p>
+
+<pre class="brush: html; toolbar: false;"><fixedpre>
+<div id = "mm_alert">
+    <p id="mm_alert_message">You have [[!MessageAlert]]</p>
+</div>
+</fixedpre></pre>
+
+<p>The code above will result in a message like one of the following:</p>
+
+<pre class="brush: html; toolbar: false;"><fixedpre>
+You have no messages
+You have 4 messages (2 unread)
+You have 1 message (0 unread)
+</fixedpre></pre>
 
 
 <a name="propertiesTable1"></a>
@@ -117,3 +144,6 @@ Go to System | Package Management on the main menu in the MODX Manager and click
         <td>empty</td>
     </tr>
 </table>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
