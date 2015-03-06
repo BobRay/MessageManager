@@ -54,7 +54,7 @@ $_lang['mm_message_deleted'] = 'Message Deleted';
 $_lang['mm_message_sent'] = 'Message Sent';
 $_lang['mm_messages_deleted'] = 'Messages Deleted';
 $_lang['mm_yes'] = 'Yes';
-$_lang['mm_no'] = 'No';
+$_lang['mm_no'] = 'no';
 $_lang['mm_no_messages'] = 'No Messages';
 
 /* Used in messagemanager.snippet.php */
@@ -62,3 +62,9 @@ $_lang['mm_unauthorized'] = '<h3>Sorry, you\'re not authorized for messages</h3>
 $_lang['mm_user'] = 'User';
 $_lang['mm_usergroup'] = 'User Group';
 $_lang['mm_all'] = 'All Users';
+
+/* Used in messagealert.snippet.php */
+$_lang['mm_messages'] = 'messages';
+$_lang['mm_message'] = 'message';
+$_lang['mm_unread'] = 'unread';
+$_lang['mm_count_no'] = 'no';

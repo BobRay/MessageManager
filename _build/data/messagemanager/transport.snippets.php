@@ -2,7 +2,7 @@
 /**
  * snippets transport file for MessageManager extra
  *
- * Copyright 2014 by Bob Ray <http://bobsguides.com>
+ * Copyright 2015 by Bob Ray <http://bobsguides.com>
  * Created on 01-26-2015
  *
  * @package messagemanager
@@ -52,5 +52,15 @@ $snippets[2]->setContent(file_get_contents($sources['source_core'] . '/elements/
 $properties = include $sources['data'].'properties/properties.mmajax.snippet.php';
 $snippets[2]->setProperties($properties);
 unset($properties);
+
+$snippets[3] = $modx->newObject('modSnippet');
+$snippets[3]->fromArray(array (
+  'id' => 3,
+  'property_preprocess' => false,
+  'name' => 'MessageAlert',
+  'description' => 'Show current user how many messages are available',
+  'properties' => NULL,
+), '', true, true);
+$snippets[3]->setContent(file_get_contents($sources['source_core'] . '/elements/snippets/messagealert.snippet.php'));
 
 return $snippets;

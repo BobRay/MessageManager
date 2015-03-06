@@ -16,14 +16,14 @@ $components = array(
     'packageName' => 'MessageManager',  /* No spaces, no dashes */
     'packageNameLower' => $packageNameLower,
     'packageDescription' => 'MessageManager lets users see and delete their messages in the front end of the site',
-    'version' => '1.0.0',
-    'release' => 'beta1',
+    'version' => '1.0.1',
+    'release' => 'rc1',
     'author' => 'Bob Ray',
     'email' => '<http://bobsguides.com>',
     'authorUrl' => 'http://bobsguides.com',
     'authorSiteName' => "Bob's Guides",
     'packageDocumentationUrl' => 'http://bobsguides.com/messagemanager-tutorial.html',
-    'copyright' => '2014',
+    'copyright' => '2015',
 
     /* no need to edit this except to change format */
     'createdon' => strftime('%m-%d-%Y'),
@@ -161,6 +161,11 @@ $components = array(
                 'description' => 'MessageManager ajax connector snippet',
                 'static'      => false,
             ),
+            'MessageAlert' => array(
+                'category'    => 'MessageManager',
+                'description' => 'Show current user how many messages are available',
+                'static'      => false,
+            ),
 
         ),
         'chunks' => array(
@@ -212,7 +217,6 @@ $components = array(
         'en' => array(
             'default',
             'properties',
-            'forms',
         ),
     ),
     /* ********************************************* */

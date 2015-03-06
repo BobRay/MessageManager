@@ -2,7 +2,7 @@
 /**
  * Properties file for MessageManager snippet
  *
- * Copyright 2014 by Bob Ray <http://bobsguides.com>
+ * Copyright 2015 by Bob Ray <http://bobsguides.com>
  * Created on 02-28-2015
  *
  * @package messagemanager
