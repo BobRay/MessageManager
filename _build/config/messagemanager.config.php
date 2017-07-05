@@ -19,10 +19,10 @@ $components = array(
     'version' => '1.0.1',
     'release' => 'rc1',
     'author' => 'Bob Ray',
-    'email' => '<http://bobsguides.com>',
-    'authorUrl' => 'http://bobsguides.com',
+    'email' => '<https://bobsguides.com>',
+    'authorUrl' => 'https://bobsguides.com',
     'authorSiteName' => "Bob's Guides",
-    'packageDocumentationUrl' => 'http://bobsguides.com/messagemanager-tutorial.html',
+    'packageDocumentationUrl' => 'https://bobsguides.com/messagemanager-tutorial.html',
     'copyright' => '2015',
 
     /* no need to edit this except to change format */

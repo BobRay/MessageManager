@@ -2,7 +2,7 @@
 /**
  * en default topic lexicon file for MessageManager extra
  *
- * Copyright 2014 by Bob Ray <http://bobsguides.com>
+ * Copyright 2014-2017 Bob Ray <https://bobsguides.com>
  * Created on 01-26-2015
  *
  * MessageManager is free software; you can redistribute it and/or modify it under the
