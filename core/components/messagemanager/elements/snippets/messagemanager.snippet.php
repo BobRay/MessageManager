@@ -48,13 +48,7 @@
 
  */
  
-$contentType = $modx->getObject('modContentType', array('mime_type' => 'text/html'));
 
-if (! $contentType) {
-  $modx->log(modX::LOG_LEVEL_ERROR, '[MessageManager] could not get content type with mime_type: "text/html"');
-} else {
-  $modx->setPlaceholder('html_file_extension', $contentType->get('file_extensions'));
-}
 $language = $modx->getOption('language', $scriptProperties, $modx->getOption('culture_key'));
 $language = empty($language) ? 'en' : $language;
 $modx->lexicon->load($language . ':messagemanager:default');
@@ -64,7 +58,6 @@ $jsonLex = $modx->toJSON($lex);
 $version = '?v=1.0.1-rc';
 
 $cssFile = $modx->getOption('cssFile', $scriptProperties, 'messagemanager.css') . $version;
-$jsFile = $modx->getOption('jsFile', $scriptProperties, 'messagemanager.js') . $version;
 $assets_url = $modx->getOption('mm.assets_url', NULL, $modx->getOption('assets_url') .
     'components/messagemanager/');
 $assets_path = $modx->getOption('mm.assets_path', NULL, $modx->getOption('assets_path') .
@@ -82,8 +75,20 @@ $modx->regClientStartupScript($assets_url . 'js/spin-min.js');
 $modx->regClientCSS($assets_url . 'css/jquery/jquery-ui.min.css');
 $modx->regClientCSS($assets_url . 'css/jquery/jquery-ui.theme.css');
 
-$path = $assets_url . 'js/' . $jsFile . $version;
-$modx->regClientStartupScript($path);
+$contentType = $modx->getObject('modContentType', array('mime_type' => 'text/html'));
+
+if (!$contentType) {
+    $modx->log(modX::LOG_LEVEL_ERROR, '[MessageManager] could not get content type with mime_type: "text/html"');
+} else {
+    $fields = array(
+        'html_file_extension' => $contentType->get('file_extensions'),
+    );
+    $jsFile = $modx->getOption('jsFile', $scriptProperties, 'mmAjaxJs', true);
+    $modx->regClientStartupScript($modx->getChunk($jsFile, $fields));
+}
+
+
+
 
 /* Forward to redirect_to resource if user is not logged in */
 if ( (!$modx->user->hasSessionContext($modx->context->get('key')))) {

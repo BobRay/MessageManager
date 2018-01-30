@@ -178,6 +178,10 @@ $components = array(
                 'category' => 'MessageManager',
 
             ),
+            'mmAjaxJs'=> array(
+                'description' => 'JS for Ajax resource',
+                'category' => 'MessageManager',
+            )
         ),
         'templates' => array(
         ),

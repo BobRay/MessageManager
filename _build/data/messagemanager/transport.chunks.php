@@ -47,4 +47,14 @@ $chunks[2]->fromArray(array (
 ), '', true, true);
 $chunks[2]->setContent(file_get_contents($sources['source_core'] . '/elements/chunks/messagetpl.chunk.html'));
 
+$chunks[3] = $modx->newObject('modChunk');
+$chunks[3]->fromArray(array (
+  'id' => 3,
+  'property_preprocess' => false,
+  'name' => 'mmAjaxJs',
+  'description' => 'JS for Ajax resource',
+  'properties' => NULL,
+), '', true, true);
+$chunks[3]->setContent(file_get_contents($sources['source_core'] . '/elements/chunks/mmajaxjs.chunk.html'));
+
 return $chunks;
