@@ -3,7 +3,7 @@
 * Resource resolver  for MessageManager extra.
 * Sets template, parent, and (optionally) TV values
 *
-* Copyright 2015-2018 by Bob Ray <https://bobsguides.com>
+* Copyright 2015 by Bob Ray <https://bobsguides.com>
 * Created on 01-26-2015
 *
  * MessageManager is free software; you can redistribute it and/or modify it under the
