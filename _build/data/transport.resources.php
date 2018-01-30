@@ -2,7 +2,7 @@
 /**
  * resources transport file for MessageManager extra
  *
- * Copyright 2015 by Bob Ray <http://bobsguides.com>
+ * Copyright 2015-2018 by Bob Ray <https://bobsguides.com>
  * Created on 01-26-2015
  *
  * @package messagemanager
@@ -40,7 +40,7 @@ $resources[1]->fromArray(array (
   'introtext' => '',
   'richtext' => false,
   'template' => 'default',
-  'menuindex' => 76,
+  'menuindex' => 80,
   'searchable' => true,
   'cacheable' => true,
   'createdby' => 1,

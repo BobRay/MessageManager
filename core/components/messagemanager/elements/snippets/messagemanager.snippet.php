@@ -2,7 +2,7 @@
 /**
  * MessageManager snippet for MessageManager extra
  *
- * Copyright 2015 by Bob Ray <http://bobsguides.com>
+ * Copyright 2015-2018 by Bob Ray <http://bobsguides.com>
  * Created on 01-26-2015
  *
  * MessageManager is free software; you can redistribute it and/or modify it under the
@@ -47,6 +47,14 @@
  * @property &allowed_groups textfield -- Comma-separated list of User Group names or IDs that are allowed to access MessageManager; if empty all groups are allowed; Default: (empty)..
 
  */
+ 
+$contentType = $modx->getObject('modContentType', array('mime_type' => 'text/html'));
+
+if (! $contentType) {
+  $modx->log(modX::LOG_LEVEL_ERROR, '[MessageManager] could not get content type with mime_type: "text/html"');
+} else {
+  $modx->setPlaceholder('html_file_extension', $contentType->get('file_extensions'));
+}
 $language = $modx->getOption('language', $scriptProperties, $modx->getOption('culture_key'));
 $language = empty($language) ? 'en' : $language;
 $modx->lexicon->load($language . ':messagemanager:default');

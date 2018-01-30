@@ -3,7 +3,7 @@
 * Resource resolver  for MessageManager extra.
 * Sets template, parent, and (optionally) TV values
 *
-* Copyright 2015 by Bob Ray <http://bobsguides.com>
+* Copyright 2015-2018 by Bob Ray <https://bobsguides.com>
 * Created on 01-26-2015
 *
  * MessageManager is free software; you can redistribute it and/or modify it under the
@@ -67,7 +67,8 @@ if($object->xpdo) {
                     if (! checkFields('pagetitle,parent,template', $fields)) {
                         continue;
                     }
-                    $resource = $modx->getObject('modResource', array('pagetitle' => $fields['pagetitle']));
+                    $resource = $modx->getObject('modResource',
+                        array('pagetitle' => $fields['pagetitle']));
                     if (! $resource) {
                         continue;
                     }
@@ -76,7 +77,8 @@ if($object->xpdo) {
                     } elseif (empty($fields['template'])) {
                         $resource->set('template', 0);
                     } else {
-                        $templateObj = $modx->getObject('modTemplate', array('templatename' => $fields['template']));
+                        $templateObj = $modx->getObject('modTemplate',
+                            array('templatename' => $fields['template']));
                         if ($templateObj) {
                             $resource->set('template', $templateObj->get('id'));
                         } else {

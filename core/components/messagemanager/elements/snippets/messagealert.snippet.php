@@ -2,7 +2,7 @@
 /**
  * MessageAlert snippet for MessageManager extra
  *
- * Copyright 2015 by Bob Ray <http://bobsguides.com>
+ * Copyright 2015-2018 by Bob Ray <http://bobsguides.com>
  * Created on 03-05-2015
  *
  * MessageManager is free software; you can redistribute it and/or modify it under the

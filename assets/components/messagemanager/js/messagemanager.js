@@ -1,7 +1,7 @@
 /** 
  * JS file for MessageManager extra
  * 
- * Copyright 2015 by Bob Ray <http://bobsguides.com>
+ * Copyright 2015-2018 Bob Ray <https://bobsguides.com>
  * Created on 01-27-2015
  *
  * MessageManager is free software; you can redistribute it and/or modify it under the
@@ -400,7 +400,7 @@ $(function () {
         /* Ajax call to action; calls MODX resource pseudo-connector */
         return $.ajax({
             type: "POST",
-            url: "mm-ajax.html",
+            url: "mm-ajax[[+html_file_extension]]",
             data: dataIn,
             dataType: "json"
 
