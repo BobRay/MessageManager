@@ -59,8 +59,12 @@ $snippets[3]->fromArray(array (
   'property_preprocess' => false,
   'name' => 'MessageAlert',
   'description' => 'Show current user how many messages are available',
-  'properties' => NULL,
 ), '', true, true);
 $snippets[3]->setContent(file_get_contents($sources['source_core'] . '/elements/snippets/messagealert.snippet.php'));
+
+
+$properties = include $sources['data'].'properties/properties.messagealert.snippet.php';
+$snippets[3]->setProperties($properties);
+unset($properties);
 
 return $snippets;

@@ -25,6 +25,54 @@ $properties = array (
     'lexicon' => 'messagemanager:properties',
     'area' => '',
   ),
+  'cssFile' => 
+  array (
+    'name' => 'cssFile',
+    'desc' => 'cssFile_desc',
+    'type' => 'textfield',
+    'options' => 
+    array (
+    ),
+    'value' => 'messagemanager.css',
+    'lexicon' => 'messagemanager:properties',
+    'area' => '',
+  ),
+  'jsChunk' => 
+  array (
+    'name' => 'jsChunk',
+    'desc' => 'jsChunk_desc',
+    'type' => 'textfield',
+    'options' => 
+    array (
+    ),
+    'value' => 'mmAjaxJS',
+    'lexicon' => 'messagemanager:properties',
+    'area' => '',
+  ),
+  'language' => 
+  array (
+    'name' => 'language',
+    'desc' => 'language_desc',
+    'type' => 'textfield',
+    'options' => 
+    array (
+    ),
+    'value' => 'en',
+    'lexicon' => 'messagemanager:properties',
+    'area' => '',
+  ),
+  'outerTpl' => 
+  array (
+    'name' => 'outerTpl',
+    'desc' => 'outerTpl_desc',
+    'type' => 'textfield',
+    'options' => 
+    array (
+    ),
+    'value' => 'MessageOuterTpl',
+    'lexicon' => 'messagemanager:properties',
+    'area' => '',
+  ),
   'recipient_options' => 
   array (
     'name' => 'recipient_options',
@@ -46,6 +94,18 @@ $properties = array (
     array (
     ),
     'value' => '',
+    'lexicon' => 'messagemanager:properties',
+    'area' => '',
+  ),
+  'tpl' => 
+  array (
+    'name' => 'tpl',
+    'desc' => 'tpl_desc',
+    'type' => 'textfield',
+    'options' => 
+    array (
+    ),
+    'value' => 'MessageTpl',
     'lexicon' => 'messagemanager:properties',
     'area' => '',
   ),

@@ -53,8 +53,12 @@ $chunks[3]->fromArray(array (
   'property_preprocess' => false,
   'name' => 'mmAjaxJs',
   'description' => 'JS for Ajax resource',
-  'properties' => NULL,
 ), '', true, true);
 $chunks[3]->setContent(file_get_contents($sources['source_core'] . '/elements/chunks/mmajaxjs.chunk.html'));
+
+
+$properties = include $sources['data'].'properties/properties.mmajaxjs.chunk.php';
+$chunks[3]->setProperties($properties);
+unset($properties);
 
 return $chunks;
