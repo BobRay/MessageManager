@@ -83,8 +83,8 @@ if (!$contentType) {
     $fields = array(
         'html_file_extension' => $contentType->get('file_extensions'),
     );
-    $jsFile = $modx->getOption('jsFile', $scriptProperties, 'mmAjaxJs', true);
-    $modx->regClientStartupScript($modx->getChunk($jsFile, $fields));
+    $jsChunk = $modx->getOption('jsChunk', $scriptProperties, 'mmAjaxJs', true);
+    $modx->regClientStartupScript($modx->getChunk($jsChunk, $fields));
 }
 
 

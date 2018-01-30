@@ -253,7 +253,7 @@ $components = array(
        if 'createCmpFiles is true, these will be ignored.
     */
     'jsFiles' => array(
-        'messagemanager.js'
+
     ),
 
     /* Desired CSS files */
