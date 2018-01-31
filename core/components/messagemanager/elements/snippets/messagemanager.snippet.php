@@ -45,36 +45,43 @@
  * @property &redirect_to textfield -- Id of Resource to redirect to if user is not logged in (e.g. the Login page); If this is not set, MessageManager will redirect to the Login page if its pagetitle is Login, or the site_start page if not; Default: (empty)..
  *
  * @property &allowed_groups textfield -- Comma-separated list of User Group names or IDs that are allowed to access MessageManager; if empty all groups are allowed; Default: (empty)..
-
  */
  
+$version = '?v=1.0.1-rc'; 
 
+$assets_path = $modx->getOption('mm.assets_path', NULL, $modx->getOption('assets_path') .
+    'components/messagemanager/');
+$assets_url = $modx->getOption('mm.assets_url', NULL, $modx->getOption('assets_url') .
+    'components/messagemanager/');
+
+/* Load lexicon string */
 $language = $modx->getOption('language', $scriptProperties, $modx->getOption('culture_key'));
 $language = empty($language) ? 'en' : $language;
 $modx->lexicon->load($language . ':messagemanager:default');
 $lex = $modx->lexicon->getFileTopic($language, 'messagemanager', 'default');
 $jsonLex = $modx->toJSON($lex);
-
-$version = '?v=1.0.1-rc';
-
-$cssFile = $modx->getOption('cssFile', $scriptProperties, 'messagemanager.css') . $version;
-$assets_url = $modx->getOption('mm.assets_url', NULL, $modx->getOption('assets_url') .
-    'components/messagemanager/');
-$assets_path = $modx->getOption('mm.assets_path', NULL, $modx->getOption('assets_path') .
-    'components/messagemanager/');
 $aaLex = file_get_contents($assets_path . 'js/aalexicon.txt');
 $aaLex = str_replace('[[+mm_lexicon]]', $jsonLex, $aaLex);
 $modx->regClientStartupScript($aaLex);
-$path = $assets_url . 'css/' . $cssFile;
-$modx->regClientCSS($path);
-$modx->regClientStartupScript('//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"');
-$modx->regClientStartupScript($assets_url . 'js/jquery-ui.min.js');
+
+/* Load JQuery */
+
+
+$modx->regClientStartupScript('//ajax.googleapis.com/ajax/libs/jquery/1.12.1/jquery.min.js"');    
+$modx->regClientCSS('//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css');
+$modx->regClientStartupScript('//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js');
+
+/* Load local JS and CSS */
+
 $modx->regClientStartupScript($assets_url . 'js/context-menu.js');
 $modx->regClientStartupScript($assets_url . 'js/spin-min.js');
+// $modx->regClientStartupScript($assets_url . 'js/jquery-ui.min.js');
+// $modx->regClientCSS($assets_url . 'css/jquery/jquery-ui.min.css');
+$cssFile = $modx->getOption('cssFile', $scriptProperties, 'messagemanager.css') . $version;
+$path = $assets_url . 'css/' . $cssFile;
+$modx->regClientCSS($path);
 
-$modx->regClientCSS($assets_url . 'css/jquery/jquery-ui.min.css');
-$modx->regClientCSS($assets_url . 'css/jquery/jquery-ui.theme.css');
-
+/* load MessageManager JS from chunk */
 $contentType = $modx->getObject('modContentType', array('mime_type' => 'text/html'));
 
 if (!$contentType) {
@@ -86,8 +93,6 @@ if (!$contentType) {
     $jsChunk = $modx->getOption('jsChunk', $scriptProperties, 'mmAjaxJs', true);
     $modx->regClientStartupScript($modx->getChunk($jsChunk, $fields));
 }
-
-
 
 
 /* Forward to redirect_to resource if user is not logged in */
