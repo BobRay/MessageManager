@@ -4,11 +4,12 @@
 
 <p>(Jump to <a href="[[~[[*id]]]]#propertiesTable1">MessageManager snippet Properties Table</a>.)</p>
 <p>(Jump to <a href="[[~[[*id]]]]#propertiesTable">mmAjax snippet Properties Table</a>.)</p>
+<p>(Jump to <a href="[[~[[*id]]]]#propertiesTable3">MessageAlert snippet Properties Table</a>.)</p>
 
 <h3>Installing MessageManager</h3>
 
 <p>
-Go to System | Package Management on the main menu in the MODX Manager and click on the &quot;Download Extras&quot; button. That will take you to the Revolution Repository (AKA Web Transport Facility). Put MessageManager in the search box and press Enter. Click on the &quot;Download&quot; button, and once the package is downloaded, click on the &quot;Back to Package Manager&quot; button. That should bring you back to your Package Management grid. Click on the
+Go to Extras | Installer on the main menu in the MODX Manager and click on the &quot;Download Extras&quot; button. That will take you to the Revolution Repository. Put MessageManager in the search box and press Enter. Click on the &quot;Download&quot; button, and once the package is downloaded, click on the &quot;Back to Package Manager&quot; button. That should bring you back to your Package Management grid. Click on the
 &quot;Install&quot; button next to MessageManager in the grid. The MessageManager package should now be installed.</p>
 
 <h3>Usage</h3>
@@ -100,27 +101,59 @@ You have 1 message (0 unread)
         <th>Description</th>
         <th>Default</th>
     </tr>
-
+    <tr>
+        <td colspan="3" class="properties_header"></td>
+    </tr>
+    <tr>
+        <td>allowed_groups</td>
+        <td>Comma-separated list of User Group names or IDs that are allowed to access MessageManager; if empty all
+            groups are allowed
+        </td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>cssFile</td>
+        <td>CSS file to use for Message Manager</td>
+        <td>messagemanager.css</td>
+    </tr>
+    <tr>
+        <td>jsChunk</td>
+        <td>Chunk containing Message Manager JS</td>
+        <td>mmAjaxJS</td>
+    </tr>
+    <tr>
+        <td>language</td>
+        <td>Language to use in Message Manager</td>
+        <td>en</td>
+    </tr>
+    <tr>
+        <td>outerTpl</td>
+        <td>Outer Tpl chunk for Message Manager</td>
+        <td>MessageOuterTpl</td>
+    </tr>
     <tr>
         <td>recipient_options</td>
-        <td>Options for sending messages; these options show up in the dropdown list when sending a new message; you must include at least one option
+        <td>Options for sending messages; these options show up in the dropdown list when sending a new message; you
+            must include at least one option; the captions for the three options are lexicon strings in the
+            default.inc.php file
         </td>
         <td>user,usergroup,all</td>
     </tr>
     <tr>
         <td>redirect_to</td>
-        <td>Id of Resource to redirect to if user is not logged in (e.g. the Login page); If this is not set, MessageManager will redirect to the Login page if its pagetitle is &quot;Login&quot;, or the site_start page if not
+        <td>Id of Resource to redirect to if user is not logged in (e.g. the Login page); If this is not set,
+            MessageManager will redirect to the Login page if its pagetitle is Login, or the site_start page if not
         </td>
         <td></td>
     </tr>
     <tr>
-        <td>allowed_groups</td>
-        <td>Comma-separated list of User Group names or IDs that are allowed to access MessageManager; if empty all groups are allowed</td>
-        <td></td>
+        <td>tpl</td>
+        <td>Tpl chunk for individual messages</td>
+        <td>MessageTpl</td>
     </tr>
 </table>
 
-<a name="propertiesTable1"></a>
+<a name="propertiesTable"></a>
 
 <h3>mmAjax Snippet Properties</h3>
 
@@ -142,6 +175,25 @@ You have 1 message (0 unread)
         <td>user_group</td>
         <td>User Group ID or name that has opted to receive messages; if empty, all users can be sent a message</td>
         <td>empty</td>
+    </tr>
+</table>
+
+<a name="propertiesTable3"></a>
+
+<h3>MessageAlert Snippet Properties</h3>
+
+<table class="properties">
+    <tr>
+        <th>Property</th>
+        <th>Description</th>
+        <th>Default</th>
+    </tr>
+
+
+    <tr>
+        <td>language</td>
+        <td>Language to use in alerts</td>
+        <td>en</td>
     </tr>
 </table>
 
