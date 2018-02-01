@@ -1,5 +1,14 @@
 Changelog for MessageManager
 
+MessageManager 1.0.2
+---------------------------------
+Fix bug with content-type file extensions
+Move MessageManagerJS into a chunk
+Update JQuery and JQueryUI versions
+Load all JQuery code from CDN
+Improve docs
+
+
 MessageManager 1.0.0
 ---------------------------------
 Initial Version
