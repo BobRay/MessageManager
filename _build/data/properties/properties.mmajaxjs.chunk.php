@@ -2,7 +2,7 @@
 /**
  * Properties file for mmAjaxJs chunk
  *
- * Copyright 2015 by Bob Ray <https://bobsguides.com>
+ * Copyright 2015-2018 by Bob Ray <https://bobsguides.com>
  * Created on 01-30-2018
  *
  * @package messagemanager

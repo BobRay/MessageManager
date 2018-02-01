@@ -16,14 +16,14 @@ $components = array(
     'packageName' => 'MessageManager',  /* No spaces, no dashes */
     'packageNameLower' => $packageNameLower,
     'packageDescription' => 'MessageManager lets users see and delete their messages in the front end of the site',
-    'version' => '1.0.1',
-    'release' => 'rc1',
+    'version' => '1.0.2',
+    'release' => 'pl',
     'author' => 'Bob Ray',
     'email' => '<https://bobsguides.com>',
     'authorUrl' => 'https://bobsguides.com',
     'authorSiteName' => "Bob's Guides",
     'packageDocumentationUrl' => 'https://bobsguides.com/messagemanager-tutorial.html',
-    'copyright' => '2015',
+    'copyright' => '2015-2018',
 
     /* no need to edit this except to change format */
     'createdon' => strftime('%m-%d-%Y'),
