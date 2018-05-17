@@ -67,7 +67,7 @@ $modx->regClientStartupScript($aaLex);
 /* Load JQuery */
 
 
-$modx->regClientStartupScript('//ajax.googleapis.com/ajax/libs/jquery/1.12.1/jquery.min.js"');    
+$modx->regClientStartupScript('//ajax.googleapis.com/ajax/libs/jquery/1.12.1/jquery.min.js');
 $modx->regClientCSS('//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css');
 $modx->regClientStartupScript('//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js');
 
