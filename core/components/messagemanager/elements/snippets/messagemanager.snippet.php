@@ -66,7 +66,7 @@ $aaLex = str_replace('[[+mm_lexicon]]', $jsonLex, $aaLex);
 $modx->regClientStartupScript($aaLex);
 $path = $assets_url . 'css/' . $cssFile;
 $modx->regClientCSS($path);
-$modx->regClientStartupScript('//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"');
+$modx->regClientStartupScript('//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js');
 $modx->regClientStartupScript($assets_url . 'js/jquery-ui.min.js');
 $modx->regClientStartupScript($assets_url . 'js/context-menu.js');
 $modx->regClientStartupScript($assets_url . 'js/spin-min.js');
