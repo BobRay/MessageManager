@@ -1,7 +1,7 @@
 <?php
 /**
  * da default topic lexicon file for MessageManager extra
- * Danish translation by Anton Himurovich - 07-14-2018
+ * Danish translation by Anton Tarasov (Himurovich) - 07-14-2018
  *
  * Copyright 2014-2018 Bob Ray <https://bobsguides.com>
  * Created on 01-26-2015
